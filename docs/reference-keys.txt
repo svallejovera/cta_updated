@@ -2,7 +2,6 @@ fig:nice-fig
 tab:nice-tab
 eq:binom
 thm:tri
-spring-reading-week
 cross
 chapters-and-sub-chapters
 captioned-figures-and-tables

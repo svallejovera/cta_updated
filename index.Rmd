@@ -16,5 +16,5 @@ github-repo: svallejovera/cta_updated
 
 Welcome to the site for the course PS9594A: "Computational Text Analysis" at Western University, taught by Sebastián Vallejo Vera. Each week, you will find the lecture slides, lecture code, exercises, and other code for the corresponding topic.
 
-Before you start, don't forget to read the [Syllabus](https://github.com/svallejovera/regression_ci/blob/main/files/9594_Computational_Text_Analysis_2026.pdf) and check Perusall for the course readings. This site will be corrected and updated throughout the semester.
+Before you start, don't forget to read the [Syllabus](https://github.com/svallejovera/cta_updated/blob/main/files/9594_Computational_Text_Analysis_2026.pdf) and check Perusall for the course readings. This site will be corrected and updated throughout the semester.
 
