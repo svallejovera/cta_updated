@@ -1,14 +1,19 @@
-# Reading List: {.unnumbered}
+# Reading List {.unnumbered}
 
 ## Week #1: Course Introduction / Why (Computational) Text Analysis? {.unnumbered}
 
 **Topics:** Review of syllabus and class organization. Introduction to computational text analysis and natural language processing (NLP).
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapter 2.
+
 - Wilkerson, John, and Andreu Casas. 2017. “Large-Scale Computerized Text Analysis in Political Science: Opportunities and Challenges.” *Annual Review of Political Science* 20: 529–544. <https://doi.org/10.1146/annurev-polisci-052615-025542>
+
 - Macanovic, Ana. 2022. “Text Mining for Social Science: The State and the Future of Computational Text Analysis in Sociology.” *Social Science Research* 108: 102784. <https://doi.org/10.1016/j.ssresearch.2022.102784>
+
 - Barberá, Pablo, and Gonzalo Rivero. 2015. “Understanding the Political Representativeness of Twitter Users.” *Social Science Computer Review* 33 (6): 712–729. <https://doi.org/10.1177/0894439314558836>
+
 - Michalopoulos, Stelios, and Melanie Meng Xue. 2021. “Folklore.” *The Quarterly Journal of Economics* 136 (4): 1993–2046. <https://doi.org/10.1093/qje/qjab003>
 
 ## Week #2: Tokenization and Word Frequency {.unnumbered}
@@ -16,9 +21,13 @@
 **Topics:** What is a bag of words? What are tokens? Why should we care about tokens?
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapter 5.
+
 - Ban, Pamela, Alexander Fouirnaies, Andrew B. Hall, and James M. Snyder, Jr. 2019. “How Newspapers Reveal Political Power.” *Political Science Research and Methods* 7 (4): 661–678. <https://doi.org/10.1017/psrm.2017.43>
+
 - Michel, Jean-Baptiste, et al. 2011. “Quantitative Analysis of Culture Using Millions of Digitized Books.” *Science* 331 (6014): 176–182. <https://doi.org/10.1126/science.1199644>
+
 - Bollen, Johan, et al. 2021. “Historical Language Records Reveal a Surge of Cognitive Distortions in Recent Decades.” *Proceedings of the National Academy of Sciences* 118 (30): e2102061118. <https://doi.org/10.1073/pnas.2102061118>
 
 ## Week #3: Dictionary-Based Techniques {.unnumbered}
@@ -26,9 +35,13 @@
 **Topics:** What are dictionaries? Why and when are they useful? What are their limitations?
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapters 15–16.
+
 - Young, Lori, and Stuart Soroka. 2012. “Affective News: The Automated Coding of Sentiment in Political Texts.” *Political Communication* 29 (2): 205–231. <https://doi.org/10.1080/10584609.2012.671234>
+
 - Martins, Mauricio D. J. D., and Nicolas Baumard. 2020. “The Rise of Prosociality in Fiction Preceded Democratic Revolutions in Early Modern Europe.” *Proceedings of the National Academy of Sciences* 117 (46): 28684–28691.
+
 - Ventura, Tiago, Kevin Munger, Katherine T. McCabe, and Keng-Chi Chang. 2021. “Connective Effervescence and Streaming Chat During Political Debates.” *Journal of Quantitative Description: Digital Media* 1. <https://doi.org/10.51685/jqd.2021.001>
 
 ## Week #4: Natural Language, Complexity, and Similarity {.unnumbered}
@@ -36,9 +49,13 @@
 **Topics:** How do we evaluate complexity in text? Why should we care about complexity in text? How do we evaluate similarity in text, and why is this useful?
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapters 6–7.
+
 - Spirling, Arthur. 2016. “Democratization and Linguistic Complexity: The Effect of Franchise Extension on Parliamentary Discourse, 1832–1915.” *The Journal of Politics* 78 (1): 120–136.
+
 - Urman, Aleksandra, Mykola Makhortykh, and Roberto Ulloa. 2022. “The Matter of Chance: Auditing Web Search Results Related to the 2020 US Presidential Primary Elections Across Six Search Engines.” *Social Science Computer Review* 40 (5): 1323–1339.
+
 - Schoonvelde, Martijn, Anna Brosius, Gijs Schumacher, and Bert N. Bakker. 2019. “Liberals Lecture, Conservatives Communicate: Analyzing Complexity and Ideology in 381,609 Political Speeches.” *PLOS ONE* 14 (2): e0208450. <https://doi.org/10.1371/journal.pone.0208450>
 
 ## Week #5: Scaling Techniques (Unsupervised Learning I) {.unnumbered}
@@ -46,8 +63,11 @@
 **Topics:** What is unsupervised learning? What are scaling models, and what can they tell us?
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapters 12–13.
+
 - Slapin, Jonathan B., and Sven-Oliver Proksch. 2008. “A Scaling Model for Estimating Time-Series Party Positions from Texts.” *American Journal of Political Science* 52 (3): 705–722.
+
 - Denny, Matthew J., and Arthur Spirling. 2018. “Text Preprocessing for Unsupervised Learning: Why It Matters, When It Misleads, and What to Do About It.” *Political Analysis* 26 (2): 168–189.
 
 ## Week #6: Topic Modeling and Clustering (Unsupervised Learning II) {.unnumbered}
@@ -55,9 +75,12 @@
 **Topics:** What is topic modeling, and what can it tell us?
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapters 12–13.
+
 - Roberts, Margaret E., et al. 2014. “Structural Topic Models for Open-Ended Survey Responses.” *American Journal of Political Science* 58 (4): 1064–1082.
-- Motolinia, Leonardo. 2021. “Electoral Accountability and Particularistic Legislation: Evidence from an Electoral Reform in Mexico.” *American Political Science Review* 115 (1): 97–113.
+
+- Motolinia, Lucia 2021. “Electoral Accountability and Particularistic Legislation: Evidence from an Electoral Reform in Mexico.” *American Political Science Review* 115 (1): 97–113.
 
 ## Spring reading week
 
@@ -68,10 +91,15 @@
 **Topics:** What is supervised learning? We will study the framework for training supervised models and when to use them. We will learn how Support Vector Machine (SVM) and Bidirectional Long-Short Term Memory (Bi-LSTM) models work.
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapters 17–20.
+
 - Siegel, Alexandra A., et al. 2021. “Trumping Hate on Twitter? Online Hate Speech in the 2016 US Election Campaign and Its Aftermath.” *Quarterly Journal of Political Science* 16 (1): 71–104.
+
 - Barberá, Pablo, Amber E. Boydstun, Suzanna Linn, Ryan McMahon, and Jonathan Nagler. 2021. “Automated Text Classification of News Articles: A Practical Guide.” *Political Analysis* 29 (1): 19–42. <https://doi.org/10.1017/pan.2020.8>
+
 - Laver, Michael, Kenneth Benoit, and John Garry. 2003. “Extracting Policy Positions from Political Texts Using Words as Data.” *American Political Science Review* 97 (2): 311–331.
+
 - Benoit, Kenneth, et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” *American Political Science Review* 110 (2): 278–295.
 
 ## Week #8: Introduction to Deep Learning and Word Embeddings {.unnumbered}
@@ -79,11 +107,17 @@
 **Topics:** How can we capture the meaning of words? We will use deep learning models to represent text.
 
 **Readings:**
+
 - Grimmer, Justin, Margaret E. Roberts, and Brandon M. Stewart. 2022. *Text as Data: A New Framework for Machine Learning and the Social Sciences*. Princeton, NJ: Princeton University Press. Chapter 8.
+
 - Lin, Gechun, and Christopher Lucas. 2023. “An Introduction to Neural Networks for the Social Sciences.” In *The Oxford Handbook of Engaged Methodological Pluralism in Political Science*, edited by Janet M. Box-Steffensmeier, Dino P. Christenson, and Valeria Sinclair-Chapman. Oxford: Oxford University Press. <https://doi.org/10.1093/oxfordhb/9780192868282.013.79>
+
 - Meyer, David. 2016. “How Exactly Does word2vec Work?” <https://davidmeyer.github.io/ml/how_does_word2vec_work.pdf>
+
 - Alammar, Jay. 2019. “The Illustrated Word2vec.” <https://jalammar.github.io/illustrated-word2vec/>
+
 - Rodriguez, Pedro L., and Arthur Spirling. 2022. “Word Embeddings: What Works, What Doesn’t, and How to Tell the Difference for Applied Research.” *The Journal of Politics* 84 (1): 101–115. <https://doi.org/10.1086/715162>
+
 - Kozlowski, Austin C., Matt Taddy, and James A. Evans. 2019. “The Geometry of Culture: Analyzing the Meanings of Class through Word Embeddings.” *American Sociological Review* 84 (5): 905–949.
 
 ## Week #9: The Transformers Architecture {.unnumbered}
@@ -91,9 +125,13 @@
 **Topics:** We will learn about the Transformer architecture, attention, and the encoder-decoder framework.
 
 **Readings:**
+
 - Alammar, Jay. 2018. “The Illustrated Transformer.” <https://jalammar.github.io/illustrated-transformer/>
+
 - Vaswani, Ashish, et al. 2017. “Attention Is All You Need.” In *Advances in Neural Information Processing Systems* 30.
+
 - Devlin, Jacob, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2018. “BERT: Pre-Training of Deep Bidirectional Transformers for Language Understanding.” *arXiv* preprint arXiv:1810.04805.
+
 - Timoneda, Joan C., and Sebastián Vallejo Vera. 2025. “BERT, RoBERTa, or DeBERTa? Comparing Performance Across Transformer Models in Political Science Text.” *The Journal of Politics* 87 (1): 347–364. <https://doi.org/10.1086/730737>
 
 ## Week #10: Encoder-Only LLMs {.unnumbered}
@@ -101,7 +139,9 @@
 **Topics:** We will take a deep dive into encoder-only LLMs and what we can do with them.
 
 **Readings:**
+
 - Taylor, Wilson L. 1953. “ ‘Cloze Procedure’: A New Tool for Measuring Readability.” *Journalism Quarterly* 30 (4): 415–433.
+
 - Dávila Gordillo, Diana, Joan C. Timoneda, and Sebastián Vallejo Vera. Forthcoming. “Machines Do See Color: A Guideline to Classify Different Forms of Racist Discourse in Large Corpora.” *Sociological Methods & Research*. arXiv:2401.09333.
 
 ## Week #11: Decoder-Only LLMs {.unnumbered}
@@ -109,8 +149,13 @@
 **Topics:** Decoder-only LLMs, also known as generative LLMs, are all the rage right now. We will study how they work, what they can do, what their limitations are, and how we can use them in our work more broadly.
 
 **Readings:**
+
 - Lee, Kyuwon, Simone Paci, Jeongmin Park, Hye Young You, and Sylvan Zheng. 2025. “Applications of GPT in Political Science Research: Extracting Information from Unstructured Text.” *PS: Political Science & Politics* 58 (4): 1–11. <https://doi.org/10.1017/S1049096525000046>
+
 - Gilardi, Fabrizio, Meysam Alizadeh, and Maël Kubli. 2023. “ChatGPT Outperforms Crowd Workers for Text-Annotation Tasks.” *Proceedings of the National Academy of Sciences* 120 (30): e2305016120. <https://doi.org/10.1073/pnas.2305016120>
+
 - Heseltine, Michael, and Bernhard Clemm von Hohenberg. 2024. “Large Language Models as a Substitute for Human Experts in Annotating Political Text.” *Research & Politics* 11 (1): 20531680241236239. <https://doi.org/10.1177/20531680241236239>
+
 - Vallejo Vera, Sebastián, and Hunter Driggers. 2025. “LLMs as Annotators: The Effect of Party Cues on Labelling Decisions by Large Language Models.” *Humanities and Social Sciences Communications* 12: Article 1530. <https://doi.org/10.1057/s41599-025-05834-4>
+
 - Walker, Christina P., and Joan C. Timoneda. 2025. “Is ChatGPT Conservative or Liberal? A Novel Approach to Assess Ideological Stances and Biases in Generative LLMs.” *Political Science Research and Methods* 1–15. <https://doi.org/10.1017/psrm.2025.10057>
