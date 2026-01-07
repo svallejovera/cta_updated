@@ -9,7 +9,7 @@ bibliography: [book.bib, packages.bib]
 # cover-image: path to the social sharing image like images/cover.jpg
 description: "Code, exercises, and slides for PS9594A: Computational Text Analysis"
 link-citations: yes
-github-repo: svallejovera/cta_update
+github-repo: svallejovera/cta_updated
 ---
 
 # About
