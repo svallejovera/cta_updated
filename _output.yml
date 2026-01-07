@@ -1,14 +1,14 @@
 bookdown::bs4_book:
   theme:
     primary: "#8b0000"
-  repo: https://github.com/svallejovera/regression_ci
+  repo: https://github.com/svallejovera/cta_updated
 bookdown::gitbook:
   css: style.css
   config:
     toc:
       before: |
-        <li><a href="./">Regressions and Causal Inference</a></li>
-    edit: https://github.com/svallejovera/regression_ci
+        <li><a href="./">Computational Text Analysis</a></li>
+    edit: https://github.com/svallejovera/cta_updated
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:
