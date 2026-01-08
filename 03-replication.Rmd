@@ -1,0 +1,50 @@
+# Replication Exercise {#replication .unnumbered}
+
+Replication exercises are adapted from Gary King’s work [here](https://gking.harvard.edu/sites/g/files/omnuum7116/files/gking/files/paperspub.pdf) and [here](https://gking.harvard.edu/sites/g/files/omnuum7116/files/gking/files/replication.pdf). At its core, replication is the process of re-running a study using the authors’ original data and code, and checking whether you can recover the published results (and, when relevant, bringing new data into the conversation). Replication matters because it is how scientific knowledge becomes credible, cumulative, and actually useful.
+
+For our purposes, replication is primarily an educational tool. A common saying in science is that you only really learn a method once you use it in your own work. Since we do not have the time to write three full papers in one semester, we will instead take advantage of published research with openly available datasets and code, and treat replication as a structured, step-by-step way of learning by doing. 
+
+The replication exercise is worth **30%** of your grade. 
+
+## Step-by-Step for Replication {.unnumbered}
+
+Here is what this exercise will look like:
+
+1. **Step 1: Choosing a paper to replicate**  
+   By the end of Week 3, you should select one article from the syllabus to replicate.
+
+2. **Step 2: Acquiring the data and code**  
+   Many journals now have open-data and open-materials expectations, which means authors will often make their replication files available (commonly on GitHub or the [Harvard Dataverse](https://dataverse.harvard.edu/)). Your first task is to locate the data and code associated with your chosen article.
+
+   If the article does *not* have replication materials publicly available, you should:
+
+   - Politely contact the authors and request the replication materials; and
+   - If you do not receive a response within a reasonable amount of time, select a different article.
+
+3. **Step 3: Presentation**  
+   In Week 12, you will present your replication efforts. Your presentation should include:
+
+   - **Introduction**: a short summary of the article and its main claims;
+   - **Methods**: a description of the data and empirical strategy used in the article;
+   - **Results**: what you were able to replicate (tables, figures, key quantities);
+   - **Differences**: any differences between your results and the authors’ results;
+   - **Replication autopsy**: what worked, what did not, and where things got stuck (this is often the most informative part);
+   - **Extension**: if you were writing this paper today, what would you do differently? Where would you innovate?
+
+4. **Step 4: Replication repository and report**  
+   By end-of-day Friday of the replication week, you should share your replication materials with me and your classmates. Your replication package should include:
+
+   - A GitHub repository with a clear, well-documented `README`. (A model is available [here](https://github.com/svallejovera/smr_racism?tab=readme-ov-file).)
+   - Your presentation as a PDF;
+   - The code used in your replication as a reproducible notebook (R Markdown or Jupyter);
+   - A short written report (maximum 5 pages; fewer is totally fine) summarizing the replication process, with emphasis on four parts of your presentation: **Results**, **Differences**, **Replication autopsy**, and **Extension**.
+
+In addition to following the requirements above, the replication exercises will also be graded on accuracy and the quality of your programming style. For instance, I will be looking for:
+
+- All code must run.
+- Solutions should be readable:
+  - Code should be thoroughly commented (I should be able to understand the code’s purpose by reading the comments).
+  - Coding solutions should be broken up into individual code chunks in **Jupyter** or **R Markdown** notebooks, not clumped together into one large code chunk.
+  - Each student-defined function should include a *docstring* explaining what the function does, each input argument, and what the function returns (only if using functions).
+- Commentary, responses, and/or solutions should be written in **Markdown** and should explain the outputs sufficiently.
+

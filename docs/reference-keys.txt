@@ -1,14 +1,5 @@
-fig:nice-fig
-tab:nice-tab
 eq:binom
 thm:tri
-cross
-chapters-and-sub-chapters
-captioned-figures-and-tables
-parts
-footnotes-and-citations
-footnotes
-citations
 blocks
 equations
 theorems-and-proofs

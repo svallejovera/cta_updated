@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Replication Exercise | PS9594: Computational Text Analysis</title>
+<meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
+<meta name="description" content="Replication exercises are adapted from Gary King’s work here and here. At its core, replication is the process of re-running a study using the authors’ original data and code, and checking whether...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Replication Exercise | PS9594: Computational Text Analysis">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Replication exercises are adapted from Gary King’s work here and here. At its core, replication is the process of re-running a study using the authors’ original data and code, and checking whether...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Replication Exercise | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="Replication exercises are adapted from Gary King’s work here and here. At its core, replication is the process of re-running a study using the authors’ original data and code, and checking whether...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">PS9594: Computational Text Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">“Computational Text Analysis”</a></li>
+<li><a class="" href="readings.html">Reading List</a></li>
+<li><a class="" href="assignments.html">Assignments</a></li>
+<li><a class="active" href="replication.html">Replication Exercise</a></li>
+<li><a class="" href="final_paper.html">Final Paper</a></li>
+<li><a class="" href="blocks.html"><span class="header-section-number">1</span> Blocks</a></li>
+<li><a class="" href="sharing-your-book.html"><span class="header-section-number">2</span> Sharing your book</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/svallejovera/cta_updated">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="replication" class="section level1 unnumbered">
+<h1>Replication Exercise<a class="anchor" aria-label="anchor" href="#replication"><i class="fas fa-link"></i></a>
+</h1>
+<p>Replication exercises are adapted from Gary King’s work <a href="https://gking.harvard.edu/sites/g/files/omnuum7116/files/gking/files/paperspub.pdf">here</a> and <a href="https://gking.harvard.edu/sites/g/files/omnuum7116/files/gking/files/replication.pdf">here</a>. At its core, replication is the process of re-running a study using the authors’ original data and code, and checking whether you can recover the published results (and, when relevant, bringing new data into the conversation). Replication matters because it is how scientific knowledge becomes credible, cumulative, and actually useful.</p>
+<p>For our purposes, replication is primarily an educational tool. A common saying in science is that you only really learn a method once you use it in your own work. Since we do not have the time to write three full papers in one semester, we will instead take advantage of published research with openly available datasets and code, and treat replication as a structured, step-by-step way of learning by doing.</p>
+<p>The replication exercise is worth <strong>30%</strong> of your grade.</p>
+<div id="step-by-step-for-replication" class="section level2 unnumbered">
+<h2>Step-by-Step for Replication<a class="anchor" aria-label="anchor" href="#step-by-step-for-replication"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is what this exercise will look like:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Step 1: Choosing a paper to replicate</strong><br>
+By the end of Week 3, you should select one article from the syllabus to replicate.</p></li>
+<li>
+<p><strong>Step 2: Acquiring the data and code</strong><br>
+Many journals now have open-data and open-materials expectations, which means authors will often make their replication files available (commonly on GitHub or the <a href="https://dataverse.harvard.edu/">Harvard Dataverse</a>). Your first task is to locate the data and code associated with your chosen article.</p>
+<p>If the article does <em>not</em> have replication materials publicly available, you should:</p>
+<ul>
+<li>Politely contact the authors and request the replication materials; and</li>
+<li>If you do not receive a response within a reasonable amount of time, select a different article.</li>
+</ul>
+</li>
+<li>
+<p><strong>Step 3: Presentation</strong><br>
+In Week 12, you will present your replication efforts. Your presentation should include:</p>
+<ul>
+<li>
+<strong>Introduction</strong>: a short summary of the article and its main claims;</li>
+<li>
+<strong>Methods</strong>: a description of the data and empirical strategy used in the article;</li>
+<li>
+<strong>Results</strong>: what you were able to replicate (tables, figures, key quantities);</li>
+<li>
+<strong>Differences</strong>: any differences between your results and the authors’ results;</li>
+<li>
+<strong>Replication autopsy</strong>: what worked, what did not, and where things got stuck (this is often the most informative part);</li>
+<li>
+<strong>Extension</strong>: if you were writing this paper today, what would you do differently? Where would you innovate?</li>
+</ul>
+</li>
+<li>
+<p><strong>Step 4: Replication repository and report</strong><br>
+By end-of-day Friday of the replication week, you should share your replication materials with me and your classmates. Your replication package should include:</p>
+<ul>
+<li>A GitHub repository with a clear, well-documented <code>README</code>. (A model is available <a href="https://github.com/svallejovera/smr_racism?tab=readme-ov-file">here</a>.)</li>
+<li>Your presentation as a PDF;</li>
+<li>The code used in your replication as a reproducible notebook (R Markdown or Jupyter);</li>
+<li>A short written report (maximum 5 pages; fewer is totally fine) summarizing the replication process, with emphasis on four parts of your presentation: <strong>Results</strong>, <strong>Differences</strong>, <strong>Replication autopsy</strong>, and <strong>Extension</strong>.</li>
+</ul>
+</li>
+</ol>
+<p>In addition to following the requirements above, the replication exercises will also be graded on accuracy and the quality of your programming style. For instance, I will be looking for:</p>
+<ul>
+<li>All code must run.</li>
+<li>Solutions should be readable:
+<ul>
+<li>Code should be thoroughly commented (I should be able to understand the code’s purpose by reading the comments).</li>
+<li>Coding solutions should be broken up into individual code chunks in <strong>Jupyter</strong> or <strong>R Markdown</strong> notebooks, not clumped together into one large code chunk.</li>
+<li>Each student-defined function should include a <em>docstring</em> explaining what the function does, each input argument, and what the function returns (only if using functions).</li>
+</ul>
+</li>
+<li>Commentary, responses, and/or solutions should be written in <strong>Markdown</strong> and should explain the outputs sufficiently.</li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="assignments.html">Assignments</a></div>
+<div class="next"><a href="final_paper.html">Final Paper</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#replication">Replication Exercise</a></li>
+<li><a class="nav-link" href="#step-by-step-for-replication">Step-by-Step for Replication</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/03-replication.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/03-replication.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-08.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

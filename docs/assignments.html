@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Assignments | PS9594: Computational Text Analysis</title>
+<meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
+<meta name="description" content="There will be three worksheets (Exercise #N) that will walk you through the implementation of different text analysis techniques. At the end of each worksheet, you will find a set of questions....">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Assignments | PS9594: Computational Text Analysis">
+<meta property="og:type" content="book">
+<meta property="og:description" content="There will be three worksheets (Exercise #N) that will walk you through the implementation of different text analysis techniques. At the end of each worksheet, you will find a set of questions....">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Assignments | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="There will be three worksheets (Exercise #N) that will walk you through the implementation of different text analysis techniques. At the end of each worksheet, you will find a set of questions....">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">PS9594: Computational Text Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">“Computational Text Analysis”</a></li>
+<li><a class="" href="readings.html">Reading List</a></li>
+<li><a class="active" href="assignments.html">Assignments</a></li>
+<li><a class="" href="replication.html">Replication Exercise</a></li>
+<li><a class="" href="final_paper.html">Final Paper</a></li>
+<li><a class="" href="blocks.html"><span class="header-section-number">1</span> Blocks</a></li>
+<li><a class="" href="sharing-your-book.html"><span class="header-section-number">2</span> Sharing your book</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/svallejovera/cta_updated">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="assignments" class="section level1 unnumbered">
+<h1>Assignments<a class="anchor" aria-label="anchor" href="#assignments"><i class="fas fa-link"></i></a>
+</h1>
+<p>There will be three worksheets (Exercise #N) that will walk you through the implementation of different text analysis techniques. At the end of each worksheet, you will find a set of questions. Some are optional (even though I strongly suggest you answer them), and some are graded assignments (shown below). You should partner up with someone else in your class and go through these together. Why? Christopher Barrie says: “This is called <a href="https://en.wikipedia.org/wiki/Pair_programming">pair programming</a> and there’s a reason we do this. Firstly, coding can be an isolating and difficult thing—it’s good to bring a friend along for the ride! Secondly, if there’s something you don’t know, maybe your partner will. This saves you both time. Thirdly, your partner can check your code as you write it, and vice versa. Again, this means both of you are working together to produce and check something as you go along.”</p>
+<p>After the assignment (optional or graded) is due, I will pick a pair (or an individual, if you prefer to work alone) at random to answer each of these questions and walk us through your code. This is not a punitive exercise, but rather a space for collaborative learning. More often than not, the obstacles encountered by one person are also encountered by many others. Furthermore, there are many ways to arrive at the same solution, and being exposed to different approaches is beneficial to everyone. All that matters to me is that you <strong>try</strong> and, eventually, learn. (The same goes for those who only have to turn in the assignment.)</p>
+<p>In total, the grade assignments are worth <strong>30%</strong> of your grade.</p>
+<p>The assignments will be graded on accuracy and the quality of your programming style. The following are elements I will be looking for when grading:</p>
+<ul>
+<li><p>All code must run.</p></li>
+<li>
+<p>Solutions should be readable:</p>
+<ul>
+<li><p>Code should be thoroughly commented (I should be able to understand the code’s purpose by reading the comments).</p></li>
+<li><p>Coding solutions should be broken up into individual code chunks in <strong>Jupyter</strong> or <strong>R Markdown</strong> notebooks, not clumped together into one large code chunk.</p></li>
+<li><p>Each student-defined function should include a <em>docstring</em> explaining what the function does, each input argument, and what the function returns (required only when you define functions).</p></li>
+</ul>
+</li>
+<li><p>Commentary, responses, and/or solutions should be written in <strong>Markdown</strong> and should explain the outputs sufficiently.</p></li>
+</ul>
+<div id="assignments-and-due-date" class="section level2 unnumbered">
+<h2>Assignments and Due Date<a class="anchor" aria-label="anchor" href="#assignments-and-due-date"><i class="fas fa-link"></i></a>
+</h2>
+<p>Each assignments is worth <strong>10 points</strong>.</p>
+<div id="assignments-1---due-date-eod-friday-week-4" class="section level3 unnumbered">
+<h3>Assignments 1 - Due Date: EOD Friday Week 4<a class="anchor" aria-label="anchor" href="#assignments-1---due-date-eod-friday-week-4"><i class="fas fa-link"></i></a>
+</h3>
+<p>This assignment must be completed after covering <a href="#week3">Week 3: Dictionary-Based Techniques</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Replicate the results from the left-most column of Figure 3 in Ventura et al. (2021).</li>
+<li>Look at the keywords in context for <em>Biden</em> in the <code>ventura_etal_df</code> dataset, and compare the results with the same data, but pre-processed (i.e., lower-case, remove stopwords, etc.). Which version provides more information about the context in which <em>Biden</em> appears in the comments?</li>
+<li>Use a different collocation approach with the <code>ventura_etal_df</code> dataset, but pre-process the data (i.e., lower-case, remove stopwords, etc.). Which approach (pre-processed or not pre-processed) provides a better picture of the corpus or of the collocations you found?</li>
+<li>Compare the <strong>positive</strong> sentiment of comments mentioning <em>trump</em> and comments mentioning <em>biden</em> using <code>bing</code> and <code>afinn</code>. Note that <code>afinn</code> gives a numeric value, so you will need to choose a threshold to determine <strong>positive</strong> sentiment.</li>
+<li>Using <code>bing</code>, compare the sentiment of comments mentioning <em>trump</em> and comments mentioning <em>biden</em> using different metrics (e.g., Young and Soroka 2012, Martins and Baumard 2020, Ventura et al. 2021).</li>
+<li>Create your own domain-specific dictionary and apply it to the <code>ventura_etal_df</code> dataset. Show the limitations of your dictionary (e.g., false positives), and comment on how much of a problem this would be if you wanted to conduct an analysis of this corpus.</li>
+</ol>
+</div>
+<div id="assignments-2---due-date-eod-friday-week-6" class="section level3 unnumbered">
+<h3>Assignments 2 - Due Date: EOD Friday Week 6<a class="anchor" aria-label="anchor" href="#assignments-2---due-date-eod-friday-week-6"><i class="fas fa-link"></i></a>
+</h3>
+<p>This assignment must be completed after covering <a href="#week5">Week 5: Scaling Techniques (Unsupervised Learning I)</a>.</p>
+<ol style="list-style-type: decimal">
+<li>We had a hard time scaling our text, so we looked at some possible problems. What are possible solutions if we want to position U.S. presidents on an ideological scale using text?</li>
+<li>Use the <code>data/candidate-tweets.csv</code> data to run an STM. Decide what your covariates are going to be. Decide whether you will use all the data or a sample of the data. Decide whether you are going to aggregate or split the text in some way (i.e., decide your unit of analysis). Decide the number of topics you will look for (try more than one option). What can you tell me about the topics tweeted by the 2015 U.S. primary candidates?</li>
+<li>Choose three topics. Can you place the candidates on an ideological scale within each topic (determine the <span class="math inline">\(\theta\)</span> threshold for when you can say that a tweet is <em>mostly</em> about a topic)? Does it make sense? Why or why not?</li>
+</ol>
+</div>
+<div id="assignments-3---due-date-eod-friday-week-11" class="section level3 unnumbered">
+<h3>Assignments 3 - Due Date: EOD Friday Week 11<a class="anchor" aria-label="anchor" href="#assignments-3---due-date-eod-friday-week-11"><i class="fas fa-link"></i></a>
+</h3>
+<p>The first part of this assignment must be completed after covering <a href="#week7">Week 7: A Primer on Supervised Learning</a>. The second part of this assignment must be completed after covering <a href="#week10">Week 10: Encoder-Only LLMs</a>.</p>
+<p>Part I:</p>
+<ol style="list-style-type: decimal">
+<li>Think of a dataset (corpus) and a classification task. Ideally, both the corpus and the classification task can be used in your final paper. However, it’s OK if you do this for the assignment (you will still need a corpus). You can choose any task except sentiment classification.</li>
+<li>Decide the number of categories that you will be predicting.</li>
+<li>Decide the number of observations you will code per category.</li>
+<li>Create a draft codebook to guide coders who will (hypothetically) label your training set.</li>
+<li>Label a sample of your data (N=200); decide how you will sample the data and explain your decision. Have a classmate label the same sample (you can find the coder pairing <a href="https://colab.research.google.com/drive/19KXG7mauoCBwNfyvwR6mrXsAXS4TgX86">here</a>). Estimate <a href="http://www.cookbook-r.com/Statistical_analysis/Inter-rater_reliability/">inter-coder reliability</a> and <a href="https://statisticsbyjim.com/hypothesis-testing/inter-rater-reliability/">evaluate the results</a>.</li>
+<li>How difficult or easy was the task? What problems did you run into? What would you change in your codebook to improve it? What other lessons did you learn from this exercise?</li>
+</ol>
+<p>Note: We will use the codebook and training set for Part II. This can also be the basis for your final paper.</p>
+<p>Part II:</p>
+<ol style="list-style-type: decimal">
+<li>Once you have validated your training set and the labels produced by LLMs, expand the training set until you have (at least) 150 observations per category. You can use LLMs to label, but you will still need to manually validate the labels produced.</li>
+<li>Using your (validated) training set, fine-tune the encoder-only LLM of your choice.</li>
+<li>Report performance statistics for your fine-tuned model (e.g., accuracy, F1, recall, etc.), as well as the confusion matrix.</li>
+<li>Use your trained model to predict labels on a target corpus.</li>
+<li>Describe the results obtained, and whether they match the expectations you had about the data.</li>
+</ol>
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="readings.html">Reading List</a></div>
+<div class="next"><a href="replication.html">Replication Exercise</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#assignments">Assignments</a></li>
+<li>
+<a class="nav-link" href="#assignments-and-due-date">Assignments and Due Date</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#assignments-1---due-date-eod-friday-week-4">Assignments 1 - Due Date: EOD Friday Week 4</a></li>
+<li><a class="nav-link" href="#assignments-2---due-date-eod-friday-week-6">Assignments 2 - Due Date: EOD Friday Week 6</a></li>
+<li><a class="nav-link" href="#assignments-3---due-date-eod-friday-week-11">Assignments 3 - Due Date: EOD Friday Week 11</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/02-assignments.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/02-assignments.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-08.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+# Final Paper {#final_paper .unnumbered}
+
+The paper is the complete description of your project’s analysis and results. It should be **4,000 words max** (single-spaced; 12pt font). The front page and references do *not* count toward the word limit. During **Week 13**, student will present the final project to the class. The final paper is due on **April 16**. The final paper is worth **40%** of your grade. 
+
+## Paper Outline {.unnumbered}
+
+Below, I outline what you should aim to cover in each section. Note that your paper should read as a cohesive report (not as a set of disconnected answers to prompts):
+
+- **Introduction**
+  - Summarize your motivation and briefly discuss prior work related to your question.
+  - State your research question.
+  - Provide a roadmap of the report.
+
+- **Data and Methods**
+  - Where does the data come from?
+  - What is the unit of observation?
+  - What are the variables of interest?
+  - What steps did you take to wrangle the data?
+
+- **Analysis**
+  - Describe the methods/tools you explored in your project and how you implemented them.
+
+- **Results**
+  - Provide a detailed summary of your results.
+  - Present results clearly and concisely.
+  - Use visualizations instead of tables whenever possible.
+
+- **Discussion**
+  - Re-introduce your main results.
+  - State your contributions.
+  - Explain where you want to take this project next.
+
+**Important note (about literature reviews).**  
+There is *no* standalone literature review section for this report. You should absolutely use the literature to motivate your work and situate your question, but you do not need a full section that tries to summarize an entire field. If you want examples of this style, read papers in general-interest journals: many excellent articles do not have long, self-contained literature review sections.
+
+## Submission of the final project {.unnumbered}
+
+The end product should be a **GitHub repository** that contains:
+
+- The raw source data used for the project. If the data are too large for GitHub, talk to me and we will find a solution.
+- Your proposal.
+- A `README` that documents the repository. For *each* file, the README should clearly describe:
+  - **Inputs** to the file (e.g., raw data; credentials needed to access an API),
+  - **What the file does** (major transformations), and
+  - **Outputs** produced by the file (e.g., a cleaned dataset; a figure).
+- The code files that transform the raw data into a form usable to answer your question.
+- Your final **4,000-word essay**.
+
+Of course, **no commits after the deadline** will be considered in the assessment.
+
+## Templates for writing {.unnumbered}
+
+Below are a few templates you can use for writing your report. In my experience, writing data-heavy social science essays in LaTeX is a productivity boost in the long run: it makes formatting predictable, citations painless, and reproducibility easier.
+
+If you want to experiment with LaTeX via Overleaf, you can start with the PNAS template (just remember to switch to a one-column format):
+
+- [PNAS template](https://www.overleaf.com/latex/templates/template-for-preparing-your-research-report-submission-to-pnas-using-overleaf-2023/whbdryzwztnd)
+
+You can also use the *Journal of Quantitative Description* templates (Word or LaTeX):
+
+- [JQD Word](https://journalqd.org/libraryFiles/downloadPublic/95)
+- [JQD LaTeX](https://journalqd.org/libraryFiles/downloadPublic/53)
+
+Finally, you can use [templates from Quarto](https://quarto.org/docs/journals/) and write your entire project using Quarto (or Markdown) files. This is a perfectly valid workflow for this course.

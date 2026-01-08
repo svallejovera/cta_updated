@@ -18,3 +18,35 @@ Welcome to the site for the course PS9594A: "Computational Text Analysis" at Wes
 
 Before you start, don't forget to read the [Syllabus](https://github.com/svallejovera/cta_updated/blob/main/files/9594_Computational_Text_Analysis_2026.pdf) and check Perusall for the course readings. This site will be corrected and updated throughout the semester.
 
+## Course Overview {.unnumbered}
+
+One of the most abundant sources of data available to social and political scientists today is text. Recent advances in Natural Language Processing (NLP) have spearheaded a text-as-data revolution, leading social scientists to seek new ways to analyze text data at scale. In this course, we will learn the intuition behind--and how to implement--different computational methods to process, analyze, and classify text. The course will cover Bag-of-Words (BoW) approaches, unsupervised methods, supervised and semi-supervised methods, and LLM-based approaches, as well as how to interpret the results obtained from applying these methods.
+
+## Readings, Assignments, and Final Exam {.unnumbered}
+
+- You can check a complete week-by-week **reading list** [here](#readings). Note that the complete texts can be found in the course's Perusall page.
+
+- You can check the schedule for the **assignments**, as well as instructions on presentation and submission, [here](#assignments).  
+
+- You can check the instructions for the **replication** exercise [here](#replication).  
+
+- You can check the instructions for the **final paper** exercise [here](#final_paper).  
+
+## Software and Packages  {.unnumbered}
+
+For the first part of this course (Weeks 1 - 5), we will be mainly using R. For the second part of the this course (Weeks 6 - 11), we will use a combination of R and Python. I will assume that you are familiar with R language, RStudio, and R packages. In R, these are the main packages you will need to have installed:
+
+- tidyverse (we will be piping)
+- tidylog (helps keep track of what your are piping)
+- tidytext (great for working with text)
+- quanteda (stands for "Quantitative Analysis of Textual Data")
+  - quanteda.textstats (to obtain stats from our dfm)
+  - quanteda.textplots (to obtain plots from our dfm stats)
+  - quanteda.dictionaries (to use dictionaries with quanteda)
+- gutenbergr (to download texts from [Project Gutenberg](https://www.gutenberg.org/))
+- wesanderson (to make things pretty)
+- stm (to run Structural Topic Models)
+
+## Acknowledgments  {.unnumbered}
+
+The organization of the first part of this course (Weeks 1 - 5) and the format of the assignments are borrowed from many sources, among them Christopher Barrie's excellent course on ["Computational Text Analysis"](https://cjbarrie.github.io/CTA-ED/), a syllabus from [Tiago Ventura](https://www.venturatiago.com/), and Grimmer, Roberts, and Stewart's excellent book, ["Text as data: A new framework for machine learning and the social sciences"](https://press.princeton.edu/books/paperback/9780691207551/text-as-data). The code used throughout the course is a patchwork of my own code, but my own code borrows heavily from the internet (but that's true for all code). I try my best to give credit to the original authors of the code (when and if possible).
