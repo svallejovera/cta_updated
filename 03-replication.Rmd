@@ -4,14 +4,20 @@ Replication exercises are adapted from Gary King’s work [here](https://gking.h
 
 For our purposes, replication is primarily an educational tool. A common saying in science is that you only really learn a method once you use it in your own work. Since we do not have the time to write three full papers in one semester, we will instead take advantage of published research with openly available datasets and code, and treat replication as a structured, step-by-step way of learning by doing. 
 
-The replication exercise is worth **30%** of your grade. 
+The replication exercise is worth **30%** of your grade.
+
+## Key Date {.unnumbered}
+
+- **Week 3**: Choose a paper to replicate. 
+- **Week 12**: Present your replication.
+- **EOD Friday Week 12**: Upload paper and code to repository.
 
 ## Step-by-Step for Replication {.unnumbered}
 
 Here is what this exercise will look like:
 
 1. **Step 1: Choosing a paper to replicate**  
-   By the end of Week 3, you should select one article from the syllabus to replicate.
+   By the end of **Week 3**, you should select one article from the syllabus to replicate.
 
 2. **Step 2: Acquiring the data and code**  
    Many journals now have open-data and open-materials expectations, which means authors will often make their replication files available (commonly on GitHub or the [Harvard Dataverse](https://dataverse.harvard.edu/)). Your first task is to locate the data and code associated with your chosen article.
@@ -22,7 +28,7 @@ Here is what this exercise will look like:
    - If you do not receive a response within a reasonable amount of time, select a different article.
 
 3. **Step 3: Presentation**  
-   In Week 12, you will present your replication efforts. Your presentation should include:
+   In **Week 12**, you will present your replication efforts. Your presentation should include:
 
    - **Introduction**: a short summary of the article and its main claims;
    - **Methods**: a description of the data and empirical strategy used in the article;
@@ -32,7 +38,7 @@ Here is what this exercise will look like:
    - **Extension**: if you were writing this paper today, what would you do differently? Where would you innovate?
 
 4. **Step 4: Replication repository and report**  
-   By end-of-day Friday of the replication week, you should share your replication materials with me and your classmates. Your replication package should include:
+   By end-of-day Friday of the **replication week**, you should share your replication materials with me and your classmates. Your replication package should include:
 
    - A GitHub repository with a clear, well-documented `README`. (A model is available [here](https://github.com/svallejovera/smr_racism?tab=readme-ov-file).)
    - Your presentation as a PDF;

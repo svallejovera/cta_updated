@@ -6,6 +6,8 @@ After the assignment (optional or graded) is due, I will pick a pair (or an indi
 
 In total, the grade assignments are worth **30%** of your grade. 
 
+## Instruction for Submission {.unnumbered}
+
 The assignments will be graded on accuracy and the quality of your programming style. The following are elements I will be looking for when grading:
 
 - All code must run.
