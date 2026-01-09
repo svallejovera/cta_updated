@@ -2,5 +2,5 @@
 
 This repo contains teaching materials for the "Computational Text Analysis" (PS9594) course at Western University. The book includes code, exercises, and slides for each week.
 
-This will be the main resource we use throughout the course. You can access all of these materials, as well as the course overview by following [this link](https://svallejovera.github.io/regression_ci/). I will continue to update the site throughout the semester(s). 
+This will be the main resource we use throughout the course. You can access all of these materials, as well as the course overview by following [this link](https://svallejovera.github.io/cta_updated/). I will continue to update the site throughout the semester(s). 
 
