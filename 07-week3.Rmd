@@ -36,14 +36,23 @@ head(ventura_etal_df)
 The comments are mostly clean, but you can check (on your own) whether they require additional cleaning. In the previous code, I showed you how to lowercase text, remove stopwords, etc., using quanteda. We can also do this using tidytext[^4]:
 
 ```{r}
+# Tokenize and lightly clean the `comments` text using tidytext.
+#
+# What this does:
+# 1) lowercases the text in `comments`
+# 2) tokenizes into one-token-per-row using `unnest_tokens()`
+# 3) keeps only tokens that contain at least one lowercase letter (regex check)
+# 4) removes stopwords using the `stop_words` lexicon
+
 tidy_ventura <- ventura_etal_df %>% 
-  # to lower:
+  # Lowercase the raw comment text to standardize tokens (e.g., "Trump" -> "trump")
   mutate(comments = tolower(comments)) %>%
-  # tokenize
+  # Tokenize: creates a new column `word` and drops the original `comments` column by default
   unnest_tokens(word, comments) %>%
-  # keep only words (check regex)
+  # Keep only tokens that contain at least one lowercase letter a–z
+  # (this removes many punctuation-only / number-only tokens; tweak as needed)
   filter(str_detect(word, "[a-z]")) %>%
-  # remove stop words
+  # Remove stopwords (common function words like "the", "and", etc.)
   filter(!word %in% stop_words$word)
 
 head(tidy_ventura, 20)
@@ -54,17 +63,24 @@ head(tidy_ventura, 20)
 We can detect the occurrence of the words **trump** and **biden** in each comment (`text_id`). 
 
 ```{r}
+# Create a comment-level dataset indicating whether each comment mentions "trump" and/or "biden" at least once.
+
 trump_biden <- tidy_ventura %>%
-  # create a dummy
-  mutate(trump_token = ifelse(word=="trump", 1, 0),
-         biden_token = ifelse(word=="biden", 1, 0)) %>%
-  # see which comments have the word trump / biden
+  # Create token-level indicator variables (1 if the token is the target word, else 0)
+  mutate(
+    trump_token = ifelse(word == "trump", 1, 0),
+    biden_token = ifelse(word == "biden", 1, 0)
+  ) %>%
+  # Aggregate within each comment (grouped by text_id) to mark whether the comment
+  # contains at least one occurrence of each target word
   group_by(text_id) %>%
-  mutate(trump_cmmnt = ifelse(sum(trump_token)>0, 1, 0),
-         biden_cmmnt = ifelse(sum(biden_token)>0, 1, 0)) %>%
-  # reduce to our unit of analysis (comment) 
-  distinct(text_id, .keep_all = T) %>%
-  select(text_id,trump_cmmnt,biden_cmmnt,likes,debate)
+  mutate(
+    trump_cmmnt = ifelse(sum(trump_token) > 0, 1, 0),
+    biden_cmmnt = ifelse(sum(biden_token) > 0, 1, 0)
+  ) %>%
+  # Reduce to the unit of analysis: one row per comment (text_id)
+  distinct(text_id, .keep_all = TRUE) %>%
+  dplyr::select(text_id, trump_cmmnt, biden_cmmnt, likes, debate)
 
 head(trump_biden, 20)
 ```
@@ -78,12 +94,12 @@ trump_biden %>%
          mentions_cat = ifelse(trump_cmmnt==1 & biden_cmmnt==0, "2. Trump", mentions_cat),
          mentions_cat = ifelse(trump_cmmnt==0 & biden_cmmnt==1, "3. Biden", mentions_cat),
          mentions_cat = ifelse(trump_cmmnt==1 & biden_cmmnt==1, "4. Both", mentions_cat)) %>%
+  # Remove the ones people like too much
+  filter(likes < 26) %>%
   group_by(mentions_cat) %>%
   mutate(likes_mean = median(likes, na.rm = T)) %>%
   ungroup() %>%
-  # Remove the ones people like too much
-  filter(likes < 26) %>%
-  # Plot
+  # Plot densities by category, with dashed median lines
   ggplot(aes(x=likes,fill = mentions_cat, color = mentions_cat)) +
   geom_density(alpha = 0.3) +
   scale_color_manual(values = wes_palette("BottleRocket2")) +
@@ -109,11 +125,11 @@ trump_biden %>%
          media = ifelse(str_detect(debate, "abc"), "ABC", NA),
          media = ifelse(str_detect(debate, "nbc"), "NBC", media),
          media = ifelse(str_detect(debate, "fox"), "FOX", media)) %>%
+  # Remove the ones people like too much
+  filter(likes < 26) %>%
   group_by(mentions_cat,media) %>%
   mutate(median_like = median(likes,na.rm = T)) %>%
   ungroup() %>%
-  # Remove the ones people like too much
-  filter(likes < 26) %>%
   # Plot
   ggplot(aes(x=likes,fill = mentions_cat, color = mentions_cat)) +
   geom_density(alpha = 0.3) +
@@ -159,7 +175,7 @@ kw_best <- kwic(toks_ventura, pattern = c("best","worst"))
 head(kw_best, 20)
 ```
 
-Alternatively, we can examine which words most commonly occur together. These are called *collocations* (a related concept to *n-grams*). Here, we want to identify the most common names mentioned (first and last names).
+Alternatively, we can examine which words most commonly occur together. These are called *collocations* (a concept closely related to *n-grams*). Here, we want to identify the most common names mentioned (first and last names).
 
 ```{r}
 toks_ventura <- tokens(corpus_ventura, remove_punct = TRUE)
@@ -219,15 +235,13 @@ get_sentiments("afinn")
 get_sentiments("bing")
 ```
 
-- `nrc`: underpaid workers from Amazon mechanical Turk coded the emotional valence of a long list of terms, which were validated in [this paper](https://arxiv.org/pdf/1308.6297.pdf). Also, check this paper about MTurk, and [Why you shouldn't trust data collected on MTurk](https://link.springer.com/article/10.3758/s13428-025-02852-7).
+- `nrc`: underpaid workers from Amazon mechanical Turk coded the emotional valence of a long list of terms, which were validated in [this paper](https://arxiv.org/pdf/1308.6297.pdf). Also, check this paper about MTurk, and [why you shouldn't trust data collected on MTurk](https://link.springer.com/article/10.3758/s13428-025-02852-7).
 
 ```{r}
 get_sentiments("nrc")
 ```
 
-Each dictionary classifies and quantifies words in a different way. Let’s use the `nrc` sentiment dictionary to analyze our comments dataset. The `nrc` dictionary classifies words as reflecting *positive* or *negative* sentiment.
-
-More broadly, `nrc` also classifies words as reflecting:
+Each dictionary classifies and quantifies words in a different way. Let’s use the `nrc` sentiment dictionary to analyze our comments dataset. The `nrc` dictionary classifies, among other concepts, words as reflecting *positive* or *negative* sentiment.
 
 ```{r}
 nrc <- get_sentiments("nrc") 
@@ -252,7 +266,9 @@ ventura_pos_neg %>%
   count(word, sort = TRUE)
 ```
 
-Some make sense: “love” is *positive*, “bully” is *negative*. Some, not so much: “talk” is positive? “joke” is negative? Some are out of context: “vice” is negative, but the *vice president* is not (especially since “president” is considered “positive,” which... really?). And then “vote” is both positive and negative, which… what? Let’s turn a blind eye for now (but, once again, see Grimmer et al., Chapter 15 for best practices).
+Some classifications make intuitive sense: “love” is *positive* and “bully” is *negative*. Others are less convincing: “talk” is positive? “joke” is negative? Some depend heavily on context: “vice” is negative, but *vice president* typically is not (especially since “president” is classified as “positive,” which... really?). And then “vote” is both positive and negative, which… what?
+
+Let’s turn a blind eye for now (but, once again, see Grimmer et al., Chapter 15 for best practices).
 
 Do people who watch different news media use different language? Let’s see what the data tell us. As always, check the unit of analysis in your dataset. In this case, each observation is a word, but we have a grouping variable for the comment (`text_id`), so we can count how many *positive* and *negative* words appear in each comment. We will calculate a net sentiment score by subtracting the number of negative words from the number of positive words (within each comment).
 
@@ -303,10 +319,9 @@ comment_pos_neg %>%
 
 ### Domain-Specific Dictionaries
 
-Sentiment dictionaries are common, but you can build a dictionary for *any* concept you are interested in. After all, as long as you can create a lexicon (and validate it), you can conduct an analysis similar to the one we just carried out. This time, rather than using an off-the-shelf sentiment dictionary, we will create our own. Let’s try a dictionary for two topics: the economy and migration.
+Sentiment dictionaries are common, but you can build a dictionary for *any* concept you’re interested in. As long as you can create a lexicon (and validate it), you can conduct an analysis similar to the one we just carried out. This time, rather than using an off-the-shelf sentiment dictionary, we will create our own. Let’s try a dictionary for two topics: the economy and migration.
 
-As long as the dictionary has the same structure as our `nrc_pos_neg` object, we can follow the same process we used for the sentiment dictionaries.
- 
+As long as the dictionary has the same structure as our `nrc_pos_neg` object, we can follow the same process we used for the sentiment dictionary.
 
 ```{r}
 # Define two simple, domain-specific dictionaries (lexicons) for:
@@ -347,7 +362,7 @@ ventura_topic %>%
   count(word, sort = TRUE)
 ```
 
-Not that many. Note that we did not stem or lemmatize our corpus, so if we want to capture “job” *and* “jobs,” we need to include both in our dictionary. In other words, any pre-processing steps we apply to the corpus should also be applied to the dictionary.
+Not that many. Note that we did not stem or lemmatize our corpus, so if we want to capture “job” *and* “jobs,” we need to include both in our dictionary. In other words, any preprocessing steps we apply to the corpus should also be applied to the dictionary.
 
 If you are a bit more versed in R, you will notice that dictionaries are often represented as lists. `quanteda` understands dictionaries as lists, so we can build them that way and use its `liwcalike()` function to find matching words in text. An added benefit is that we can use [glob](https://linuxhint.com/bash_globbing_tutorial/) patterns to capture variations of the same word (e.g., `job*` will match “job,” “jobs,” and “jobless”).
 
@@ -412,7 +427,7 @@ This is more than a simple dictionary: the key advantage is that it provides an 
 joy_lex <- intense_lex %>%
   filter(AffectDimension=="joy") %>%
   mutate(word=term) %>%
-  select(word,AffectDimension,score)
+  dplyr::select(word,AffectDimension,score)
 
 ventura_joy <- tidy_ventura %>%
   left_join(joy_lex) %>%

@@ -3,7 +3,7 @@
 ## Slides{.unnumbered}
 
 - 1 Introduction to CTA ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/1%20Introduction%20to%20CTA.pptx)
-- 2 Why Computational Text Analysis? ([link](https://github.com/svallejovera/cpa_uwo/blob/main/slides/2%20Why%20Computational%20Text%20Analysis.pptx)
+- 2 Why Computational Text Analysis? ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/2%20Why%20Computational%20Text%20Analysis.pptx)
 
 ## Setup
 
@@ -107,7 +107,7 @@ wilde_words_ct <- wilde_words %>%
   # Keep a single row per (word_length, title) combination
   distinct(word_length, title, .keep_all = TRUE) %>%
   # Keep only the variables needed for plotting/inspection
-  select(word_length, title, author, total_word_length)
+  dplyr::select(word_length, title, author, total_word_length)
 
 ```
 
@@ -153,7 +153,7 @@ wilde_words %>%
   # Keep one row per (word_length, title) combination for plotting
   distinct(word_length, title, .keep_all = TRUE) %>%
   # Keep relevant columns (median_word_length is repeated but useful for plotting the median line)
-  select(word_length, title, author, total_word_length, median_word_length) %>%
+  dplyr::select(word_length, title, author, total_word_length, median_word_length) %>%
   # Plot the sampled word-length distributions
   ggplot(aes(x = word_length, y = total_word_length, color = title)) +
   geom_point(alpha = 0.8) +
@@ -207,7 +207,7 @@ words %>%
   group_by(word_length,title,author) %>%
   mutate(total_word_length = n()) %>%
   distinct(word_length,title,.keep_all=T) %>%
-  select(word_length,title,author,total_word_length,median_word_length) %>%
+  dplyr::select(word_length,title,author,total_word_length,median_word_length) %>%
   ggplot(aes(y=total_word_length,x=word_length,color=author,group=title)) +
   geom_point(alpha=0.8) +
   geom_line(alpha=0.8) +

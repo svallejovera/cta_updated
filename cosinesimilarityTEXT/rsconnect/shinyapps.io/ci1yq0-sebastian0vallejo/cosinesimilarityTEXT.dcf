@@ -1,0 +1,12 @@
+name: cosinesimilarityTEXT
+title: cosinesimilarityTEXT
+username: ci1yq0-sebastian0vallejo
+account: ci1yq0-sebastian0vallejo
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16454290
+bundleId: 11462870
+url: https://ci1yq0-sebastian0vallejo.shinyapps.io/cosinesimilarityTEXT/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

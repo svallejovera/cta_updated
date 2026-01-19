@@ -55,7 +55,7 @@ sample_lyrics <- sample_lyrics %>%
     lyrics_clean = str_replace_all(lyrics_clean, "\\r", "\\.")
   ) %>%
   # Drop the original lyrics column to avoid keeping both raw and cleaned versions
-  select(-lyrics)
+  dplyr::select(-lyrics)
 
 # Inspect the 4th cleaned lyric to confirm the replacements worked as intended
 sample_lyrics$lyrics_clean[4]

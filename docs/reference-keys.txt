@@ -24,3 +24,11 @@ sentiment-analysis
 domain-specific-dictionaries
 using-pre-built-dictionaries
 assignments-1---due-date-eod-friday-week-4-1
+week4
+setup-3
+replicating-the-lecture
+comparing-text
+character-level-comparisons
+token-level-comparisons
+complexity
+exercise-optional-1
