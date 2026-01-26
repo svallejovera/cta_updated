@@ -1,0 +1,58 @@
+# Week 7: A Primer on Supervised Learning {#week7}
+
+## Slides{.unnumbered}
+
+- 7 Supervised Learning ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/7%20A%20Primer%20on%20Supervised%20Learning.pptx) to slides) 
+
+## Setup
+
+As always, we first load the packages that we'll be using:
+
+```{r, warning = F, message = F}
+# devtools::install_github("conjugateprior/austin")
+library(austin) # just for those sweet wordscores
+library(tidyverse) # for wrangling data
+library(tidylog) # to know what we are wrangling
+library(tidytext) # for 'tidy' manipulation of text data
+library(quanteda) # tokenization power house
+library(quanteda.textmodels)
+library(wesanderson) # to prettify
+```
+
+## Wordscores
+
+Laver et al. (2003) propose a supervised scaling technique called *Wordscores*. We learned the intuition in this week's lecture. We will now replicate Table 1 from Laver and Benoit (2003) using the `austin` package. The package includes sample data that we will use:
+
+```{r}
+data(lbg)
+```
+
+Let's keep only the reference documents:
+
+```{r}
+ref <- getdocs(lbg, 1:5)
+ref
+```
+
+This is the same matrix as in Figure 1, where we have a count of each word (in this case, letters) by reference document (i.e., documents that have already been labeled). We can assign scores (`A_scores`) to each reference text to place them on an ideological scale (or whatever scale we want). We then estimate *Wordscores* for each word.
+
+```{r}
+# We do this in the order of the reference texts:
+A_score <- c(-1.5,-0.75,0,0.75,1.5)
+ws <- classic.wordscores(ref, scores=A_score)
+ws$pi
+```
+
+Now we get the virgin text and predict the textscore by estimating the average of the weighted wordscores for the virgin document:
+
+```{r}
+vir <- getdocs(lbg, 'V1')
+vir
+```
+
+```{r}
+# predict textscores for the virgin documents
+predict(ws, newdata=vir)
+```
+
+Cool. 

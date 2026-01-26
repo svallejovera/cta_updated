@@ -1,8 +1,12 @@
-# Week 6: Scaling Techniques and Topic Modeling {#week6}
+# Week 6: Topic Modeling (Unsupervised Learning II) {#week6}
 
 ## Slides{.unnumbered}
 
 - 6 Scaling Techniques and Topic Modeling ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/6%20Scaling%20Techniques%20and%20Topic%20Modeling.pptx) to slides) 
+
+## K-Means Clustering
+
+Before looking at the code for Structural Topic Models, let's just think about the intuition behind the slightly more basic k-means clustering: [K-means Intuition Building App](https://ci1yq0-sebastian0vallejo.shinyapps.io/k-means/)
 
 ## Setup
 
