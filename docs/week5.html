@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 5 Week 5: Scaling Techniques (Unsupervised Learning I) | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
-<meta name="description" content='Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin")...'>
-<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta name="description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
 <meta property="og:title" content="Chapter 5 Week 5: Scaling Techniques (Unsupervised Learning I) | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
-<meta property="og:description" content='Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin")...'>
+<meta property="og:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 5 Week 5: Scaling Techniques (Unsupervised Learning I) | PS9594: Computational Text Analysis">
-<meta name="twitter:description" content='Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin")...'>
+<meta name="twitter:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  5.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -52,7 +52,8 @@
 <li><a class="" href="week3.html"><span class="header-section-number">3</span> Week 3: Dictionary-Based Approaches</a></li>
 <li><a class="" href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></li>
 <li><a class="active" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
-<li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling</a></li>
+<li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
+<li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 </ul>
 
         <div class="book-extra">
@@ -76,172 +77,23 @@
 <span class="header-section-number">5.1</span> Setup<a class="anchor" aria-label="anchor" href="#setup-4"><i class="fas fa-link"></i></a>
 </h2>
 <p>As always, we first load the packages that we’ll be using:</p>
-<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># devtools::install_github("conjugateprior/austin")</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conjugateprior.github.io/austin">austin</a></span><span class="op">)</span> <span class="co"># just for those sweet wordscores</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elbersb/tidylog/">tidylog</a></span><span class="op">)</span> <span class="co"># to know what we are wrangling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span> <span class="co"># for 'tidy' manipulation of text data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://quanteda.io">quanteda</a></span><span class="op">)</span> <span class="co"># tokenization power house</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/quanteda/quanteda.textmodels">quanteda.textmodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.structuraltopicmodel.com/">stm</a></span><span class="op">)</span> <span class="co"># run structural topic models</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson">wesanderson</a></span><span class="op">)</span> <span class="co"># to prettify</span></span></code></pre></div>
 </div>
-<div id="wordscores" class="section level2" number="5.2">
+<div id="wordfish" class="section level2" number="5.2">
 <h2>
-<span class="header-section-number">5.2</span> Wordscores<a class="anchor" aria-label="anchor" href="#wordscores"><i class="fas fa-link"></i></a>
-</h2>
-<p>Laver et al. (2003) propose a supervised scaling technique called <em>Wordscores</em>. We learned the intuition in this week’s lecture. We will now replicate Table 1 from Laver and Benoit (2003) using the <code>austin</code> package. The package includes sample data that we will use:</p>
-<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">lbg</span><span class="op">)</span></span></code></pre></div>
-<p>Let’s keep only the reference documents:</p>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">ref</span></span></code></pre></div>
-<pre><code>##      docs
-## words  R1  R2  R3  R4  R5
-##    A    2   0   0   0   0
-##    B    3   0   0   0   0
-##    C   10   0   0   0   0
-##    D   22   0   0   0   0
-##    E   45   0   0   0   0
-##    F   78   2   0   0   0
-##    G  115   3   0   0   0
-##    H  146  10   0   0   0
-##    I  158  22   0   0   0
-##    J  146  45   0   0   0
-##    K  115  78   2   0   0
-##    L   78 115   3   0   0
-##    M   45 146  10   0   0
-##    N   22 158  22   0   0
-##    O   10 146  45   0   0
-##    P    3 115  78   2   0
-##    Q    2  78 115   3   0
-##    R    0  45 146  10   0
-##    S    0  22 158  22   0
-##    T    0  10 146  45   0
-##    U    0   3 115  78   2
-##    V    0   2  78 115   3
-##    W    0   0  45 146  10
-##    X    0   0  22 158  22
-##    Y    0   0  10 146  45
-##    Z    0   0   3 115  78
-##    ZA   0   0   2  78 115
-##    ZB   0   0   0  45 146
-##    ZC   0   0   0  22 158
-##    ZD   0   0   0  10 146
-##    ZE   0   0   0   3 115
-##    ZF   0   0   0   2  78
-##    ZG   0   0   0   0  45
-##    ZH   0   0   0   0  22
-##    ZI   0   0   0   0  10
-##    ZJ   0   0   0   0   3
-##    ZK   0   0   0   0   2</code></pre>
-<p>This is the same matrix as in Figure 1, where we have a count of each word (in this case, letters) by reference document (i.e., documents that have already been labeled). We can assign scores (<code>A_scores</code>) to each reference text to place them on an ideological scale (or whatever scale we want). We then estimate <em>Wordscores</em> for each word.</p>
-<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># We do this in the order of the reference texts:</span></span>
-<span><span class="va">A_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>,<span class="op">-</span><span class="fl">0.75</span>,<span class="fl">0</span>,<span class="fl">0.75</span>,<span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="va">ws</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/classic.wordscores.html">classic.wordscores</a></span><span class="op">(</span><span class="va">ref</span>, scores<span class="op">=</span><span class="va">A_score</span><span class="op">)</span></span>
-<span><span class="va">ws</span><span class="op">$</span><span class="va">pi</span></span></code></pre></div>
-<pre><code>##         Score
-## A  -1.5000000
-## B  -1.5000000
-## C  -1.5000000
-## D  -1.5000000
-## E  -1.5000000
-## F  -1.4812500
-## G  -1.4809322
-## H  -1.4519231
-## I  -1.4083333
-## J  -1.3232984
-## K  -1.1846154
-## L  -1.0369898
-## M  -0.8805970
-## N  -0.7500000
-## O  -0.6194030
-## P  -0.4507576
-## Q  -0.2992424
-## R  -0.1305970
-## S   0.0000000
-## T   0.1305970
-## U   0.2992424
-## V   0.4507576
-## W   0.6194030
-## X   0.7500000
-## Y   0.8805970
-## Z   1.0369898
-## ZA  1.1846154
-## ZB  1.3232984
-## ZC  1.4083333
-## ZD  1.4519231
-## ZE  1.4809322
-## ZF  1.4812500
-## ZG  1.5000000
-## ZH  1.5000000
-## ZI  1.5000000
-## ZJ  1.5000000
-## ZK  1.5000000</code></pre>
-<p>Now we get the virgin text and predict the textscore by estimating the average of the weighted wordscores for the virgin document:</p>
-<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="st">'V1'</span><span class="op">)</span></span>
-<span><span class="va">vir</span></span></code></pre></div>
-<pre><code>##      docs
-## words  V1
-##    A    0
-##    B    0
-##    C    0
-##    D    0
-##    E    0
-##    F    0
-##    G    0
-##    H    2
-##    I    3
-##    J   10
-##    K   22
-##    L   45
-##    M   78
-##    N  115
-##    O  146
-##    P  158
-##    Q  146
-##    R  115
-##    S   78
-##    T   45
-##    U   22
-##    V   10
-##    W    3
-##    X    2
-##    Y    0
-##    Z    0
-##    ZA   0
-##    ZB   0
-##    ZC   0
-##    ZD   0
-##    ZE   0
-##    ZF   0
-##    ZG   0
-##    ZH   0
-##    ZI   0
-##    ZJ   0
-##    ZK   0</code></pre>
-<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># predict textscores for the virgin documents</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ws</span>, newdata<span class="op">=</span><span class="va">vir</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## 37 of 37 words (100%) are scorable
-## 
-##     Score Std. Err. Rescaled  Lower  Upper
-## V1 -0.448    0.0119   -0.448 -0.459 -0.437</code></pre>
-<p>Cool.</p>
-</div>
-<div id="wordfish" class="section level2" number="5.3">
-<h2>
-<span class="header-section-number">5.3</span> Wordfish<a class="anchor" aria-label="anchor" href="#wordfish"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.2</span> Wordfish<a class="anchor" aria-label="anchor" href="#wordfish"><i class="fas fa-link"></i></a>
 </h2>
 <p>Slapin and Proksch (2008) propose an unsupervised scaling model that places texts on a one-dimensional scale. The underlying assumption is that</p>
 <p><span class="math display">\[w_{ik} \sim \text{Poisson}(\lambda_{ik})\]</span>
 <span class="math display">\[\lambda_{ik} = \exp(\alpha_i + \psi_k + \beta_k \times \theta_i)\]</span></p>
 <p>Here, <span class="math inline">\(\lambda_{ik}\)</span> is generated by <span class="math inline">\(\alpha_i\)</span> (the “loquaciousness” of politician <span class="math inline">\(i\)</span>, or document fixed effects), <span class="math inline">\(\psi_k\)</span> (the baseline frequency of word <span class="math inline">\(k\)</span>), <span class="math inline">\(\beta_k\)</span> (the discrimination parameter of word <span class="math inline">\(k\)</span>), and—most importantly, <span class="math inline">\(\theta_i\)</span> (the politician’s ideological position). Let’s believe, for a moment, that the peer-review system works and use the <code><a href="https://rdrr.io/pkg/quanteda.textmodels/man/textmodel_wordfish.html">textmodel_wordfish()</a></code> function to estimate the ideological positions of U.S. presidents using their inaugural speeches.</p>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">us_pres</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/inaugTexts.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 4
@@ -254,7 +106,7 @@
 ## 5 "Citizens of the United States:\r\n\r\nYour suff…  1869 Grant     Repu…
 ## 6 "Fellow-Citizens:\r\n\r\nUnder Providence I have…  1873 Grant     Repu…</code></pre>
 <p>The text is pretty clean, so we can convert it into a corpus object, then into a <code>dfm</code>, and apply <code><a href="https://rdrr.io/pkg/quanteda.textmodels/man/textmodel_wordfish.html">textmodel_wordfish()</a></code>:</p>
-<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">corpus_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/corpus.html">corpus</a></span><span class="op">(</span><span class="va">us_pres</span>,</span>
 <span>                     text_field <span class="op">=</span> <span class="st">"inaugSpeech"</span>,</span>
 <span>                     unique_docnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -304,7 +156,7 @@
 ##  text39   773   2321       100 2005         Bush Republican
 ##  text40   937   2667       110 2009        Obama   Democrat
 ##  text41   814   2317        88 2013        Obama   Democrat</code></pre>
-<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We do the whole tokenization sequence</span></span>
 <span><span class="va">toks_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_us_pres</span>,</span>
 <span>                   remove_numbers <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Thinks about this</span></span>
@@ -384,7 +236,7 @@
 ## beta -0.05042 -0.1159  0.2266 -0.08426 0.01539  0.169
 ## psi  -1.52207 -0.2338  0.8392 -0.25097 0.19869 -1.708</code></pre>
 <p>Let’s see whether this makes any sense. Since we know each president’s party, we would expect Republican presidents to cluster together and separate from Democrats (or something along those lines):</p>
-<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get predictions:</span></span>
 <span><span class="va">wfish_preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">wfish_us_pres</span>, interval <span class="op">=</span> <span class="st">"confidence"</span><span class="op">)</span></span>
 <span></span>
@@ -397,27 +249,29 @@
 <span><span class="va">posi_us_pres</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fit</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">President</span>,<span class="va">fit</span><span class="op">)</span>, xmin <span class="op">=</span> <span class="va">lwr</span>, xmax <span class="op">=</span> <span class="va">upr</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_errorbarh.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Position"</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">"Party"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Estimated Positions"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-90-1.png" width="672"></div>
+<pre><code>## `height` was translated to `width`.</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-78-1.png" alt="" width="672"></div>
 <p>Two things to note. First, the <em>direction</em> of the scale is a theoretically grounded decision that the researcher has to make (not the algorithm). In our case, based on these results, we could interpret positive values as more left-leaning and negative values as more right-leaning. For visualization purposes, we can flip the direction simply by multiplying by -1:</p>
-<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot inverse</span></span>
 <span><span class="va">posi_us_pres</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="va">fit</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">President</span>,<span class="va">fit</span><span class="op">)</span>, xmin <span class="op">=</span> <span class="op">-</span><span class="va">lwr</span>, xmax <span class="op">=</span> <span class="op">-</span><span class="va">upr</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_errorbarh.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Position"</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">"Party"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Estimated Positions"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-91-1.png" width="672"></div>
+<pre><code>## `height` was translated to `width`.</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-79-1.png" alt="" width="672"></div>
 <p>Second, there seems to be a mismatch between our theoretical expectations and our empirical observations. We might assume that Republicans (Democrats) would talk more similarly to other Republicans (Democrats) and differently from Democrats (Republicans). However, that is not what we see here. <em>What could be happening?</em></p>
 <p>One possibility is that language changes over time, issues change over time, or even what it means to be a Democrat or Republican changes over time. and the model is picking up that temporal shift:</p>
-<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot time</span></span>
 <span><span class="va">posi_us_pres</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="op">-</span><span class="va">fit</span>, x <span class="op">=</span> <span class="va">Year</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="va">lwr</span>, ymax <span class="op">=</span> <span class="op">-</span><span class="va">upr</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -427,9 +281,9 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Estimated Positions"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-92-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-80-1.png" alt="" width="672"></div>
 <p>That seems like one possible explanation. Another is that our preprocessing steps substantively modified the texts (see Denny and Spirling 2018). We can estimate the model again using a differently preprocessed version of the text:</p>
-<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tokenization only removing punctuation</span></span>
 <span><span class="va">toks_us_pres2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_us_pres</span>,</span>
 <span>                   remove_punct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
@@ -449,14 +303,15 @@
 <span><span class="va">posi_us_pres</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="va">fit</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">President</span>,<span class="va">fit</span><span class="op">)</span>, xmin <span class="op">=</span> <span class="op">-</span><span class="va">lwr</span>, xmax <span class="op">=</span> <span class="op">-</span><span class="va">upr</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_errorbarh.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Position"</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">"Party"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Estimated Positions (Minimal Pre-Processing)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-93-1.png" width="672"></div>
+<pre><code>## `height` was translated to `width`.</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-81-1.png" alt="" width="672"></div>
 <p>At the very least, the within president differences in estimates have narrowed, but time seems to still be the best predictor:</p>
-<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot time</span></span>
 <span><span class="va">posi_us_pres</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="op">-</span><span class="va">fit</span>, x <span class="op">=</span> <span class="va">Year</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="va">lwr</span>, ymax <span class="op">=</span> <span class="op">-</span><span class="va">upr</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -466,12 +321,12 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Estimated Positions (Minimal Pre-Processing)"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-82-1.png" alt="" width="672"></div>
 <p>If time is the main predictor, then we may need to focus on periods that are more comparable across parties (e.g., the era after the Civil Rights Act).</p>
 </div>
-<div id="homework-2" class="section level2" number="5.4">
+<div id="homework-2" class="section level2" number="5.3">
 <h2>
-<span class="header-section-number">5.4</span> Homework 2:<a class="anchor" aria-label="anchor" href="#homework-2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.3</span> Homework 2:<a class="anchor" aria-label="anchor" href="#homework-2"><i class="fas fa-link"></i></a>
 </h2>
 <ol style="list-style-type: decimal">
 <li>We had a hard time scaling our text, so we looked at some possible problems. What are possible solutions if we want to position U.S. presidents on an ideological scale using text?</li>
@@ -482,16 +337,15 @@
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></div>
-<div class="next"><a href="week6.html"><span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling</a></div>
+<div class="next"><a href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#week5"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
 <li><a class="nav-link" href="#slides-4">Slides</a></li>
 <li><a class="nav-link" href="#setup-4"><span class="header-section-number">5.1</span> Setup</a></li>
-<li><a class="nav-link" href="#wordscores"><span class="header-section-number">5.2</span> Wordscores</a></li>
-<li><a class="nav-link" href="#wordfish"><span class="header-section-number">5.3</span> Wordfish</a></li>
-<li><a class="nav-link" href="#homework-2"><span class="header-section-number">5.4</span> Homework 2:</a></li>
+<li><a class="nav-link" href="#wordfish"><span class="header-section-number">5.2</span> Wordfish</a></li>
+<li><a class="nav-link" href="#homework-2"><span class="header-section-number">5.3</span> Homework 2:</a></li>
 </ul>
 
       <div class="book-extra">
@@ -509,7 +363,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-25.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-26.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

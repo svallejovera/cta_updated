@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 6 Week 6: Scaling Techniques and Topic Modeling | PS9594: Computational Text Analysis</title>
+<title>Chapter 6 Week 6: Topic Modeling (Unsupervised Learning II) | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
-<meta name="description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
-<meta name="generator" content="bookdown 0.42 with bs4_book()">
-<meta property="og:title" content="Chapter 6 Week 6: Scaling Techniques and Topic Modeling | PS9594: Computational Text Analysis">
+<meta name="description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 K-Means Clustering Before looking at the code for Structural Topic Models, let’s just think about the intuition behind the...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 6 Week 6: Topic Modeling (Unsupervised Learning II) | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
-<meta property="og:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
+<meta property="og:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 K-Means Clustering Before looking at the code for Structural Topic Models, let’s just think about the intuition behind the...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 6 Week 6: Scaling Techniques and Topic Modeling | PS9594: Computational Text Analysis">
-<meta name="twitter:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
+<meta name="twitter:title" content="Chapter 6 Week 6: Topic Modeling (Unsupervised Learning II) | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="Slides 6 Scaling Techniques and Topic Modeling (link to slides)  6.1 K-Means Clustering Before looking at the code for Structural Topic Models, let’s just think about the intuition behind the...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -52,7 +52,8 @@
 <li><a class="" href="week3.html"><span class="header-section-number">3</span> Week 3: Dictionary-Based Approaches</a></li>
 <li><a class="" href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></li>
 <li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
-<li><a class="active" href="week6.html"><span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling</a></li>
+<li><a class="active" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
+<li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 </ul>
 
         <div class="book-extra">
@@ -62,7 +63,7 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week6" class="section level1" number="6">
 <h1>
-<span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling<a class="anchor" aria-label="anchor" href="#week6"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)<a class="anchor" aria-label="anchor" href="#week6"><i class="fas fa-link"></i></a>
 </h1>
 <div id="slides-5" class="section level2 unnumbered">
 <h2>Slides<a class="anchor" aria-label="anchor" href="#slides-5"><i class="fas fa-link"></i></a>
@@ -71,12 +72,18 @@
 <li>6 Scaling Techniques and Topic Modeling (<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/6%20Scaling%20Techniques%20and%20Topic%20Modeling.pptx">link</a> to slides)</li>
 </ul>
 </div>
-<div id="setup-5" class="section level2" number="6.1">
+<div id="k-means-clustering" class="section level2" number="6.1">
 <h2>
-<span class="header-section-number">6.1</span> Setup<a class="anchor" aria-label="anchor" href="#setup-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.1</span> K-Means Clustering<a class="anchor" aria-label="anchor" href="#k-means-clustering"><i class="fas fa-link"></i></a>
+</h2>
+<p>Before looking at the code for Structural Topic Models, let’s just think about the intuition behind the slightly more basic k-means clustering: <a href="https://ci1yq0-sebastian0vallejo.shinyapps.io/k-means/">K-means Intuition Building App</a></p>
+</div>
+<div id="setup-5" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Setup<a class="anchor" aria-label="anchor" href="#setup-5"><i class="fas fa-link"></i></a>
 </h2>
 <p>As always, we first load the packages that we’ll be using:</p>
-<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elbersb/tidylog/">tidylog</a></span><span class="op">)</span> <span class="co"># to know what we are wrangling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span> <span class="co"># for 'tidy' manipulation of text data</span></span>
@@ -85,7 +92,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.structuraltopicmodel.com/">stm</a></span><span class="op">)</span> <span class="co"># run structural topic models</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson">wesanderson</a></span><span class="op">)</span> <span class="co"># to prettify</span></span></code></pre></div>
 <p>We get the data from the inaugural speeches again.</p>
-<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">us_pres</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/inaugTexts.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 4
@@ -98,7 +105,7 @@
 ## 5 "Citizens of the United States:\r\n\r\nYour suff…  1869 Grant     Repu…
 ## 6 "Fellow-Citizens:\r\n\r\nUnder Providence I have…  1873 Grant     Repu…</code></pre>
 <p>The text is pretty clean, so we can convert it into a corpus object, then into a <code>dfm</code>:</p>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">corpus_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/corpus.html">corpus</a></span><span class="op">(</span><span class="va">us_pres</span>,</span>
 <span>                     text_field <span class="op">=</span> <span class="st">"inaugSpeech"</span>,</span>
 <span>                     unique_docnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -148,7 +155,7 @@
 ##  text39   773   2321       100 2005         Bush Republican
 ##  text40   937   2667       110 2009        Obama   Democrat
 ##  text41   814   2317        88 2013        Obama   Democrat</code></pre>
-<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We do the whole tokenization sequence</span></span>
 <span><span class="va">toks_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_us_pres</span>,</span>
 <span>                   remove_numbers <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Thinks about this</span></span>
@@ -164,15 +171,15 @@
 <span></span>
 <span><span class="va">dfm_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dfm.html">dfm</a></span><span class="op">(</span><span class="va">toks_us_pres</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="structural-topic-models" class="section level2" number="6.2">
+<div id="structural-topic-models" class="section level2" number="6.3">
 <h2>
-<span class="header-section-number">6.2</span> Structural Topic Models<a class="anchor" aria-label="anchor" href="#structural-topic-models"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.3</span> Structural Topic Models<a class="anchor" aria-label="anchor" href="#structural-topic-models"><i class="fas fa-link"></i></a>
 </h2>
 <p>STM provides two ways to include contextual information to “guide” model estimation. First, <strong>topic prevalence</strong> can vary by metadata (e.g., Republicans talk about military issues more than Democrats). Second, <strong>topic content</strong> can vary by metadata (e.g., Republicans talk about military issues differently from Democrats).</p>
 <p>We can run STM using the <code>stm</code> package. The package includes a complete workflow (i.e., from raw text to figures), and if you are planning to use it in the future, I highly encourage you to check <a href="https://cran.r-project.org/web/packages/stm/vignettes/stmVignette.pdf">this</a>, <a href="https://www.jstor.org/stable/pdf/24363543.pdf?casa_token=b_rJjIOUUScAAAAA:KXNQeVBQMzB7-kIEhl-1qo6uyD7vHvRTHhMinMdZVT6G3M3olzKzPv00XMJQd7mRw9Nm9UqJDmWHv3N_0cXBmbdeu2XZv8-jy1RYxvpm7Ab3WEOmApXP">this</a>, <a href="https://juliasilge.com/blog/evaluating-stm/">this</a>, and <a href="https://juliasilge.com/blog/sherlock-holmes-stm/">this</a>.</p>
 <p>At a high level, <code><a href="https://rdrr.io/pkg/stm/man/stm.html">stm()</a></code> takes our <em>dfm</em> and produces topics. If we do not specify any prevalence terms, it will estimate an LDA-style model. Because this is a Bayesian approach, it is recommended that you set a seed value for replication. We also need to choose <span class="math inline">\(K\)</span>, the number of topics. How many topics is the “right” number? There is no good number. Too many pre-specified topics and the categories might be meaningless. Too few, and you might be piling together two or more topics. Note that changes to a) the number of topics, b) the prevalence term, c) the omitted words, d) the seed value, can (greatly) change the outcome. Here is where validation becomes crucial (for a review see <a href="https://www.researchgate.net/profile/Andreu_Casas/publication/317140610_Large-Scale_Computerized_Text_Analysis_in_Political_Science_Opportunities_and_Challenges/links/59285e6f0f7e9b9979a35ec4/Large-Scale-Computerized-Text-Analysis-in-Political-Science-Opportunities-and-Challenges.pdf">Wilkerson and Casas 2017</a>).</p>
 <p>Using our presidential speeches data, I will use <code>stm</code> to estimate topics in inaugural addresses. As the prevalence term, I include the party of the speaker. I set the number of topics to 10 (but with a corpus this large, I would likely start around ~30 and work my way up from there).</p>
-<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stm_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/stm/man/stm.html">stm</a></span><span class="op">(</span><span class="va">dfm_us_pres</span>, K <span class="op">=</span> <span class="fl">10</span>, seed <span class="op">=</span> <span class="fl">1984</span>,</span>
 <span>                   prevalence <span class="op">=</span> <span class="op">~</span><span class="va">party</span>,</span>
 <span>                   init.type <span class="op">=</span> <span class="st">"Spectral"</span><span class="op">)</span></span></code></pre></div>
@@ -473,12 +480,12 @@
 <li><p>After repeating the previous step many times, you eventually reach a roughly steady state where the assignments are reasonably good. You can then use these assignments to estimate (a) the topic mixture of each document (by counting the proportion of words assigned to each topic within that document) and (b) the words associated with each topic (by counting the proportion of words assigned to each topic overall).</p></li>
 </ol>
 <p>(This explanation was adapted from <a href="https://wiki.ubc.ca/Course:CPSC522/Latent_Dirichlet_Allocation#cite_note-rcode-4">here</a>.) Let’s explore the topics produced:</p>
-<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/labelTopics.html">labelTopics</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Topic 1 Top Words:
 ##       Highest Prob: us, new, let, nation, world, can, america 
 ##       FREX: let, centuri, togeth, dream, new, promis, weak 
-##       Lift: 19th, 200th, 20th, adventur, angri, catch, caught 
+##       Lift: 200th, 20th, micah, rhetor, 18th, 19th, accident 
 ##       Score: role, dream, abroad, third, explor, shape, proud 
 ## Topic 2 Top Words:
 ##       Highest Prob: us, new, can, nation, work, world, day 
@@ -488,77 +495,77 @@
 ## Topic 3 Top Words:
 ##       Highest Prob: constitut, state, govern, peopl, shall, can, law 
 ##       FREX: case, constitut, slave, union, territori, slaveri, perpetu 
-##       Lift: abli, acting, adduc, afloat, alleg, altern, anarchi 
+##       Lift: alleg, anarchi, dissatisfi, woe, abli, acting, adduc 
 ##       Score: case, slaveri, territori, slave, invas, provis, fli 
 ## Topic 4 Top Words:
 ##       Highest Prob: nation, peopl, must, us, world, can, govern 
 ##       FREX: activ, republ, task, industri, confid, inspir, normal 
-##       Lift: stricken, unshaken, abdic, abject, abnorm, acclaim, afresh 
+##       Lift: abnorm, acclaim, aright, befit, changer, comiti, frugal 
 ##       Score: normal, activ, amid, readjust, self-reli, relationship, unshaken 
 ## Topic 5 Top Words:
 ##       Highest Prob: govern, peopl, upon, law, state, countri, nation 
 ##       FREX: revenu, tariff, offic, appoint, busi, proper, consider 
-##       Lift: 15th, 30th, abey, aborigin, acquaint, actuat, acut 
+##       Lift: type, 15th, 30th, abey, aborigin, acquaint, actuat 
 ##       Score: revenu, legisl, enforc, polici, negro, interst, tariff 
 ## Topic 6 Top Words:
 ##       Highest Prob: nation, freedom, america, peopl, govern, know, democraci 
 ##       FREX: democraci, ideal, million, liberti, freedom, came, seen 
-##       Lift: aught, charta, clariti, compact, constrict, counti, dire 
+##       Lift: &gt;, aught, autocrat, baffl, baggag, beli, bell 
 ##       Score: democraci, paint, magna, million, excus, encount, unlimit 
 ## Topic 7 Top Words:
 ##       Highest Prob: us, must, america, nation, american, world, peopl 
 ##       FREX: journey, stori, generat, storm, america, job, ideal 
-##       Lift: winter, afghanistan, aids, alongsid, anchor, anybodi, apathi 
+##       Lift: fascism, rage, remak, winter, afghanistan, aids, alongsid 
 ##       Score: stori, journey, job, capitol, storm, thank, drift 
 ## Topic 8 Top Words:
 ##       Highest Prob: upon, nation, govern, peopl, can, shall, great 
 ##       FREX: enforc, counsel, organ, island, thought, upon, integr 
-##       Lift: creation, cuba, eighteenth, fast, adapt, aspect, cuban 
+##       Lift: adapt, cuba, eighteenth, aspect, creation, cuban, dilig 
 ##       Score: enforc, island, cuba, counsel, organ, eighteenth, adapt 
 ## Topic 9 Top Words:
 ##       Highest Prob: nation, peopl, world, can, peac, must, free 
 ##       FREX: resourc, contribut, repres, everywher, result, free, europ 
-##       Lift: display, joint, likewis, philosophi, abhor, absurd, accur 
+##       Lift: array, display, joint, likewis, mockeri, philosophi, abhor 
 ##       Score: europ, philosophi, commun, contribut, precept, tax, program 
 ## Topic 10 Top Words:
 ##       Highest Prob: us, govern, nation, peopl, world, must, american 
 ##       FREX: weapon, tax, believ, hero, man, reduc, dream 
-##       Lift: 50th, hearten, marker, masteri, mathia, penal, rocket 
+##       Lift: marker, masteri, 50th, absent, adam, alamo, anger 
 ##       Score: weapon, hero, monument, nuclear, spend, tax, soviet</code></pre>
 <p><em>FREX</em> weights words by both their overall frequency and how exclusive they are to the topic. <em>Lift</em> weights words by dividing by their frequency in other topics, which gives higher weight to words that appear less frequently elsewhere. Similar to Lift, <em>Score</em> divides the log frequency of a word in the topic by the log frequency of that word in other topics <a href="https://cran.r-project.org/web/packages/stm/vignettes/stmVignette.pdf">(Roberts et al. 2013)</a>. <a href="https://icml.cc/2012/papers/113.pdf">Bischof and Airoldi (2012)</a> show the value of using <strong>FREX</strong> over the other measures.</p>
 <p>You can use the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function to show the topics.</p>
-<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">stm_us_pres</span>, type <span class="op">=</span> <span class="st">"summary"</span>, labeltype <span class="op">=</span> <span class="st">"frex"</span><span class="op">)</span> <span class="co"># or prob, lift score</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-101-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-89-1.png" alt="" width="672"></div>
 <p>Topic 5 seems to be about the economy: revenue, tariffs, etc. Topic 3 about slavery adn the Civil War. If you want to see a sample of a specific topic:</p>
-<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/findThoughts.html">findThoughts</a></span><span class="op">(</span><span class="va">stm_us_pres</span>, texts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">corpus_us_pres</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://quanteda.io/reference/docnames.html">docnames</a></span><span class="op">(</span><span class="va">dfm_us_pres</span><span class="op">)</span><span class="op">]</span>, topics <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>  </span></code></pre></div>
 <p>That is a long speech.</p>
 <p>We can (should/must) run some diagnostics. There are two qualities that were are looking for in our model: semantic coherence and exclusivity. Exclusivity is based on the FREX labeling matrix. Semantic coherence is a criterion developed by Mimno et al. (2011) and it maximizes when the most probable words in a given topic frequently co-occur together. Mimno et al. (2011) show that the metric correlates well with human judgement of topic quality. Yet, it is fairly easy to obtain high semantic coherence so it is important to see it in tandem with exclusivity. Let’s see how exclusive are the words in each topic:</p>
-<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/dotchart.html">dotchart</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/exclusivity.html">exclusivity</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-103-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-91-1.png" alt="" width="672"></div>
 <p>We can also see the semantic coherence of our topics –words a topic generates should co-occur often in the same document–:</p>
-<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/dotchart.html">dotchart</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/semanticCoherence.html">semanticCoherence</a></span><span class="op">(</span><span class="va">stm_us_pres</span>,<span class="va">dfm_us_pres</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-104-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-92-1.png" alt="" width="672"></div>
 <p>We can also see the overall quality of our topic model:</p>
-<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">stm_us_pres</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  [1]  -5.287875  -9.358241 -12.913601  -2.995819  -8.562729 -11.770514
 ##  [7]  -4.095783  -5.495206  -5.782951  -4.769013
 ##  [1] 8.975480 9.330844 8.792229 8.230546 7.888169 9.119047 8.616511
 ##  [8] 7.905410 8.690023 8.814819</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/Quality-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/Quality-1.png" alt="" width="672"></div>
 <p>On their own, both metrics are not really useful (what do those numbers even mean?). They are useful when we are looking for the “optimal” number of topics.</p>
-<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stm_us_pres_10_15_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/stm/man/manyTopics.html">manyTopics</a></span><span class="op">(</span><span class="va">dfm_us_pres</span>,</span>
 <span>                       prevalence <span class="op">=</span> <span class="op">~</span> <span class="va">party</span>,</span>
 <span>                       K <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">15</span>,<span class="fl">20</span><span class="op">)</span>, runs<span class="op">=</span><span class="fl">2</span>,</span>
 <span>                       <span class="co"># max.em.its = 100, </span></span>
 <span>                       init.type <span class="op">=</span> <span class="st">"Spectral"</span><span class="op">)</span> <span class="co"># It takes around 250 iterations for the model to converge. Depending on your computer, this can take a while.</span></span></code></pre></div>
 <p>We can now compare the performance of each model based on their semantic coherence and exclusivity. We are looking for high exclusivity and high coherence (top-right corner):</p>
-<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k_10</span> <span class="op">&lt;-</span> <span class="va">stm_us_pres_10_15_20</span><span class="op">$</span><span class="va">out</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="co"># k_10 is an stm object which can be explored and used like any other topic model. </span></span>
 <span><span class="va">k_15</span> <span class="op">&lt;-</span> <span class="va">stm_us_pres_10_15_20</span><span class="op">$</span><span class="va">out</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">k_20</span> <span class="op">&lt;-</span> <span class="va">stm_us_pres_10_15_20</span><span class="op">$</span><span class="va">out</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
@@ -569,8 +576,8 @@
 ##  [7]  -4.095783  -5.495206  -5.782951  -4.769013
 ##  [1] 8.975480 9.330844 8.792229 8.230546 7.888169 9.119047 8.616511
 ##  [8] 7.905410 8.690023 8.814819</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-106-1.png" width="672"></div>
-<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-1.png" alt="" width="672"></div>
+<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">k_15</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  [1]  -8.282551 -10.661122  -9.146329  -6.243444 -10.002100 -11.315179
 ##  [7]  -3.107797  -4.907182  -5.059424  -4.905652  -7.864316 -13.149897
@@ -578,8 +585,8 @@
 ##  [1] 9.224913 9.358942 9.252240 9.185552 9.037701 9.150431 8.614509
 ##  [8] 8.496738 8.546778 9.138797 8.182268 9.136596 8.467905 9.641939
 ## [15] 8.453004</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-106-2.png" width="672"></div>
-<div class="sourceCode" id="cb203"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-2.png" alt="" width="672"></div>
+<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">k_20</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  [1]  -8.136428 -22.245476 -21.390006  -6.602534 -11.543624 -10.272049
 ##  [7]  -3.923380  -5.506620  -7.188791 -12.486262 -10.086060 -13.443443
@@ -588,41 +595,35 @@
 ##  [1] 9.488914 9.872405 9.761287 9.184162 9.370479 9.330506 9.018598
 ##  [8] 8.520731 8.634212 9.649024 8.306973 9.125545 8.958623 9.644274
 ## [15] 9.532977 8.823851 9.488908 9.220082 8.595757 8.726901</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-106-3.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-3.png" alt="" width="672"></div>
 <p>Maybe we have some theory about the difference in topic prevalence across parties. We can see the topic proportions in our topic model object:</p>
-<div class="sourceCode" id="cb205"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb200"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##              [,1]         [,2]         [,3]         [,4]         [,5]
-## [1,] 0.0001979850 9.251664e-05 8.228013e-05 1.374029e-04 0.0003064405
-## [2,] 0.0004943565 6.848981e-05 9.820101e-01 1.268903e-04 0.0165642826
-## [3,] 0.0002944155 4.882956e-05 9.988036e-01 1.888195e-05 0.0005382537
-## [4,] 0.1142592136 9.390427e-04 8.766105e-01 2.738605e-04 0.0030665368
-## [5,] 0.0114556926 2.301045e-04 6.716342e-03 1.151595e-03 0.9771020843
-## [6,] 0.0253504520 3.633666e-04 4.721880e-03 1.752615e-03 0.9609463741
+## [1,] 0.0001979849 9.251666e-05 8.228023e-05 1.374029e-04 0.0003064405
+## [2,] 0.0004943565 6.848981e-05 9.820101e-01 1.268902e-04 0.0165643082
+## [3,] 0.0002944155 4.882957e-05 9.988036e-01 1.888193e-05 0.0005382538
+## [4,] 0.1142591864 9.390427e-04 8.766105e-01 2.738602e-04 0.0030665372
+## [5,] 0.0114556879 2.301044e-04 6.716340e-03 1.151595e-03 0.9771020920
+## [6,] 0.0253504465 3.633663e-04 4.721876e-03 1.752614e-03 0.9609463882
 ##              [,6]         [,7]         [,8]         [,9]        [,10]
-## [1,] 0.0001963620 1.252948e-04 9.985702e-01 1.878275e-04 1.037197e-04
-## [2,] 0.0001660826 1.833598e-04 2.357889e-04 9.220995e-05 5.844376e-05
-## [3,] 0.0000637886 5.100825e-05 6.868126e-05 6.709721e-05 4.546202e-05
-## [4,] 0.0007906834 8.990925e-04 7.088244e-04 1.080922e-03 1.371326e-03
-## [5,] 0.0005254018 4.726644e-04 8.332618e-04 8.167810e-04 6.960722e-04
-## [6,] 0.0007236007 6.685461e-04 1.759546e-03 1.313855e-03 2.399765e-03</code></pre>
+## [1,] 1.963622e-04 1.252948e-04 9.985702e-01 1.878272e-04 1.037197e-04
+## [2,] 1.660827e-04 1.833599e-04 2.357891e-04 9.220991e-05 5.844376e-05
+## [3,] 6.378862e-05 5.100825e-05 6.868135e-05 6.709716e-05 4.546199e-05
+## [4,] 7.906836e-04 8.990925e-04 7.088248e-04 1.080922e-03 1.371325e-03
+## [5,] 5.254017e-04 4.726642e-04 8.332617e-04 8.167809e-04 6.960721e-04
+## [6,] 7.236003e-04 6.685457e-04 1.759545e-03 1.313854e-03 2.399764e-03</code></pre>
 <p>Note that the prevalence terms <span class="math inline">\(\theta\)</span> will add to 1 within a document. That is, the term tells us the proportion of (words associated with) topics for each document:</p>
-<div class="sourceCode" id="cb207"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode" id="cb209"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>What about connecting this info to our dfm and seeing if there are differences in the proportion topic 5 (economy) is addressed by each side.</p>
-<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/">fixest</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code>## 
-## Attaching package: 'fixest'</code></pre>
-<pre><code>## The following object is masked from 'package:arm':
-## 
-##     coefplot</code></pre>
-<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjPlot/">sjPlot</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/">fixest</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjPlot/">sjPlot</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">us_pres_prev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>topic5 <span class="op">=</span> <span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span>, <span class="fu"><a href="https://quanteda.io/reference/docvars.html">docvars</a></span><span class="op">(</span><span class="va">dfm_us_pres</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">feols_topic5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html">feols</a></span><span class="op">(</span><span class="va">topic5</span> <span class="op">~</span> <span class="va">party</span> , data <span class="op">=</span> <span class="va">us_pres_prev</span><span class="op">)</span></span>
@@ -633,9 +634,9 @@
 ##   unexpected results. It is recommended to convert these variables
 ##   to factors before fitting the model.
 ##   The following variables are of type character: `party`</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-109-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-97-1.png" alt="" width="672"></div>
 <p>Seems that Republican presidents address more the economy in their speeches. Let’s plot the proportion of speeches about the economy by president:</p>
-<div class="sourceCode" id="cb216"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb208"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">us_pres_prev</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Going to log the prev of topic 5 because is quite skewed but you should probably leave as is if you want to explore how topics are addressed. </span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">topic5</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">President</span>,<span class="va">topic5</span><span class="op">)</span>, color <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -643,9 +644,9 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"log(Theta)"</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">"Party"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">"BottleRocket2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-110-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-98-1.png" alt="" width="672"></div>
 <p>We can do something similar with the <code>stm</code> function directly. We just need to specify the functional form and add the document variables.</p>
-<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb209"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">topics_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/stm/man/estimateEffect.html">estimateEffect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span> <span class="op">~</span> <span class="va">party</span>, <span class="va">stm_us_pres</span>, <span class="fu"><a href="https://quanteda.io/reference/docvars.html">docvars</a></span><span class="op">(</span><span class="va">dfm_us_pres</span><span class="op">)</span><span class="op">)</span> <span class="co"># You can compare other topics by changing c(6,9). </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">topics_us_pres</span>, <span class="st">"party"</span>, method <span class="op">=</span> <span class="st">"difference"</span>,</span>
 <span>     cov.value1 <span class="op">=</span> <span class="st">"Democrat"</span>, </span>
@@ -654,29 +655,22 @@
 <span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">.75</span>,<span class="fl">.25</span><span class="op">)</span>,</span>
 <span>     custom.labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Topic 3: Slavery'</span>, <span class="st">'Topic 5: Economy'</span><span class="op">)</span>,</span>
 <span>     model <span class="op">=</span> <span class="va">stm_us_pres</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-111-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-99-1.png" alt="" width="672"></div>
 <p>Same results, Republicans mention more Topic 5: Economy.</p>
 
 </div>
 </div>
-
-
-
-
-
-
-
-
   <div class="chapter-nav">
 <div class="prev"><a href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></div>
-<div class="empty"></div>
+<div class="next"><a href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#week6"><span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling</a></li>
+<li><a class="nav-link" href="#week6"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="nav-link" href="#slides-5">Slides</a></li>
-<li><a class="nav-link" href="#setup-5"><span class="header-section-number">6.1</span> Setup</a></li>
-<li><a class="nav-link" href="#structural-topic-models"><span class="header-section-number">6.2</span> Structural Topic Models</a></li>
+<li><a class="nav-link" href="#k-means-clustering"><span class="header-section-number">6.1</span> K-Means Clustering</a></li>
+<li><a class="nav-link" href="#setup-5"><span class="header-section-number">6.2</span> Setup</a></li>
+<li><a class="nav-link" href="#structural-topic-models"><span class="header-section-number">6.3</span> Structural Topic Models</a></li>
 </ul>
 
       <div class="book-extra">
@@ -694,7 +688,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-25.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-26.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -1,5 +1,5 @@
 fig:curve
-tab:unnamed-chunk-57
+tab:unnamed-chunk-50
 week1
 setup
 get-data
@@ -34,9 +34,12 @@ complexity
 exercise-optional-1
 week5
 setup-4
-wordscores
 wordfish
 homework-2
 week6
+k-means-clustering
 setup-5
 structural-topic-models
+week7
+setup-6
+wordscores

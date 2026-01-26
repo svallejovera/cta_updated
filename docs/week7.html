@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 7 Week 7: A Primer on Supervised Learning | PS9594: Computational Text Analysis</title>
+<meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
+<meta name="description" content='Slides 7 Supervised Learning (link to slides)  7.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin") library(austin) # just for...'>
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 7 Week 7: A Primer on Supervised Learning | PS9594: Computational Text Analysis">
+<meta property="og:type" content="book">
+<meta property="og:description" content='Slides 7 Supervised Learning (link to slides)  7.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin") library(austin) # just for...'>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 7 Week 7: A Primer on Supervised Learning | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content='Slides 7 Supervised Learning (link to slides)  7.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin") library(austin) # just for...'>
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">PS9594: Computational Text Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">“Computational Text Analysis”</a></li>
+<li><a class="" href="readings.html">Reading List</a></li>
+<li><a class="" href="assignments.html">Assignments</a></li>
+<li><a class="" href="replication.html">Replication Exercise</a></li>
+<li><a class="" href="final_paper.html">Final Paper</a></li>
+<li><a class="" href="week1.html"><span class="header-section-number">1</span> Week 1: A Primer on Using Text as Data</a></li>
+<li><a class="" href="week2.html"><span class="header-section-number">2</span> Week 2: Tokenization and Word Frequency</a></li>
+<li><a class="" href="week3.html"><span class="header-section-number">3</span> Week 3: Dictionary-Based Approaches</a></li>
+<li><a class="" href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></li>
+<li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
+<li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
+<li><a class="active" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/svallejovera/cta_updated">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week7" class="section level1" number="7">
+<h1>
+<span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning<a class="anchor" aria-label="anchor" href="#week7"><i class="fas fa-link"></i></a>
+</h1>
+<div id="slides-6" class="section level2 unnumbered">
+<h2>Slides<a class="anchor" aria-label="anchor" href="#slides-6"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>7 Supervised Learning (<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/7%20A%20Primer%20on%20Supervised%20Learning.pptx">link</a> to slides)</li>
+</ul>
+</div>
+<div id="setup-6" class="section level2" number="7.1">
+<h2>
+<span class="header-section-number">7.1</span> Setup<a class="anchor" aria-label="anchor" href="#setup-6"><i class="fas fa-link"></i></a>
+</h2>
+<p>As always, we first load the packages that we’ll be using:</p>
+<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># devtools::install_github("conjugateprior/austin")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conjugateprior.github.io/austin">austin</a></span><span class="op">)</span> <span class="co"># just for those sweet wordscores</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elbersb/tidylog/">tidylog</a></span><span class="op">)</span> <span class="co"># to know what we are wrangling</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span> <span class="co"># for 'tidy' manipulation of text data</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://quanteda.io">quanteda</a></span><span class="op">)</span> <span class="co"># tokenization power house</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/quanteda/quanteda.textmodels">quanteda.textmodels</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson">wesanderson</a></span><span class="op">)</span> <span class="co"># to prettify</span></span></code></pre></div>
+</div>
+<div id="wordscores" class="section level2" number="7.2">
+<h2>
+<span class="header-section-number">7.2</span> Wordscores<a class="anchor" aria-label="anchor" href="#wordscores"><i class="fas fa-link"></i></a>
+</h2>
+<p>Laver et al. (2003) propose a supervised scaling technique called <em>Wordscores</em>. We learned the intuition in this week’s lecture. We will now replicate Table 1 from Laver and Benoit (2003) using the <code>austin</code> package. The package includes sample data that we will use:</p>
+<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">lbg</span><span class="op">)</span></span></code></pre></div>
+<p>Let’s keep only the reference documents:</p>
+<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">ref</span></span></code></pre></div>
+<pre><code>##      docs
+## words  R1  R2  R3  R4  R5
+##    A    2   0   0   0   0
+##    B    3   0   0   0   0
+##    C   10   0   0   0   0
+##    D   22   0   0   0   0
+##    E   45   0   0   0   0
+##    F   78   2   0   0   0
+##    G  115   3   0   0   0
+##    H  146  10   0   0   0
+##    I  158  22   0   0   0
+##    J  146  45   0   0   0
+##    K  115  78   2   0   0
+##    L   78 115   3   0   0
+##    M   45 146  10   0   0
+##    N   22 158  22   0   0
+##    O   10 146  45   0   0
+##    P    3 115  78   2   0
+##    Q    2  78 115   3   0
+##    R    0  45 146  10   0
+##    S    0  22 158  22   0
+##    T    0  10 146  45   0
+##    U    0   3 115  78   2
+##    V    0   2  78 115   3
+##    W    0   0  45 146  10
+##    X    0   0  22 158  22
+##    Y    0   0  10 146  45
+##    Z    0   0   3 115  78
+##    ZA   0   0   2  78 115
+##    ZB   0   0   0  45 146
+##    ZC   0   0   0  22 158
+##    ZD   0   0   0  10 146
+##    ZE   0   0   0   3 115
+##    ZF   0   0   0   2  78
+##    ZG   0   0   0   0  45
+##    ZH   0   0   0   0  22
+##    ZI   0   0   0   0  10
+##    ZJ   0   0   0   0   3
+##    ZK   0   0   0   0   2</code></pre>
+<p>This is the same matrix as in Figure 1, where we have a count of each word (in this case, letters) by reference document (i.e., documents that have already been labeled). We can assign scores (<code>A_scores</code>) to each reference text to place them on an ideological scale (or whatever scale we want). We then estimate <em>Wordscores</em> for each word.</p>
+<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># We do this in the order of the reference texts:</span></span>
+<span><span class="va">A_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>,<span class="op">-</span><span class="fl">0.75</span>,<span class="fl">0</span>,<span class="fl">0.75</span>,<span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">ws</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/classic.wordscores.html">classic.wordscores</a></span><span class="op">(</span><span class="va">ref</span>, scores<span class="op">=</span><span class="va">A_score</span><span class="op">)</span></span>
+<span><span class="va">ws</span><span class="op">$</span><span class="va">pi</span></span></code></pre></div>
+<pre><code>##         Score
+## A  -1.5000000
+## B  -1.5000000
+## C  -1.5000000
+## D  -1.5000000
+## E  -1.5000000
+## F  -1.4812500
+## G  -1.4809322
+## H  -1.4519231
+## I  -1.4083333
+## J  -1.3232984
+## K  -1.1846154
+## L  -1.0369898
+## M  -0.8805970
+## N  -0.7500000
+## O  -0.6194030
+## P  -0.4507576
+## Q  -0.2992424
+## R  -0.1305970
+## S   0.0000000
+## T   0.1305970
+## U   0.2992424
+## V   0.4507576
+## W   0.6194030
+## X   0.7500000
+## Y   0.8805970
+## Z   1.0369898
+## ZA  1.1846154
+## ZB  1.3232984
+## ZC  1.4083333
+## ZD  1.4519231
+## ZE  1.4809322
+## ZF  1.4812500
+## ZG  1.5000000
+## ZH  1.5000000
+## ZI  1.5000000
+## ZJ  1.5000000
+## ZK  1.5000000</code></pre>
+<p>Now we get the virgin text and predict the textscore by estimating the average of the weighted wordscores for the virgin document:</p>
+<div class="sourceCode" id="cb216"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="st">'V1'</span><span class="op">)</span></span>
+<span><span class="va">vir</span></span></code></pre></div>
+<pre><code>##      docs
+## words  V1
+##    A    0
+##    B    0
+##    C    0
+##    D    0
+##    E    0
+##    F    0
+##    G    0
+##    H    2
+##    I    3
+##    J   10
+##    K   22
+##    L   45
+##    M   78
+##    N  115
+##    O  146
+##    P  158
+##    Q  146
+##    R  115
+##    S   78
+##    T   45
+##    U   22
+##    V   10
+##    W    3
+##    X    2
+##    Y    0
+##    Z    0
+##    ZA   0
+##    ZB   0
+##    ZC   0
+##    ZD   0
+##    ZE   0
+##    ZF   0
+##    ZG   0
+##    ZH   0
+##    ZI   0
+##    ZJ   0
+##    ZK   0</code></pre>
+<div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># predict textscores for the virgin documents</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ws</span>, newdata<span class="op">=</span><span class="va">vir</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 37 of 37 words (100%) are scorable
+## 
+##     Score Std. Err. Rescaled  Lower  Upper
+## V1 -0.448    0.0119   -0.448 -0.459 -0.437</code></pre>
+<p>Cool.</p>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#week7"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
+<li><a class="nav-link" href="#slides-6">Slides</a></li>
+<li><a class="nav-link" href="#setup-6"><span class="header-section-number">7.1</span> Setup</a></li>
+<li><a class="nav-link" href="#wordscores"><span class="header-section-number">7.2</span> Wordscores</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/11-week7.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/11-week7.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-26.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
