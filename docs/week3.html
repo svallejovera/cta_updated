@@ -51,6 +51,8 @@
 <li><a class="" href="week2.html"><span class="header-section-number">2</span> Week 2: Tokenization and Word Frequency</a></li>
 <li><a class="active" href="week3.html"><span class="header-section-number">3</span> Week 3: Dictionary-Based Approaches</a></li>
 <li><a class="" href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></li>
+<li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
+<li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Scaling Techniques and Topic Modeling</a></li>
 </ul>
 
         <div class="book-extra">
@@ -74,7 +76,7 @@
 <span class="header-section-number">3.1</span> Setup<a class="anchor" aria-label="anchor" href="#setup-2"><i class="fas fa-link"></i></a>
 </h2>
 <p>As always, we first load the packages that we’ll be using:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elbersb/tidylog/">tidylog</a></span><span class="op">)</span> <span class="co"># to know what we are wrangling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span> <span class="co"># for 'tidy' manipulation of text data</span></span>
@@ -92,7 +94,7 @@
 <span class="header-section-number">3.2</span> Get Data:<a class="anchor" aria-label="anchor" href="#get-data-2"><i class="fas fa-link"></i></a>
 </h2>
 <p>For this example, we will be using data from <em>Ventura et al. (2021) - Connective effervescence and streaming chat during political debates</em>.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/ventura_etal_df.Rdata"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ventura_etal_df</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##   text_id
@@ -109,27 +111,20 @@
 ## 4                                                                                                                                                   This debate is why other counties laugh at us. School yard class president debate at best.
 ## 5                                                                    OMG\n ... shut up tRump ... so rude and out of control.  Obviously freaking \nout.  This is a debate NOT a convention or a speech or your platform.  \nLearn some manners
 ## 6                                                                                                      It’s\n hard to see what this country has become.  The Presidency is no longer a\n respected position it has lost all of it’s integrity.
-##                      id likes
-## 1              ABC News   100
-## 2            Anita Hill    61
-## 3          Dave Garland    99
-## 4              Carl Roy    47
-## 5 Lynda Martin-Chambers   154
-## 6         Nica Merchant   171
-##                    debate
-## 1 abc_first_debate_manual
-## 2 abc_first_debate_manual
-## 3 abc_first_debate_manual
-## 4 abc_first_debate_manual
-## 5 abc_first_debate_manual
-## 6 abc_first_debate_manual</code></pre>
+##                      id likes                  debate
+## 1              ABC News   100 abc_first_debate_manual
+## 2            Anita Hill    61 abc_first_debate_manual
+## 3          Dave Garland    99 abc_first_debate_manual
+## 4              Carl Roy    47 abc_first_debate_manual
+## 5 Lynda Martin-Chambers   154 abc_first_debate_manual
+## 6         Nica Merchant   171 abc_first_debate_manual</code></pre>
 </div>
 <div id="tokenization-etc." class="section level2" number="3.3">
 <h2>
 <span class="header-section-number">3.3</span> Tokenization etc.<a class="anchor" aria-label="anchor" href="#tokenization-etc."><i class="fas fa-link"></i></a>
 </h2>
 <p>The comments are mostly clean, but you can check (on your own) whether they require additional cleaning. In the previous code, I showed you how to lowercase text, remove stopwords, etc., using quanteda. We can also do this using tidytext<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;This code is adapted from Christopher Barrie’s course on &lt;a href="https://cjbarrie.github.io/CTA-ED/exercise-2-dictionary-based-methods.html"&gt;Computational Text Analysis&lt;/a&gt;.&lt;/p&gt;'><sup>3</sup></a>:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tokenize and lightly clean the `comments` text using tidytext.</span></span>
 <span><span class="co">#</span></span>
 <span><span class="co"># What this does:</span></span>
@@ -147,58 +142,40 @@
 <span>  <span class="co"># (this removes many punctuation-only / number-only tokens; tweak as needed)</span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">word</span>, <span class="st">"[a-z]"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Remove stopwords (common function words like "the", "and", etc.)</span></span>
-<span>  <span class="fu">filter</span><span class="op">(</span><span class="op">!</span><span class="va">word</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">stop_words</span><span class="op">$</span><span class="va">word</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tidy_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##    text_id         id likes
-## 1        1   ABC News   100
-## 2        1   ABC News   100
-## 3        1   ABC News   100
-## 4        1   ABC News   100
-## 5        1   ABC News   100
-## 6        1   ABC News   100
-## 7        1   ABC News   100
-## 8        1   ABC News   100
-## 9        1   ABC News   100
-## 10       1   ABC News   100
-## 11       1   ABC News   100
-## 12       1   ABC News   100
-## 13       1   ABC News   100
-## 14       1   ABC News   100
-## 15       1   ABC News   100
-## 16       1   ABC News   100
-## 17       1   ABC News   100
-## 18       2 Anita Hill    61
-## 19       2 Anita Hill    61
-## 20       2 Anita Hill    61
-##                     debate        word
-## 1  abc_first_debate_manual coronavirus
-## 2  abc_first_debate_manual  pandemic's
-## 3  abc_first_debate_manual      impact
-## 4  abc_first_debate_manual        race
-## 5  abc_first_debate_manual     display
-## 6  abc_first_debate_manual  candidates
-## 7  abc_first_debate_manual     partake
-## 8  abc_first_debate_manual   handshake
-## 9  abc_first_debate_manual   customary
-## 10 abc_first_debate_manual         top
-## 11 abc_first_debate_manual      events
-## 12 abc_first_debate_manual        size
-## 13 abc_first_debate_manual    audience
-## 14 abc_first_debate_manual     limited
-## 15 abc_first_debate_manual       https
-## 16 abc_first_debate_manual     abcn.ws
-## 17 abc_first_debate_manual     3kvyl16
-## 18 abc_first_debate_manual         god
-## 19 abc_first_debate_manual       bless
-## 20 abc_first_debate_manual       trump</code></pre>
+<span>  <span class="fu">filter</span><span class="op">(</span><span class="op">!</span><span class="va">word</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">stop_words</span><span class="op">$</span><span class="va">word</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: changed 29,261 values (99%) of 'comments' (0 new NAs)
+## filter: removed 3,374 rows (1%), 494,341 rows remaining
+## filter: removed 296,793 rows (60%), 197,548 rows remaining</code></pre>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tidy_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##    text_id         id likes                  debate        word
+## 1        1   ABC News   100 abc_first_debate_manual coronavirus
+## 2        1   ABC News   100 abc_first_debate_manual  pandemic's
+## 3        1   ABC News   100 abc_first_debate_manual      impact
+## 4        1   ABC News   100 abc_first_debate_manual        race
+## 5        1   ABC News   100 abc_first_debate_manual     display
+## 6        1   ABC News   100 abc_first_debate_manual  candidates
+## 7        1   ABC News   100 abc_first_debate_manual     partake
+## 8        1   ABC News   100 abc_first_debate_manual   handshake
+## 9        1   ABC News   100 abc_first_debate_manual   customary
+## 10       1   ABC News   100 abc_first_debate_manual         top
+## 11       1   ABC News   100 abc_first_debate_manual      events
+## 12       1   ABC News   100 abc_first_debate_manual        size
+## 13       1   ABC News   100 abc_first_debate_manual    audience
+## 14       1   ABC News   100 abc_first_debate_manual     limited
+## 15       1   ABC News   100 abc_first_debate_manual       https
+## 16       1   ABC News   100 abc_first_debate_manual     abcn.ws
+## 17       1   ABC News   100 abc_first_debate_manual     3kvyl16
+## 18       2 Anita Hill    61 abc_first_debate_manual         god
+## 19       2 Anita Hill    61 abc_first_debate_manual       bless
+## 20       2 Anita Hill    61 abc_first_debate_manual       trump</code></pre>
 </div>
 <div id="keywords" class="section level2" number="3.4">
 <h2>
 <span class="header-section-number">3.4</span> Keywords<a class="anchor" aria-label="anchor" href="#keywords"><i class="fas fa-link"></i></a>
 </h2>
 <p>We can detect the occurrence of the words <strong>trump</strong> and <strong>biden</strong> in each comment (<code>text_id</code>).</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a comment-level dataset indicating whether each comment mentions "trump" and/or "biden" at least once.</span></span>
 <span></span>
 <span><span class="va">trump_biden</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -216,36 +193,41 @@
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Reduce to the unit of analysis: one row per comment (text_id)</span></span>
 <span>  <span class="fu">distinct</span><span class="op">(</span><span class="va">text_id</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">text_id</span>, <span class="va">trump_cmmnt</span>, <span class="va">biden_cmmnt</span>, <span class="va">likes</span>, <span class="va">debate</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trump_biden</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">text_id</span>, <span class="va">trump_cmmnt</span>, <span class="va">biden_cmmnt</span>, <span class="va">likes</span>, <span class="va">debate</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: new variable 'trump_token' (double) with 2 unique values and 0% NA
+##         new variable 'biden_token' (double) with 2 unique values and 0% NA
+## group_by: one grouping variable (text_id)
+## mutate (grouped): new variable 'trump_cmmnt' (double) with 2 unique values and 0% NA
+##                   new variable 'biden_cmmnt' (double) with 2 unique values and 0% NA
+## distinct (grouped): removed 168,013 rows (85%), 29,535 rows remaining (removed 0 groups, 29,535 groups remaining)</code></pre>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trump_biden</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 20 × 5
 ## # Groups:   text_id [20]
-##    text_id trump_cmmnt biden_cmmnt likes
-##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt;
-##  1       1           0           0   100
-##  2       2           1           0    61
-##  3       3           1           0    99
-##  4       4           0           0    47
-##  5       5           1           0   154
-##  6       6           0           0   171
-##  7       7           0           0    79
-##  8       8           0           0    39
-##  9       9           0           0    53
-## 10      10           0           0    36
-## 11      11           1           0    41
-## 12      12           0           0    28
-## 13      13           1           0    54
-## 14      14           0           0    30
-## 15      15           1           0    27
-## 16      16           1           1    31
-## 17      17           1           0    35
-## 18      18           1           1    32
-## 19      19           0           0    34
-## 20      20           1           0    37
-## # ℹ 1 more variable: debate &lt;chr&gt;</code></pre>
+##    text_id trump_cmmnt biden_cmmnt likes debate                 
+##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;                  
+##  1       1           0           0   100 abc_first_debate_manual
+##  2       2           1           0    61 abc_first_debate_manual
+##  3       3           1           0    99 abc_first_debate_manual
+##  4       4           0           0    47 abc_first_debate_manual
+##  5       5           1           0   154 abc_first_debate_manual
+##  6       6           0           0   171 abc_first_debate_manual
+##  7       7           0           0    79 abc_first_debate_manual
+##  8       8           0           0    39 abc_first_debate_manual
+##  9       9           0           0    53 abc_first_debate_manual
+## 10      10           0           0    36 abc_first_debate_manual
+## 11      11           1           0    41 abc_first_debate_manual
+## 12      12           0           0    28 abc_first_debate_manual
+## 13      13           1           0    54 abc_first_debate_manual
+## 14      14           0           0    30 abc_first_debate_manual
+## 15      15           1           0    27 abc_first_debate_manual
+## 16      16           1           1    31 abc_first_debate_manual
+## 17      17           1           0    35 abc_first_debate_manual
+## 18      18           1           1    32 abc_first_debate_manual
+## 19      19           0           0    34 abc_first_debate_manual
+## 20      20           1           0    37 abc_first_debate_manual</code></pre>
 <p>Rather than replicating the results from Figure 3 in Ventura et al. (2021), we will estimate the median number of likes that comments mentioning Trump, Biden, both, or neither receive:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Create categories</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>mentions_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">trump_cmmnt</span><span class="op">==</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">biden_cmmnt</span><span class="op">==</span><span class="fl">0</span>, <span class="st">"1. None"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
@@ -268,9 +250,14 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">""</span>, y <span class="op">=</span> <span class="st">"Density"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span>,</span>
 <span>       caption <span class="op">=</span> <span class="st">"Note: Median likes in dashed lines."</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
+<pre><code>## mutate (grouped): new variable 'mentions_cat' (character) with 4 unique values and 0% NA
+## filter (grouped): removed 8,136 rows (28%), 21,399 rows remaining (removed 8,136 groups, 21,399 groups remaining)
+## group_by: one grouping variable (mentions_cat)
+## mutate (grouped): new variable 'likes_mean' (double) with 3 unique values and 0% NA
+## ungroup: no grouping variables remain</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-40-1.png" width="672"></div>
 <p>And we can also see if there are differences across news media:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Create categories</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>mentions_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">trump_cmmnt</span><span class="op">==</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">biden_cmmnt</span><span class="op">==</span><span class="fl">0</span>, <span class="st">"1. None"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
@@ -296,9 +283,15 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">""</span>, y <span class="op">=</span> <span class="st">"Density"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span>,</span>
 <span>       caption <span class="op">=</span> <span class="st">"Note: Median likes in dashed lines."</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
+<pre><code>## mutate (grouped): new variable 'mentions_cat' (character) with 4 unique values and 0% NA
+##                   new variable 'media' (character) with 3 unique values and 0% NA
+## filter (grouped): removed 8,136 rows (28%), 21,399 rows remaining (removed 8,136 groups, 21,399 groups remaining)
+## group_by: 2 grouping variables (mentions_cat, media)
+## mutate (grouped): new variable 'median_like' (double) with 6 unique values and 0% NA
+## ungroup: no grouping variables remain</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-41-1.png" width="672"></div>
 <p>Similar to Young and Soroka (2012), we can also explore our keywords of interest in context. This is a good way to validate our proposed measure (e.g., is mentioning <em>trump</em> a reflection of interest, or simply relevance?).</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a quanteda corpus from the Ventura et al. dataset.</span></span>
 <span><span class="co"># - text_field indicates which column contains the text to treat as documents.</span></span>
 <span><span class="co"># - unique_docnames ensures each document is assigned a unique ID.</span></span>
@@ -318,94 +311,73 @@
 <span><span class="co"># Inspect the first 20 KWIC results</span></span>
 <span><span class="co"># (The number of tokens before/after the keyword is controlled by the window size in kwic().)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">kw_trump</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Keyword-in-context with 20 matches.                                         
-##    [text2, 5]      God please bless all |
-##    [text3, 1]                           |
-##    [text5, 7]               ... shut up |
-##  [text11, 11] a bad opiate problem then |
-##   [text13, 4]                 This is a |
-##   [text15, 1]                           |
-##   [text16, 8]  this SO much better than |
-##   [text17, 3]                    I love |
-##   [text18, 4]            Biden is right |
-##   [text20, 1]                           |
-##  [text22, 12]     being a decent human. |
-##   [text23, 1]                           |
-##  [text27, 11]          for once, i wish |
-##  [text28, 10]             it America... |
-##   [text30, 1]                           |
-##   [text31, 1]                           |
-##   [text32, 1]                           |
-##  [text32, 15]    People open your eyes. |
-##   [text34, 1]                           |
-##   [text36, 1]                           |
-##                                         
-##  Trump | supporters. They need it       
-##  Trump | is a living disaster!          
-##  tRump | ... so rude                    
-##  trump | brings up about bidens son     
-##  TRUMP | all about ME debate and        
-##  Trump | is looking pretty flushed right
-##  Trump | and I wasn’t even going        
-##  Trump | ! He is the best               
-##  Trump | doesn’t have a plan for        
-##  Trump | worse president EVER 😡 thank  
-##  Trump | doesn't know the meaning of    
-##  Trump | such a hateful person he       
-##  trump | would shut his trap for        
-##  Trump | IS NOT smarter than a          
-##  Trump | has improved our economy and   
-##  Trump | has done so much harm          
-##  Trump | is a clown and after           
-##  Trump | is evil.                       
-##  Trump | is so broke that is            
-##  Trump | is literally making this debate</code></pre>
+<pre><code>## Keyword-in-context with 20 matches.                                                 
+##    [text2, 5]      God please bless all | Trump |
+##    [text3, 1]                           | Trump |
+##    [text5, 7]               ... shut up | tRump |
+##  [text11, 11] a bad opiate problem then | trump |
+##   [text13, 4]                 This is a | TRUMP |
+##   [text15, 1]                           | Trump |
+##   [text16, 8]  this SO much better than | Trump |
+##   [text17, 3]                    I love | Trump |
+##   [text18, 4]            Biden is right | Trump |
+##   [text20, 1]                           | Trump |
+##  [text22, 12]     being a decent human. | Trump |
+##   [text23, 1]                           | Trump |
+##  [text27, 11]          for once, i wish | trump |
+##  [text28, 10]             it America... | Trump |
+##   [text30, 1]                           | Trump |
+##   [text31, 1]                           | Trump |
+##   [text32, 1]                           | Trump |
+##  [text32, 15]    People open your eyes. | Trump |
+##   [text34, 1]                           | Trump |
+##   [text36, 1]                           | Trump |
+##                                 
+##  supporters. They need it       
+##  is a living disaster!          
+##  ... so rude                    
+##  brings up about bidens son     
+##  all about ME debate and        
+##  is looking pretty flushed right
+##  and I wasn’t even going        
+##  ! He is the best               
+##  doesn’t have a plan for        
+##  worse president EVER 😡 thank  
+##  doesn't know the meaning of    
+##  such a hateful person he       
+##  would shut his trap for        
+##  IS NOT smarter than a          
+##  has improved our economy and   
+##  has done so much harm          
+##  is a clown and after           
+##  is evil.                       
+##  is so broke that is            
+##  is literally making this debate</code></pre>
 <p>We can also look for more than one word at the same time:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kw_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/kwic.html">kwic</a></span><span class="op">(</span><span class="va">toks_ventura</span>, pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"best"</span>,<span class="st">"worst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">kw_best</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Keyword-in-context with 20 matches.                                             
-##    [text4, 17] yard class president debate at
-##    [text10, 1]                               
-##    [text17, 8]               Trump! He is the
-##    [text43, 6]           This is gonna be the
-##   [text81, 31]  an incompetent President, the
-##   [text81, 33]          President, the worst,
-##   [text81, 35]              the worst, worst,
-##   [text82, 11]         was totally one sided!
-##    [text86, 8]           right - Trump is the
-##   [text100, 9]             !! BRAVO BRAVO THE
-##   [text102, 4]                  Obama was the
-##  [text119, 10]            he said he would do
-##  [text138, 13]               think. He is the
-##  [text141, 22]           puppet could be? The
-##   [text143, 6]           Trump may not be the
-##  [text158, 15]              This man is a the
-##   [text167, 3]                         He the
-##  [text221, 34]           by far have been the
-##  [text221, 36]           have been the worst,
-##  [text221, 38]              the worst, WORST,
-##           
-##  | best  |
-##  | Worst |
-##  | best  |
-##  | best  |
-##  | worst |
-##  | worst |
-##  | worst |
-##  | Worst |
-##  | worst |
-##  | BEST  |
-##  | worst |
-##  | Best  |
-##  | worst |
-##  | worst |
-##  | best  |
-##  | worst |
-##  | worst |
-##  | worst |
-##  | WORST |
-##  | WORST |
+<pre><code>## Keyword-in-context with 20 matches.                                                       
+##    [text4, 17] yard class president debate at | best  |
+##    [text10, 1]                                | Worst |
+##    [text17, 8]               Trump! He is the | best  |
+##    [text43, 6]           This is gonna be the | best  |
+##   [text81, 31]  an incompetent President, the | worst |
+##   [text81, 33]          President, the worst, | worst |
+##   [text81, 35]              the worst, worst, | worst |
+##   [text82, 11]         was totally one sided! | Worst |
+##    [text86, 8]           right - Trump is the | worst |
+##   [text100, 9]             !! BRAVO BRAVO THE | BEST  |
+##   [text102, 4]                  Obama was the | worst |
+##  [text119, 10]            he said he would do | Best  |
+##  [text138, 13]               think. He is the | worst |
+##  [text141, 22]           puppet could be? The | worst |
+##   [text143, 6]           Trump may not be the | best  |
+##  [text158, 15]              This man is a the | worst |
+##   [text167, 3]                         He the | worst |
+##  [text221, 34]           by far have been the | worst |
+##  [text221, 36]           have been the worst, | WORST |
+##  [text221, 38]              the worst, WORST, | WORST |
 ##                                     
 ##  .                                  
 ##  debate I’ve ever seen!             
@@ -428,7 +400,7 @@
 ##  , WORST PRESIDENT!!                
 ##  PRESIDENT!!!</code></pre>
 <p>Alternatively, we can examine which words most commonly occur together. These are called <em>collocations</em> (a concept closely related to <em>n-grams</em>). Here, we want to identify the most common names mentioned (first and last names).</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">toks_ventura</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_ventura</span>, remove_punct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">col_ventura</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens_select.html">tokens_select</a></span><span class="op">(</span><span class="va">toks_ventura</span>, </span>
 <span>                                <span class="co"># Keep only tokens that start with a capital letter</span></span>
@@ -438,51 +410,30 @@
 <span>                                padding <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>                  <span class="fu"><a href="https://quanteda.io/reference/textstat_collocations.html">textstat_collocations</a></span><span class="op">(</span>min_count <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="co"># Minimum number of collocations to be taken into account.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">col_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##          collocation count count_nested
-## 1      chris wallace  1695            0
-## 2    president trump   831            0
-## 3          joe biden   431            0
-## 4           fox news   267            0
-## 5       mr president   152            0
-## 6      united states   144            0
-## 7       donald trump   141            0
-## 8         mike pence    40            0
-## 9       jo jorgensen    78            0
-## 10             HE IS    43            0
-## 11  democratic party    38            0
-## 12    vice president   347            0
-## 13     CHRIS WALLACE    38            0
-## 14   PRESIDENT TRUMP    37            0
-## 15          TRUMP IS    42            0
-## 16       white house    47            0
-## 17 african americans    35            0
-## 18         JOE BIDEN    25            0
-## 19           YOU ARE    27            0
-## 20            IS NOT    34            0
-##    length    lambda         z
-## 1       2  6.752252 128.27065
-## 2       2  3.747948  84.12773
-## 3       2  3.389153  59.43303
-## 4       2  8.943930  53.78327
-## 5       2  4.985057  45.89307
-## 6       2 12.106819  36.13493
-## 7       2  4.735894  35.48376
-## 8       2  8.952895  34.74457
-## 9       2 10.969720  34.45690
-## 10      2  6.205826  34.13557
-## 11      2  9.093924  31.88407
-## 12      2  8.555551  31.81775
-## 13      2  9.634400  31.78949
-## 14      2  5.845521  30.56607
-## 15      2  5.197700  30.15608
-## 16      2 11.387847  29.41946
-## 17      2  7.750170  29.38751
-## 18      2  7.534616  28.84871
-## 19      2  6.651381  28.81572
-## 20      2  5.508680  28.73548</code></pre>
+<pre><code>##          collocation count count_nested length    lambda         z
+## 1      chris wallace  1695            0      2  6.752252 128.27065
+## 2    president trump   831            0      2  3.747948  84.12773
+## 3          joe biden   431            0      2  3.389153  59.43303
+## 4           fox news   267            0      2  8.943930  53.78327
+## 5       mr president   152            0      2  4.985057  45.89307
+## 6      united states   144            0      2 12.106819  36.13493
+## 7       donald trump   141            0      2  4.735894  35.48376
+## 8         mike pence    40            0      2  8.952895  34.74457
+## 9       jo jorgensen    78            0      2 10.969720  34.45690
+## 10             HE IS    43            0      2  6.205826  34.13557
+## 11  democratic party    38            0      2  9.093924  31.88407
+## 12    vice president   347            0      2  8.555551  31.81775
+## 13     CHRIS WALLACE    38            0      2  9.634400  31.78949
+## 14   PRESIDENT TRUMP    37            0      2  5.845521  30.56607
+## 15          TRUMP IS    42            0      2  5.197700  30.15608
+## 16       white house    47            0      2 11.387847  29.41946
+## 17 african americans    35            0      2  7.750170  29.38751
+## 18         JOE BIDEN    25            0      2  7.534616  28.84871
+## 19           YOU ARE    27            0      2  6.651381  28.81572
+## 20            IS NOT    34            0      2  5.508680  28.73548</code></pre>
 <p>(The <span class="math inline">\(\lambda\)</span> score is a measure of how strongly two words are associated, for example, how likely <em>chris</em> and <em>wallace</em> are to occur next to each other. For a complete explanation, you can <a href="http://web.science.mq.edu.au/~mjohnson/papers/2001/dpb-colloc01.pdf">read this paper</a>.)</p>
 <p>We can also discover collocations longer than two words. In the example below, we identify collocations consisting of three words.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify frequent collocations (multi-word expressions) in the Ventura corpus.</span></span>
 <span><span class="co"># - tokens_select() is used here mainly to ensure settings are explicit:</span></span>
 <span><span class="co">#   * case_insensitive = FALSE keeps case distinctions (e.g., "Trump" vs "trump")</span></span>
@@ -499,48 +450,27 @@
 <span></span>
 <span><span class="co"># Inspect the top 20 collocations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">col_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##            collocation count count_nested
-## 1          know how to   115            0
-## 2  the american people   220            0
-## 3          this is the   158            0
-## 4           to do with   108            0
-## 5       this debate is   167            0
-## 6             is not a   139            0
-## 7     wallace needs to   172            0
-## 8         is the worst   110            0
-## 9            is such a   107            0
-## 10        trump is the   153            0
-## 11           is a joke   248            0
-## 12      trump has done   105            0
-## 13          trump is a   322            0
-## 14         this is not   119            0
-## 15      trump needs to   131            0
-## 16         what a joke   141            0
-## 17   the united states   132            0
-## 18         going to be   122            0
-## 19         is going to   210            0
-## 20          biden is a   164            0
-##    length      lambda           z
-## 1       3 3.098608190 11.32651308
-## 2       3 2.602503749 10.16184037
-## 3       3 1.393392161  9.01490638
-## 4       3 4.010890138  7.21665079
-## 5       3 0.994328169  6.14171313
-## 6       3 0.796789305  6.08626604
-## 7       3 1.635032948  4.63118161
-## 8       3 1.840376131  3.63917670
-## 9       3 0.776121492  2.54094422
-## 10      3 0.280826175  2.53147919
-## 11      3 2.096508909  2.53031226
-## 12      3 0.644366045  2.27854315
-## 13      3 0.204080417  2.01355366
-## 14      3 0.447286359  1.99058988
-## 15      3 0.577684570  1.93126531
-## 16      3 2.376681732  1.67038242
-## 17      3 0.738270253  1.43145851
-## 18      3 1.918098701  1.35112904
-## 19      3 0.101248917  0.60225753
-## 20      3 0.001248882  0.01013271</code></pre>
+<pre><code>##            collocation count count_nested length      lambda           z
+## 1          know how to   115            0      3 3.098608190 11.32651308
+## 2  the american people   220            0      3 2.602503749 10.16184037
+## 3          this is the   158            0      3 1.393392161  9.01490638
+## 4           to do with   108            0      3 4.010890138  7.21665079
+## 5       this debate is   167            0      3 0.994328169  6.14171313
+## 6             is not a   139            0      3 0.796789305  6.08626604
+## 7     wallace needs to   172            0      3 1.635032948  4.63118161
+## 8         is the worst   110            0      3 1.840376131  3.63917670
+## 9            is such a   107            0      3 0.776121492  2.54094422
+## 10        trump is the   153            0      3 0.280826175  2.53147919
+## 11           is a joke   248            0      3 2.096508909  2.53031226
+## 12      trump has done   105            0      3 0.644366045  2.27854315
+## 13          trump is a   322            0      3 0.204080417  2.01355366
+## 14         this is not   119            0      3 0.447286359  1.99058988
+## 15      trump needs to   131            0      3 0.577684570  1.93126531
+## 16         what a joke   141            0      3 2.376681732  1.67038242
+## 17   the united states   132            0      3 0.738270253  1.43145851
+## 18         going to be   122            0      3 1.918098701  1.35112904
+## 19         is going to   210            0      3 0.101248917  0.60225753
+## 20          biden is a   164            0      3 0.001248882  0.01013271</code></pre>
 </div>
 <div id="dictionary-approaches" class="section level2" number="3.5">
 <h2>
@@ -556,7 +486,7 @@
 <li>
 <code>AFFIN</code>: measures sentiment with a numeric score between -5 and 5, and were validated in <a href="http://www2.imm.dtu.dk/pubdb/edoc/imm6006.pdf">this paper</a>.</li>
 </ul>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/get_sentiments.html">get_sentiments</a></span><span class="op">(</span><span class="st">"afinn"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 2,477 × 2
 ##    word       value
@@ -576,7 +506,7 @@
 <li>
 <code>bing</code>: sentiment words found in online forums. More information <a href="https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html">here</a>.</li>
 </ul>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/get_sentiments.html">get_sentiments</a></span><span class="op">(</span><span class="st">"bing"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6,786 × 2
 ##    word        sentiment
@@ -596,7 +526,7 @@
 <li>
 <code>nrc</code>: underpaid workers from Amazon mechanical Turk coded the emotional valence of a long list of terms, which were validated in <a href="https://arxiv.org/pdf/1308.6297.pdf">this paper</a>. Also, check this paper about MTurk, and <a href="https://link.springer.com/article/10.3758/s13428-025-02852-7">why you shouldn’t trust data collected on MTurk</a>.</li>
 </ul>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/get_sentiments.html">get_sentiments</a></span><span class="op">(</span><span class="st">"nrc"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 13,872 × 2
 ##    word        sentiment
@@ -613,24 +543,21 @@
 ## 10 abandonment fear     
 ## # ℹ 13,862 more rows</code></pre>
 <p>Each dictionary classifies and quantifies words in a different way. Let’s use the <code>nrc</code> sentiment dictionary to analyze our comments dataset. The <code>nrc</code> dictionary classifies, among other concepts, words as reflecting <em>positive</em> or <em>negative</em> sentiment.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nrc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/get_sentiments.html">get_sentiments</a></span><span class="op">(</span><span class="st">"nrc"</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">nrc</span><span class="op">$</span><span class="va">sentiment</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
-##        anger anticipation      disgust 
-##         1245          837         1056 
-##         fear          joy     negative 
-##         1474          687         3316 
-##     positive      sadness     surprise 
-##         2308         1187          532 
-##        trust 
-##         1230</code></pre>
+##        anger anticipation      disgust         fear          joy 
+##         1245          837         1056         1474          687 
+##     negative     positive      sadness     surprise        trust 
+##         3316         2308         1187          532         1230</code></pre>
 <p>We will focus solely on <em>positive</em> or <em>negative</em> sentiment:</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nrc_pos_neg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/get_sentiments.html">get_sentiments</a></span><span class="op">(</span><span class="st">"nrc"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">filter</span><span class="op">(</span><span class="va">sentiment</span> <span class="op">==</span> <span class="st">"positive"</span> <span class="op">|</span> <span class="va">sentiment</span> <span class="op">==</span> <span class="st">"negative"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ventura_pos_neg</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">filter</span><span class="op">(</span><span class="va">sentiment</span> <span class="op">==</span> <span class="st">"positive"</span> <span class="op">|</span> <span class="va">sentiment</span> <span class="op">==</span> <span class="st">"negative"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## filter: removed 8,248 rows (59%), 5,624 rows remaining</code></pre>
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ventura_pos_neg</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">nrc_pos_neg</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Joining with `by = join_by(word)`
 ## left_join: added one column (sentiment)
@@ -640,12 +567,12 @@
 ## &gt; =========
 ## &gt; rows total 199,263</code></pre>
 <p>Let’s check the top <em>positive</em> words and the top <em>negative</em> words:</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ventura_pos_neg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sentiment</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">count</span><span class="op">(</span><span class="va">word</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## count: now 14,242 rows and 3 columns, one
-## group variable remaining (sentiment)</code></pre>
+<pre><code>## group_by: one grouping variable (sentiment)
+## count: now 14,242 rows and 3 columns, one group variable remaining (sentiment)</code></pre>
 <pre><code>## # A tibble: 14,242 × 3
 ## # Groups:   sentiment [3]
 ##    sentiment word          n
@@ -664,7 +591,7 @@
 <p>Some classifications make intuitive sense: “love” is <em>positive</em> and “bully” is <em>negative</em>. Others are less convincing: “talk” is positive? “joke” is negative? Some depend heavily on context: “vice” is negative, but <em>vice president</em> typically is not (especially since “president” is classified as “positive,” which… really?). And then “vote” is both positive and negative, which… what?</p>
 <p>Let’s turn a blind eye for now (but, once again, see Grimmer et al., Chapter 15 for best practices).</p>
 <p>Do people who watch different news media use different language? Let’s see what the data tell us. As always, check the unit of analysis in your dataset. In this case, each observation is a word, but we have a grouping variable for the comment (<code>text_id</code>), so we can count how many <em>positive</em> and <em>negative</em> words appear in each comment. We will calculate a net sentiment score by subtracting the number of negative words from the number of positive words (within each comment).</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comment_pos_neg</span> <span class="op">&lt;-</span> <span class="va">ventura_pos_neg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Create dummies of pos and neg for counting</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>pos_dum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">sentiment</span> <span class="op">==</span> <span class="st">"positive"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,</span>
@@ -678,29 +605,35 @@
 <span>  <span class="fu">distinct</span><span class="op">(</span><span class="va">text_id</span>,.keep_all<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Now we estimate the net sentiment score. You can change this and get a different way to measure the ratio of positive to negative</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>net_sent <span class="op">=</span> <span class="va">total_pos</span> <span class="op">-</span> <span class="va">total_neg</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> </span>
-<span>  </span>
-<span><span class="co"># Note that the `word` and `sentiment` columns are meaningless now</span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
+<pre><code>## mutate: new variable 'pos_dum' (double) with 3 unique values and 74% NA
+##         new variable 'neg_dum' (double) with 3 unique values and 74% NA
+## group_by: one grouping variable (text_id)
+## mutate (grouped): new variable 'total_words' (integer) with 25 unique values and 0% NA
+##                   new variable 'total_pos' (double) with 14 unique values and 0% NA
+##                   new variable 'total_neg' (double) with 10 unique values and 0% NA
+## distinct (grouped): removed 169,728 rows (85%), 29,535 rows remaining (removed 0 groups, 29,535 groups remaining)
+## mutate (grouped): new variable 'net_sent' (double) with 21 unique values and 0% NA
+## ungroup: no grouping variables remain</code></pre>
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Note that the `word` and `sentiment` columns are meaningless now</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">comment_pos_neg</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 10 × 12
-##    text_id id     likes debate word  sentiment
-##      &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    
-##  1       1 ABC N…   100 abc_f… coro… &lt;NA&gt;     
-##  2       2 Anita…    61 abc_f… god   positive 
-##  3       3 Dave …    99 abc_f… trump &lt;NA&gt;     
-##  4       4 Carl …    47 abc_f… deba… positive 
-##  5       5 Lynda…   154 abc_f… omg   &lt;NA&gt;     
-##  6       6 Nica …   171 abc_f… it’s  &lt;NA&gt;     
-##  7       7 Conni…    79 abc_f… happ… &lt;NA&gt;     
-##  8       8 Tammy…    39 abc_f… expe… &lt;NA&gt;     
-##  9       9 Susan…    53 abc_f… smart &lt;NA&gt;     
-## 10      10 Dana …    36 abc_f… worst &lt;NA&gt;     
-## # ℹ 6 more variables: pos_dum &lt;dbl&gt;,
-## #   neg_dum &lt;dbl&gt;, total_words &lt;int&gt;,
-## #   total_pos &lt;dbl&gt;, total_neg &lt;dbl&gt;,
-## #   net_sent &lt;dbl&gt;</code></pre>
+##    text_id id    likes debate word  sentiment pos_dum neg_dum total_words
+##      &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt;
+##  1       1 ABC …   100 abc_f… coro… &lt;NA&gt;           NA      NA          17
+##  2       2 Anit…    61 abc_f… god   positive        1       0           4
+##  3       3 Dave…    99 abc_f… trump &lt;NA&gt;           NA      NA           6
+##  4       4 Carl…    47 abc_f… deba… positive        1       0           8
+##  5       5 Lynd…   154 abc_f… omg   &lt;NA&gt;           NA      NA          12
+##  6       6 Nica…   171 abc_f… it’s  &lt;NA&gt;           NA      NA           9
+##  7       7 Conn…    79 abc_f… happ… &lt;NA&gt;           NA      NA           7
+##  8       8 Tamm…    39 abc_f… expe… &lt;NA&gt;           NA      NA           4
+##  9       9 Susa…    53 abc_f… smart &lt;NA&gt;           NA      NA          13
+## 10      10 Dana…    36 abc_f… worst &lt;NA&gt;           NA      NA          15
+## # ℹ 3 more variables: total_pos &lt;dbl&gt;, total_neg &lt;dbl&gt;, net_sent &lt;dbl&gt;</code></pre>
 <p>Ok, now we can plot the differences:</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comment_pos_neg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="co"># Create categories</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>media <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">debate</span>, <span class="st">"abc"</span><span class="op">)</span>, <span class="st">"ABC"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
@@ -720,7 +653,10 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">""</span>, y <span class="op">=</span> <span class="st">"Count"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span>,</span>
 <span>       caption <span class="op">=</span> <span class="st">"Note: Mean net sentiment in dashed lines."</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
+<pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
+## group_by: one grouping variable (media)
+## mutate (grouped): new variable 'median_sent' (double) with 3 unique values and 0% NA</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
 </div>
 <div id="domain-specific-dictionaries" class="section level3" number="3.5.2">
 <h3>
@@ -728,7 +664,7 @@
 </h3>
 <p>Sentiment dictionaries are common, but you can build a dictionary for <em>any</em> concept you’re interested in. As long as you can create a lexicon (and validate it), you can conduct an analysis similar to the one we just carried out. This time, rather than using an off-the-shelf sentiment dictionary, we will create our own. Let’s try a dictionary for two topics: the economy and migration.</p>
 <p>As long as the dictionary has the same structure as our <code>nrc_pos_neg</code> object, we can follow the same process we used for the sentiment dictionary.</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define two simple, domain-specific dictionaries (lexicons) for:</span></span>
 <span><span class="co"># 1) the economy and 2) migration.</span></span>
 <span><span class="co"># Each dictionary is a two-column data frame with:</span></span>
@@ -768,7 +704,7 @@
 ## 13       daca migration
 ## 14    dreamer migration</code></pre>
 <p>Let’s see if we find some of these words in our comments:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ventura_topic</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">dict</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Joining with `by = join_by(word)`
@@ -778,13 +714,14 @@
 ## &gt; matched rows 1,373
 ## &gt; =========
 ## &gt; rows total 197,548</code></pre>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ventura_topic</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">topic</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">topic</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">count</span><span class="op">(</span><span class="va">word</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## count: now 11 rows and 3 columns, one group
-## variable remaining (topic)</code></pre>
+<pre><code>## filter: removed 196,175 rows (99%), 1,373 rows remaining
+## group_by: one grouping variable (topic)
+## count: now 11 rows and 3 columns, one group variable remaining (topic)</code></pre>
 <pre><code>## # A tibble: 11 × 3
 ## # Groups:   topic [2]
 ##    topic     word           n
@@ -802,7 +739,7 @@
 ## 11 migration visa           1</code></pre>
 <p>Not that many. Note that we did not stem or lemmatize our corpus, so if we want to capture “job” <em>and</em> “jobs,” we need to include both in our dictionary. In other words, any preprocessing steps we apply to the corpus should also be applied to the dictionary.</p>
 <p>If you are a bit more versed in R, you will notice that dictionaries are often represented as lists. <code>quanteda</code> understands dictionaries as lists, so we can build them that way and use its <code><a href="https://rdrr.io/pkg/quanteda.dictionaries/man/liwcalike.html">liwcalike()</a></code> function to find matching words in text. An added benefit is that we can use <a href="https://linuxhint.com/bash_globbing_tutorial/">glob</a> patterns to capture variations of the same word (e.g., <code>job*</code> will match “job,” “jobs,” and “jobless”).</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>economy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"econom*"</span>,<span class="st">"tax*"</span>,<span class="st">"inflation"</span>,<span class="st">"debt*"</span>,<span class="st">"employ*"</span>,<span class="st">"job*"</span><span class="op">)</span>,</span>
 <span>                        immigration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"immigrant*"</span>,<span class="st">"border"</span>,<span class="st">"wall"</span>,<span class="st">"alien"</span>,<span class="st">"migrant*"</span>,<span class="st">"visa*"</span>,<span class="st">"daca"</span>,<span class="st">"dreamer*"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
@@ -829,48 +766,34 @@
 ## 12331    Ask\n Biden how much he will raise taxes to pay for all the things he says he\n is going to provide everyone - including illegal immigrants!
 ## 14345 Trump has been living the life and does not care for the hard working American...His taxes are not the only rip off...Investigate Wall Money...
 ## 19889                                                               Vote trump out. He needs to pay taxes too ... immigrants pay more than that thief
-##                        id likes
-## 4998         Ellen Lustic    NA
-## 6475      Kevin G Vazquez     1
-## 8098      Prince M Dorbor     1
-## 12331 Lynne Basista Shine     6
-## 14345          RJ Jimenez     4
-## 19889      Nicole Brennan    13
-##                        debate   docname
-## 4998  abc_first_debate_manual  text4998
-## 6475  abc_first_debate_manual  text6475
-## 8098  abc_first_debate_manual  text8098
-## 12331 fox_first_debate_manual text12331
-## 14345 fox_first_debate_manual text14345
-## 19889 nbc_first_debate_manual text19889
-##       Segment      WPS WC Sixltr   Dic
-## 4998     4998 12.50000 25   4.00  8.00
-## 6475     6475 20.00000 20  25.00 10.00
-## 8098     8098 14.00000 28   7.14 10.71
-## 12331   12331 27.00000 27  18.52  7.41
-## 14345   14345 11.66667 35   8.57  5.71
-## 19889   19889  9.50000 19   5.26 10.53
-##       economy immigration AllPunc Period
-## 4998     4.00        4.00   12.00   0.00
-## 6475     5.00        5.00    0.00   0.00
-## 8098     7.14        3.57   35.71   3.57
-## 12331    3.70        3.70    7.41   0.00
-## 14345    2.86        2.86   25.71  25.71
-## 19889    5.26        5.26   21.05  21.05
-##       Comma Colon SemiC QMark Exclam Dash
-## 4998      4     0     0  4.00   0.00  0.0
-## 6475      0     0     0  0.00   0.00  0.0
-## 8098      0     0     0 17.86  10.71  0.0
-## 12331     0     0     0  0.00   3.70  3.7
-## 14345     0     0     0  0.00   0.00  0.0
-## 19889     0     0     0  0.00   0.00  0.0
-##       Quote Apostro Parenth OtherP
-## 4998   4.00    4.00       0   8.00
-## 6475   0.00    0.00       0   0.00
-## 8098   3.57    3.57       0  35.71
-## 12331  0.00    0.00       0   3.70
-## 14345  0.00    0.00       0  25.71
-## 19889  0.00    0.00       0  21.05</code></pre>
+##                        id likes                  debate   docname
+## 4998         Ellen Lustic    NA abc_first_debate_manual  text4998
+## 6475      Kevin G Vazquez     1 abc_first_debate_manual  text6475
+## 8098      Prince M Dorbor     1 abc_first_debate_manual  text8098
+## 12331 Lynne Basista Shine     6 fox_first_debate_manual text12331
+## 14345          RJ Jimenez     4 fox_first_debate_manual text14345
+## 19889      Nicole Brennan    13 nbc_first_debate_manual text19889
+##       Segment      WPS WC Sixltr   Dic economy immigration AllPunc
+## 4998     4998 12.50000 25   4.00  8.00    4.00        4.00   12.00
+## 6475     6475 20.00000 20  25.00 10.00    5.00        5.00    0.00
+## 8098     8098 14.00000 28   7.14 10.71    7.14        3.57   35.71
+## 12331   12331 27.00000 27  18.52  7.41    3.70        3.70    7.41
+## 14345   14345 11.66667 35   8.57  5.71    2.86        2.86   25.71
+## 19889   19889  9.50000 19   5.26 10.53    5.26        5.26   21.05
+##       Period Comma Colon SemiC QMark Exclam Dash Quote Apostro Parenth
+## 4998    0.00     4     0     0  4.00   0.00  0.0  4.00    4.00       0
+## 6475    0.00     0     0     0  0.00   0.00  0.0  0.00    0.00       0
+## 8098    3.57     0     0     0 17.86  10.71  0.0  3.57    3.57       0
+## 12331   0.00     0     0     0  0.00   3.70  3.7  0.00    0.00       0
+## 14345  25.71     0     0     0  0.00   0.00  0.0  0.00    0.00       0
+## 19889  21.05     0     0     0  0.00   0.00  0.0  0.00    0.00       0
+##       OtherP
+## 4998    8.00
+## 6475    0.00
+## 8098   35.71
+## 12331   3.70
+## 14345  25.71
+## 19889  21.05</code></pre>
 <p>The output provides some interesting information. First, <code>economy</code> and <code>immigration</code> give us the <em>percentage</em> of words in the text that match our economy or immigration dictionaries. In general, we would not expect many words in a sentence to reference, for example, “jobs” for us to conclude that the sentence is about the economy. So, any value above 0% can be interpreted as mentioning the economy (unless you have theoretical reasons to treat, say, 3% as meaningfully different from 2%). For the remaining variables:</p>
 <ul>
 <li>
@@ -887,9 +810,16 @@
 <code>Period</code> to <code>OtherP</code>: % of specific punctuation marks.</li>
 </ul>
 <p>With this information, we can identify which users focus more on each topic:</p>
+<pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
+##         new variable 'economy_dum' (double) with 2 unique values and 0% NA
+##         new variable 'immigration_dum' (double) with 2 unique values and 0% NA
+## group_by: one grouping variable (media)
+## mutate (grouped): new variable 'pct_econ' (double) with 3 unique values and 0% NA
+##                   new variable 'pct_migr' (double) with 3 unique values and 0% NA
+## distinct (grouped): removed 29,544 rows (&gt;99%), 3 rows remaining (removed 0 groups, 3 groups remaining)</code></pre>
 <div class="inline-table"><table class="table table-sm">
 <caption>
-<span id="tab:unnamed-chunk-50">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
+<span id="tab:unnamed-chunk-57">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
 <thead><tr class="header">
 <th align="left">media</th>
 <th align="right">pct_econ</th>
@@ -920,7 +850,7 @@
 </h3>
 <p>So far, we have seen how to apply pre-loaded dictionaries (e.g., sentiment) and how to apply our own dictionaries. What if you have a pre-built dictionary that you want to apply to your corpus? As long as the dictionary has the correct structure, we can use the techniques we have applied so far. This also means that you may need to do some data wrangling, since pre-built dictionaries come in many formats.</p>
 <p>Let’s use the NRC Affect Intensity Lexicon (created by the same team behind the pre-loaded <code>nrc</code> sentiment dictionary). The NRC Affect Intensity Lexicon measures the intensity of an emotion on a scale from 0 (low) to 1 (high). For example, “defiance” has an anger intensity of 0.51, and “hate” has an anger intensity of 0.83.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">intense_lex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/NRC-AffectIntensity-Lexicon.txt"</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                          header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">intense_lex</span><span class="op">)</span></span></code></pre></div>
@@ -932,40 +862,35 @@
 ## 5  terrorize 0.939           anger
 ## 6 infuriated 0.938           anger</code></pre>
 <p>This is more than a simple dictionary: the key advantage is that it provides an <em>intensity</em> score for each word, which gives us more variation in our analysis (e.g., instead of a binary anger/no-anger measure, we can analyze degrees of anger). We will use the <code>tidytext</code> approach to analyze degrees of “joy” in our corpus.</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">joy_lex</span> <span class="op">&lt;-</span> <span class="va">intense_lex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"joy"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>word<span class="op">=</span><span class="va">term</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">word</span>,<span class="va">AffectDimension</span>,<span class="va">score</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ventura_joy</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">word</span>,<span class="va">AffectDimension</span>,<span class="va">score</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## filter: removed 4,546 rows (78%), 1,268 rows remaining
+## mutate: new variable 'word' (character) with 1,268 unique values and 0% NA</code></pre>
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ventura_joy</span> <span class="op">&lt;-</span> <span class="va">tidy_ventura</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">joy_lex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co">## Most of the comments have no joy words so we will change these NAs to 0 but this is an ad-hoc decision. This decision must be theoretically motivated and justified</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">score</span><span class="op">)</span>,<span class="fl">0</span>,<span class="va">score</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Joining with `by = join_by(word)`
-## left_join: added 2 columns (AffectDimension,
-## score)
+## left_join: added 2 columns (AffectDimension, score)
 ## &gt; rows only in x 184,943
 ## &gt; rows only in joy_lex ( 769)
 ## &gt; matched rows 12,605
 ## &gt; =========
-## &gt; rows total 197,548</code></pre>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+## &gt; rows total 197,548
+## mutate: changed 184,943 values (94%) of 'score' (184,943 fewer NAs)</code></pre>
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ventura_joy</span><span class="op">[</span><span class="va">ventura_joy</span><span class="op">$</span><span class="va">score</span><span class="op">&gt;</span><span class="fl">0</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##    text_id           id likes
-## 18       2   Anita Hill    61
-## 19       2   Anita Hill    61
-## 23       3 Dave Garland    99
-## 30       4     Carl Roy    47
-## 64       8  Tammy Eisen    39
-## 65       8  Tammy Eisen    39
-##                     debate       word
-## 18 abc_first_debate_manual        god
-## 19 abc_first_debate_manual      bless
-## 23 abc_first_debate_manual     living
-## 30 abc_first_debate_manual      laugh
-## 64 abc_first_debate_manual experience
-## 65 abc_first_debate_manual      share
+<pre><code>##    text_id           id likes                  debate       word
+## 18       2   Anita Hill    61 abc_first_debate_manual        god
+## 19       2   Anita Hill    61 abc_first_debate_manual      bless
+## 23       3 Dave Garland    99 abc_first_debate_manual     living
+## 30       4     Carl Roy    47 abc_first_debate_manual      laugh
+## 64       8  Tammy Eisen    39 abc_first_debate_manual experience
+## 65       8  Tammy Eisen    39 abc_first_debate_manual      share
 ##    AffectDimension score
 ## 18             joy 0.545
 ## 19             joy 0.561
@@ -974,7 +899,7 @@
 ## 64             joy 0.375
 ## 65             joy 0.438</code></pre>
 <p>Now, we can see the relationship between <code>likes</code> and <code>joy</code>:</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span> <span class="co"># To add the negative binomial fitted line</span></span>
 <span></span>
 <span><span class="va">ventura_joy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1000,10 +925,17 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Mean Joy"</span>, y <span class="op">=</span> <span class="st">"Likes"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## `geom_smooth()` using formula = 'y ~ x'</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
+<pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
+## group_by: one grouping variable (text_id)
+## mutate (grouped): new variable 'mean_joy' (double) with 3,118 unique values and 0% NA
+## distinct (grouped): removed 168,013 rows (85%), 29,535 rows remaining (removed 0 groups, 29,535 groups remaining)
+## ungroup: no grouping variables remain
+## filter: removed 20,355 rows (69%), 9,180 rows remaining
+## filter: removed 2,518 rows (27%), 6,662 rows remaining
+## `geom_smooth()` using formula = 'y ~ x'</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-60-1.png" width="672"></div>
 <p>Finally, for the sake of showing the process, I will write the code to load the dictionary using <code>quanteda</code>, but note that this approach loses all the intensity information.</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">affect_dict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>anger <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"anger"</span><span class="op">]</span>,</span>
 <span>                        fear <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"fear"</span><span class="op">]</span>,</span>
 <span>                        joy <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"joy"</span><span class="op">]</span>,</span>
@@ -1031,41 +963,27 @@
 ## 11                             with\n the usa having such a bad opiate problem then trump brings up about \nbidens son is the most disgraceful thing any human being could do...vote\n him out
 ## 12   Trump’s\n only recourse in the debate is to demean his opponent and talk about \nwhat a great man he, himself is. Turn his mic off when it’s not his turn\n to speak. Nothing but babble!
 ## 23                                                                                           Trump such a hateful person he has no moral or respect in a debate he blames everyone except him.
-##              id likes                  debate
-## 3  Dave Garland    99 abc_first_debate_manual
-## 7   Connie Sage    79 abc_first_debate_manual
-## 9  Susan Weyant    53 abc_first_debate_manual
-## 11  Lynn Kohler    41 abc_first_debate_manual
-## 12     Jim Lape    28 abc_first_debate_manual
-## 23   Joe Sonera    65 abc_first_debate_manual
-##    docname Segment       WPS WC Sixltr   Dic
-## 3    text3       3  6.333333 19  15.79 36.84
-## 7    text7       7 11.500000 23  17.39 17.39
-## 9    text9       9 15.333333 46   8.70 13.04
-## 11  text11      11 32.000000 32   6.25 28.12
-## 12  text12      12 13.000000 39  12.82  5.13
-## 23  text23      23 20.000000 20  15.00 25.00
-##    anger  fear  joy sadness AllPunc Period
-## 3   5.26 15.79 5.26   10.53   15.79   0.00
-## 7   4.35  4.35 0.00    8.70    8.70   0.00
-## 9   4.35  2.17 2.17    4.35   23.91  17.39
-## 11  9.38  6.25 3.12    9.38    9.38   9.38
-## 12  2.56  2.56 0.00    0.00   15.38   5.13
-## 23 10.00  5.00 5.00    5.00    5.00   5.00
-##    Comma Colon SemiC QMark Exclam Dash Quote
-## 3   0.00     0     0  0.00  15.79    0  0.00
-## 7   0.00     0     0  0.00   8.70    0  0.00
-## 9   4.35     0     0  2.17   0.00    0  0.00
-## 11  0.00     0     0  0.00   0.00    0  0.00
-## 12  2.56     0     0  0.00   2.56    0  5.13
-## 23  0.00     0     0  0.00   0.00    0  0.00
-##    Apostro Parenth OtherP
-## 3     0.00       0  15.79
-## 7     0.00       0   8.70
-## 9     0.00       0  23.91
-## 11    0.00       0   9.38
-## 12    5.13       0  10.26
-## 23    0.00       0   5.00</code></pre>
+##              id likes                  debate docname Segment       WPS
+## 3  Dave Garland    99 abc_first_debate_manual   text3       3  6.333333
+## 7   Connie Sage    79 abc_first_debate_manual   text7       7 11.500000
+## 9  Susan Weyant    53 abc_first_debate_manual   text9       9 15.333333
+## 11  Lynn Kohler    41 abc_first_debate_manual  text11      11 32.000000
+## 12     Jim Lape    28 abc_first_debate_manual  text12      12 13.000000
+## 23   Joe Sonera    65 abc_first_debate_manual  text23      23 20.000000
+##    WC Sixltr   Dic anger  fear  joy sadness AllPunc Period Comma Colon
+## 3  19  15.79 36.84  5.26 15.79 5.26   10.53   15.79   0.00  0.00     0
+## 7  23  17.39 17.39  4.35  4.35 0.00    8.70    8.70   0.00  0.00     0
+## 9  46   8.70 13.04  4.35  2.17 2.17    4.35   23.91  17.39  4.35     0
+## 11 32   6.25 28.12  9.38  6.25 3.12    9.38    9.38   9.38  0.00     0
+## 12 39  12.82  5.13  2.56  2.56 0.00    0.00   15.38   5.13  2.56     0
+## 23 20  15.00 25.00 10.00  5.00 5.00    5.00    5.00   5.00  0.00     0
+##    SemiC QMark Exclam Dash Quote Apostro Parenth OtherP
+## 3      0  0.00  15.79    0  0.00    0.00       0  15.79
+## 7      0  0.00   8.70    0  0.00    0.00       0   8.70
+## 9      0  2.17   0.00    0  0.00    0.00       0  23.91
+## 11     0  0.00   0.00    0  0.00    0.00       0   9.38
+## 12     0  0.00   2.56    0  5.13    5.13       0  10.26
+## 23     0  0.00   0.00    0  0.00    0.00       0   5.00</code></pre>
 </div>
 </div>
 <div id="assignments-1---due-date-eod-friday-week-4-1" class="section level2" number="3.6">
@@ -1120,7 +1038,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-19.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-25.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

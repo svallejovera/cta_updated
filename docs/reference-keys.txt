@@ -1,5 +1,5 @@
 fig:curve
-tab:unnamed-chunk-50
+tab:unnamed-chunk-57
 week1
 setup
 get-data
@@ -32,3 +32,11 @@ character-level-comparisons
 token-level-comparisons
 complexity
 exercise-optional-1
+week5
+setup-4
+wordscores
+wordfish
+homework-2
+week6
+setup-5
+structural-topic-models

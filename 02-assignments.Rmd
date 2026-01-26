@@ -43,7 +43,7 @@ This assignment must be completed after covering [Week 5: Scaling Techniques (Un
 
 1. We had a hard time scaling our text, so we looked at some possible problems. What are possible solutions if we want to position U.S. presidents on an ideological scale using text?
 2. Use the `data/candidate-tweets.csv` data to run an STM. Decide what your covariates are going to be. Decide whether you will use all the data or a sample of the data. Decide whether you are going to aggregate or split the text in some way (i.e., decide your unit of analysis). Decide the number of topics you will look for (try more than one option). What can you tell me about the topics tweeted by the 2015 U.S. primary candidates?
-3. Choose three topics. Can you place the candidates on an ideological scale within each topic (determine the $\theta$ threshold for when you can say that a tweet is *mostly* about a topic)? Does it make sense? Why or why not?
+3. Choose three topics ([see Week 6](#week6)). Can you place the candidates on an ideological scale within each topic (determine the $\theta$ threshold for when you can say that a tweet is *mostly* about a topic)? Does it make sense? Why or why not?
 
 ### Assignments 3 - Due Date: EOD Friday Week 11 {.unnumbered}
 
