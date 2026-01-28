@@ -21,9 +21,22 @@ Build output goes to the `docs/` directory. The project supports multiple output
 ## Architecture
 
 **Content Structure:**
-- `index.Rmd` - Course overview and homepage
-- `01-readings.Rmd` through `04-final_project.Rmd` - Course logistics
-- `05-week1.Rmd` through `11-week7.Rmd` - Weekly lesson content with executable R code
+
+*Course Information:*
+- `index.Rmd` - Course homepage with overview, syllabus link, and required R/Python packages
+- `01-readings.Rmd` - Week-by-week reading list with academic references for each topic
+- `02-assignments.Rmd` - Three graded worksheets with pair programming approach; submission guidelines and due dates
+- `03-replication.Rmd` - Replication exercise instructions (30% of grade); students replicate a syllabus paper
+- `04-final_project.Rmd` - Final paper requirements (4,000 words max); GitHub repo submission with data, code, and report
+
+*Weekly Lessons (executable R code):*
+- `05-week1.Rmd` - Primer on text-as-data; replicates Mendenhall's word-length analysis using Oscar Wilde plays from Project Gutenberg
+- `06-week2.Rmd` - Tokenization and word frequency; uses song lyrics corpus to demonstrate text cleaning and quanteda DFM creation
+- `07-week3.Rmd` - Dictionary-based sentiment analysis; applies AFINN/Bing lexicons to Ventura et al. debate chat data
+- `08-week4.Rmd` - Text complexity and similarity; string distances (Levenshtein, Jaro), cosine similarity, TF-IDF weighting
+- `09-week5.Rmd` - Unsupervised scaling with Wordfish; positions U.S. presidential inaugural speeches on ideological scale
+- `10-week6.Rmd` - Structural Topic Models (STM); k-means intuition and topic modeling on inaugural speeches
+- `11-week7.Rmd` - Supervised learning intro; Wordscores technique replicating Laver & Benoit (2003)
 
 **Configuration:**
 - `_bookdown.yml` - Bookdown settings (output dir, book filename)
