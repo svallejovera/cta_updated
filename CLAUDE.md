@@ -35,7 +35,15 @@ Build output goes to the `docs/` directory. The project supports multiple output
 - `data/` - Course datasets (CSV, XLSX, Rdata files)
 - `images/` - Figures referenced in content
 - `slides/` - PowerPoint lecture slides
-- `k-means/app.R` - Interactive Shiny visualization
+
+**Shiny Apps:**
+- `k-means/app.R` - K-means clustering step-by-step intuition builder (used in Week 6)
+- `cosinesimA/app.R` - Cosine similarity intuition builder with 2D vectors (polar/Cartesian inputs) (used in Week 4)
+- `cosinesimilarityTEXT/app.R` - Build sentences → DFM → cosine similarity → 3D vector visualization (used in Week 4)
+
+**Shiny App References in Course Content:**
+- `08-week4.Rmd` (line 148) - Links to both `cosinesimA` and `cosinesimilarityTEXT` apps for cosine similarity visualization
+- `10-week6.Rmd` (line 9) - Links to `k-means` app for clustering intuition before STM content
 
 ## Key R Packages
 
