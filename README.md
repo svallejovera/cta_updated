@@ -4,7 +4,7 @@ This repo contains teaching materials for the "Computational Text Analysis" (PS9
 
 This will be the main resource we use throughout the course. You can access all of these materials, as well as the course overview by following [this link](https://svallejovera.github.io/cta_updated/). I will continue to update the site throughout the semester(s). 
 
-## Note on the use of LLM for this course/site ##
+## Note on the use of LLM for this course/site 
 
 A bit of inception-meta-commentary, while this course teaches about LLMs, I am also using LLMs in different capacities. For transparency, this is where I have used GPT or Claude for the construction of the course (I will update this list if/when it grows):
   1. I have LLMs annotate my code: I do not like annotating code and I am not particularly good at it. I let LLMs do that, especially at the beginning of the course, when students are less familiar with some of the libraries and functions. 
