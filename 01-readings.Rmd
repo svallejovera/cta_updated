@@ -102,6 +102,11 @@
 
 - Benoit, Kenneth, et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” *American Political Science Review* 110 (2): 278–295.
 
+**Reference Material:**
+
+- Schreier, Margrit. 2012. *Qualitative Content Analysis in Practice*. 1st ed. London: SAGE Publications Ltd. <https://doi.org/10.4135/9781529682571>
+
+
 ## Week #8: Introduction to Deep Learning and Word Embeddings {.unnumbered}
 
 **Topics:** How can we capture the meaning of words? We will use deep learning models to represent text.

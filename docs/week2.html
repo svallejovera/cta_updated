@@ -7,7 +7,7 @@
 <title>Chapter 2 Week 2: Tokenization and Word Frequency | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
 <meta name="description" content="Slides 3 Tokenization and Word Frequency (link or in Perusall)  2.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
-<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
 <meta property="og:title" content="Chapter 2 Week 2: Tokenization and Word Frequency | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Slides 3 Tokenization and Word Frequency (link or in Perusall)  2.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
@@ -97,20 +97,24 @@
 <code class="sourceCode R"><span><span class="va">sample_lyrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/lyrics_sample.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">sample_lyrics</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 5
-##   artist                   album                      year song    lyrics
-##   &lt;chr&gt;                    &lt;chr&gt;                     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; 
-## 1 Rage Against the Machine Evil Empire                1996 Bulls … "Come…
-## 2 Rage Against the Machine Rage Against the Machine   1992 Killin… "Kill…
-## 3 Rage Against the Machine Renegades                  2000 Renega… "No m…
-## 4 Rage Against the Machine The Battle of Los Angeles  1999 Sleep … "Yeah…
-## 5 Rage Against the Machine The Battle of Los Angeles  1999 Guerri… "Tran…
-## 6 Rage Against the Machine The Battle of Los Angeles  1999 Testify "Uh!\…</code></pre>
+##   artist                 album  year song  lyrics
+##   &lt;chr&gt;                  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Rage Against the Mach… Evil…  1996 Bull… "Come…
+## 2 Rage Against the Mach… Rage…  1992 Kill… "Kill…
+## 3 Rage Against the Mach… Rene…  2000 Rene… "No m…
+## 4 Rage Against the Mach… The …  1999 Slee… "Yeah…
+## 5 Rage Against the Mach… The …  1999 Guer… "Tran…
+## 6 Rage Against the Mach… The …  1999 Test… "Uh!\…</code></pre>
 <p>Ok, so we have different artists, from different genres and years…</p>
 <pre><code>## 
-##      Megan Thee Stallion Rage Against the Machine 
-##                        5                        6 
-##         System of a Down             Taylor Swift 
-##                        5                        5</code></pre>
+##      Megan Thee Stallion 
+##                        5 
+## Rage Against the Machine 
+##                        6 
+##         System of a Down 
+##                        5 
+##             Taylor Swift 
+##                        5</code></pre>
 <p>And we have the lyrics in the following form:</p>
 <pre><code>## [1] "Yeah\r\n\r\nThe world is my expense\r\nIt’s the cost of my desire\r\nJesus blessed me with its future\r\nAnd I protect it with fire\r\n\r\nSo raise your fists and march around\r\nJust don’t take what you need\r\nI’ll jail and bury those committed\r\nAnd smother the rest in greed\r\n\r\nCrawl with me into tomorrow\r\nOr I’ll drag you to your grave\r\nI’m deep inside your children\r\nThey’ll betray you in my name\r\n\r\nHey, hey, sleep now in the fire\r\nHey, hey, sleep now in the fire\r\n\r\nThe lie is my expense\r\nThe scope of my desire\r\nThe party blessed me with its future\r\nAnd I protect it with fire\r\n\r\nI am the Niña, the Pinta, the Santa María\r\nThe noose and the rapist, the fields overseer\r\nThe Agents of Orange, the Priests of Hiroshima\r\nThe cost of my desire, sleep now in the fire\r\n\r\nHey, hey, sleep now in the fire\r\nHey, hey, sleep now in the fire\r\n\r\nFor it’s the end of history\r\nIt’s caged and frozen still\r\nThere is no other pill to take\r\nSo swallow the one that made you ill\r\n\r\nThe Niña, the Pinta, the Santa María\r\nThe noose and the rapist, the fields overseer\r\nThe Agents of Orange, the Priests of Hiroshima\r\nThe cost of my desire to sleep now in the fire\r\n\r\nYeah\r\n\r\nSleep now in the fire\r\nSleep now in the fire\r\nSleep now in the fire\r\nSleep now in the fire"</code></pre>
 </div>
@@ -130,8 +134,8 @@
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Drop the original lyrics column to avoid keeping both raw and cleaned versions</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lyrics</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## mutate: new variable 'lyrics_clean' (character) with 21 unique values
-## and 0% NA</code></pre>
+<pre><code>## mutate: new variable 'lyrics_clean' (character)
+## with 21 unique values and 0% NA</code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect the 4th cleaned lyric to confirm the replacements worked as intended</span></span>
 <span><span class="va">sample_lyrics</span><span class="op">$</span><span class="va">lyrics_clean</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
@@ -156,50 +160,94 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">corpus_lyrics</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Corpus consisting of 21 documents, showing 21 documents:
 ## 
-##    Text Types Tokens Sentences                   artist
-##   text1   119    375        35 Rage Against the Machine
-##   text2    52    853        83 Rage Against the Machine
-##   text3   188    835        91 Rage Against the Machine
-##   text4    97    352        38 Rage Against the Machine
-##   text5   160    440        50 Rage Against the Machine
-##   text6   133    535        67 Rage Against the Machine
-##   text7   105    560        53         System of a Down
-##   text8    67    366        40         System of a Down
-##   text9    68    298        33         System of a Down
-##  text10    65    258        32         System of a Down
-##  text11   137    558        68         System of a Down
-##  text12   131    876        70             Taylor Swift
-##  text13   159    465        41             Taylor Swift
-##  text14   162    544        62             Taylor Swift
-##  text15   196    738        84             Taylor Swift
-##  text16   169    549        50             Taylor Swift
-##  text17   229    867        55      Megan Thee Stallion
-##  text18   193    664        61      Megan Thee Stallion
-##  text19   310   1190        87      Megan Thee Stallion
-##  text20   198    656        48      Megan Thee Stallion
-##  text21   255   1092        73      Megan Thee Stallion
-##                       album year                  song
-##                 Evil Empire 1996       Bulls on Parade
-##    Rage Against the Machine 1992   Killing in the Name
-##                   Renegades 2000     Renegades of Funk
-##   The Battle of Los Angeles 1999 Sleep Now in the Fire
-##   The Battle of Los Angeles 1999       Guerrilla Radio
-##   The Battle of Los Angeles 1999               Testify
-##                   Mezmerize 2005               B.Y.O.B
-##                    Toxicity 2001            Chop Suey!
-##                    Toxicity 2001               Aerials
-##                    Toxicity 2001               Toxicty
-##                    Toxicity 2001                 Sugar
-##                        1989 2014          Shake it Off
-##                   Midnights 2022             Anti-Hero
-##                    Fearless 2008    You Belong With Me
-##                        1989 2014           Blank Space
-##                    Fearless 2008            Love Story
-##                  Traumazine 2022                Plan B
-##                        Suga 2020                Savage
-##  Something for Thee Hotties 2021             Thot Shit
-##                  Traumazine 2022                   Her
-##                  Traumazine 2022            Ungrateful</code></pre>
+##    Text Types Tokens Sentences
+##   text1   119    375        35
+##   text2    52    853        83
+##   text3   188    835        91
+##   text4    97    352        38
+##   text5   160    440        50
+##   text6   133    535        67
+##   text7   105    560        53
+##   text8    67    366        40
+##   text9    68    298        33
+##  text10    65    258        32
+##  text11   137    558        68
+##  text12   131    876        70
+##  text13   159    465        41
+##  text14   162    544        62
+##  text15   196    738        84
+##  text16   169    549        50
+##  text17   229    867        55
+##  text18   193    664        61
+##  text19   310   1190        87
+##  text20   198    656        48
+##  text21   255   1092        73
+##                    artist
+##  Rage Against the Machine
+##  Rage Against the Machine
+##  Rage Against the Machine
+##  Rage Against the Machine
+##  Rage Against the Machine
+##  Rage Against the Machine
+##          System of a Down
+##          System of a Down
+##          System of a Down
+##          System of a Down
+##          System of a Down
+##              Taylor Swift
+##              Taylor Swift
+##              Taylor Swift
+##              Taylor Swift
+##              Taylor Swift
+##       Megan Thee Stallion
+##       Megan Thee Stallion
+##       Megan Thee Stallion
+##       Megan Thee Stallion
+##       Megan Thee Stallion
+##                       album year
+##                 Evil Empire 1996
+##    Rage Against the Machine 1992
+##                   Renegades 2000
+##   The Battle of Los Angeles 1999
+##   The Battle of Los Angeles 1999
+##   The Battle of Los Angeles 1999
+##                   Mezmerize 2005
+##                    Toxicity 2001
+##                    Toxicity 2001
+##                    Toxicity 2001
+##                    Toxicity 2001
+##                        1989 2014
+##                   Midnights 2022
+##                    Fearless 2008
+##                        1989 2014
+##                    Fearless 2008
+##                  Traumazine 2022
+##                        Suga 2020
+##  Something for Thee Hotties 2021
+##                  Traumazine 2022
+##                  Traumazine 2022
+##                   song
+##        Bulls on Parade
+##    Killing in the Name
+##      Renegades of Funk
+##  Sleep Now in the Fire
+##        Guerrilla Radio
+##                Testify
+##                B.Y.O.B
+##             Chop Suey!
+##                Aerials
+##                Toxicty
+##                  Sugar
+##           Shake it Off
+##              Anti-Hero
+##     You Belong With Me
+##            Blank Space
+##             Love Story
+##                 Plan B
+##                 Savage
+##              Thot Shit
+##                    Her
+##             Ungrateful</code></pre>
 <p>Looks good. Now we can tokenize our corpus (and reduce complexity). One benefit of creating a corpus object first is that it preserves all the metadata for each document when we tokenize. This will come in handy later.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tokenize the corpus: split each document into tokens (typically words).</span></span>
@@ -215,14 +263,16 @@
 <span><span class="va">lyrics_toks</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "The"     "world"   "is"      "my"      "expense"
-##  [7] "It’s"    "the"     "cost"    "of"      "my"      "desire" 
+##  [1] "Yeah"    "The"     "world"   "is"     
+##  [5] "my"      "expense" "It’s"    "the"    
+##  [9] "cost"    "of"      "my"      "desire" 
 ## [ ... and 227 more ]
 ## 
 ## text14 :
-##  [1] "You're"     "on"         "the"        "phone"      "with"      
-##  [6] "your"       "girlfriend" "she's"      "upset"      "She's"     
-## [11] "going"      "off"       
+##  [1] "You're"     "on"         "the"       
+##  [4] "phone"      "with"       "your"      
+##  [7] "girlfriend" "she's"      "upset"     
+## [10] "She's"      "going"      "off"       
 ## [ ... and 385 more ]</code></pre>
 <p>We got rid of punctuation. Now let’s remove stop words, high- and low-frequency words, and stem the remaining tokens. Here I am cheating, though: I already know which words are high- and low-frequency because I inspected my <code>dfm</code> (see the next code chunk).</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
@@ -249,27 +299,31 @@
 <span><span class="va">lyrics_toks</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "world"   "expense" "It’s"    "cost"    "desire" 
-##  [7] "Jesus"   "blessed" "future"  "protect" "fire"    "raise"  
+##  [1] "Yeah"    "world"   "expense" "It’s"   
+##  [5] "cost"    "desire"  "Jesus"   "blessed"
+##  [9] "future"  "protect" "fire"    "raise"  
 ## [ ... and 105 more ]
 ## 
 ## text14 :
-##  [1] "phone"      "girlfriend" "upset"      "going"      "something" 
-##  [6] "said"       "Cause"      "get"        "humor"      "like"      
-## [11] "room"       "typical"   
+##  [1] "phone"      "girlfriend" "upset"     
+##  [4] "going"      "something"  "said"      
+##  [7] "Cause"      "get"        "humor"     
+## [10] "like"       "room"       "typical"   
 ## [ ... and 133 more ]</code></pre>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_toks_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "world"   "expens"  "It’s"    "cost"    "desir"  
-##  [7] "Jesus"   "bless"   "futur"   "protect" "fire"    "rais"   
+##  [1] "Yeah"    "world"   "expens"  "It’s"   
+##  [5] "cost"    "desir"   "Jesus"   "bless"  
+##  [9] "futur"   "protect" "fire"    "rais"   
 ## [ ... and 105 more ]
 ## 
 ## text14 :
-##  [1] "phone"      "girlfriend" "upset"      "go"         "someth"    
-##  [6] "said"       "Caus"       "get"        "humor"      "like"      
-## [11] "room"       "typic"     
+##  [1] "phone"      "girlfriend" "upset"     
+##  [4] "go"         "someth"     "said"      
+##  [7] "Caus"       "get"        "humor"     
+## [10] "like"       "room"       "typic"     
 ## [ ... and 133 more ]</code></pre>
 <p>We can compare the stemmed output and the non-stemmed output. Why did “future” become “futur”? Because stemming assumes that, for <em>our</em> purposes, “future” and “futuristic” should be treated as the same underlying root. Whether that assumption is appropriate depends on your research question. Finally, we can create our document-feature matrix (<code>dfm</code>).</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -284,13 +338,21 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">lyrics_dfm_stem</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Document-feature matrix of: 6 documents, 1,161 features (93.10% sparse) and 4 docvars.
 ##        features
-## docs    come wit microphon explod shatter mold either drop hit like
-##   text1    4   4         1      1       1    1      1    3   1    1
-##   text2    2   0         0      0       0    0      0    0   0    0
-##   text3    0   0         0      0       0    0      0    0   0    4
-##   text4    0   0         0      0       0    0      0    0   0    0
-##   text5    0   0         0      0       0    0      0    0   0    1
-##   text6    0   4         0      0       0    0      0    0   0    0
+## docs    come wit microphon explod shatter mold
+##   text1    4   4         1      1       1    1
+##   text2    2   0         0      0       0    0
+##   text3    0   0         0      0       0    0
+##   text4    0   0         0      0       0    0
+##   text5    0   0         0      0       0    0
+##   text6    0   4         0      0       0    0
+##        features
+## docs    either drop hit like
+##   text1      1    3   1    1
+##   text2      0    0   0    0
+##   text3      0    0   0    4
+##   text4      0    0   0    0
+##   text5      0    0   0    1
+##   text6      0    0   0    0
 ## [ reached max_nfeat ... 1,151 more features ]</code></pre>
 <p>Note that once we create the <code>dfm</code> object, all tokens become lowercase. Now we can check what are the 15 most frequent tokens.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
@@ -318,13 +380,14 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">"Frequency"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Hide legend (frequency is already shown on the y-axis)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
 <p>Does not tell us much, but I used the previous code to check for low-information tokens that I might want to remove from my analysis. We can also see how many tokens appear only once:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">only_once</span> <span class="op">&lt;-</span> <span class="va">lyrics_dfm_stem</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://quanteda.io/reference/textstat_frequency.html">textstat_frequency</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="va">frequency</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## filter: removed 564 rows (49%), 597 rows remaining</code></pre>
+<pre><code>## filter: removed 564 rows (49%), 597 rows
+## remaining</code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">only_once</span><span class="op">$</span><span class="va">feature</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 597</code></pre>
@@ -350,7 +413,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
 <p>Interesting. There is not a lot of overlap (apart from one token shared by Megan Thee Stallion and Rage Against the Machine). However, it would be great if we could measure the importance of a word relative to how widely it appears across documents (i.e., normalize by document prevalence). Enter TF-IDF: “term frequency–inverse document frequency.” TF-IDF weighting up-weights relatively rare words–words that do not appear in many documents. By combining term frequency and inverse document frequency, we can identify words that are especially characteristic of a given document within a collection.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_dfm_tfidf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dfm_tfidf.html">dfm_tfidf</a></span><span class="op">(</span><span class="va">lyrics_dfm_stem</span><span class="op">)</span> <span class="co"># Create a dfm with tf-idf instead of counts</span></span>
@@ -368,7 +431,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">"TF-IDF"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
 <p>If we are building a dictionary, for example, we might want to include words with high TF-IDF values. Another way to think about TF-IDF is in terms of predictive power. Words that are common to all documents have little predictive power and receive a TF-IDF value close to 0. Words that appear in only a relatively small number of documents tend to have greater predictive power and receive higher TF-IDF values. Very rare words are also effectively down-weighted, since they may provide only idiosyncratic information about a single document (i.e., strong “prediction” for one document but little information about the rest). As you will read in Chapters 6–7 of Grimmer et al., the goal is to find the right balance.</p>
 <p>Another useful tool (and concept) is <em>keyness</em>. Keyness is a two-by-two association score for features that occur differentially across categories. We can estimate which features are more strongly associated with one category (in this case, one artist) relative to another. Let’s compare Megan Thee Stallion and Taylor Swift.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
@@ -387,7 +450,7 @@
 <span></span>
 <span><span class="co"># Visualize the most strongly associated (key) features for the target vs. the reference group.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/quanteda.textplots/man/textplot_keyness.html">textplot_keyness</a></span><span class="op">(</span><span class="va">lyrics_key</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-24-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-24-1.png" width="672"></div>
 <p>Similar to what we would have inferred from the TF-IDF graphs. Notice that stemming does not always work as expected. Taylor Swift sings about “shake, shake, shake,” and Megan Thee Stallion sings about “shaking.” However, these still appear as distinct features for the two artists.</p>
 </div>
 <div id="word-frequency-across-artist" class="section level2" number="2.5">
@@ -432,7 +495,7 @@
 ## distinct (grouped): removed 8,958 rows (&gt;99%), 21 rows remaining (removed 0 groups, 21 groups remaining)
 ## group_by: one grouping variable (artist)
 ## mutate (grouped): new variable 'mean_tokens' (double) with 4 unique values and 0% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-25-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-25-1.png" width="672"></div>
 <p>Alternatively, we can estimate the frequency of a specific token by song.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_totals</span> <span class="op">&lt;-</span> <span class="va">sample_lyrics</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -482,7 +545,7 @@
 ##            &gt; rows total                21
 ## ungroup: no grouping variables remain
 ## mutate: new variable 'like_prop' (double) with 13 unique values and 43% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-28-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
 </div>
 <div id="final-words-1" class="section level2" number="2.6">
 <h2>
@@ -524,7 +587,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-01-26.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
