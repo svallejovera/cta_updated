@@ -54,6 +54,7 @@
 <li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
 <li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
+<li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 </ul>
 
         <div class="book-extra">
@@ -282,7 +283,7 @@ Figure 1.1: From Mendenhall (1987) - The Characteristic Curves of Composition.
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Axis labels (x = word length in characters; y = number of tokens of that length)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Length"</span>, y <span class="op">=</span> <span class="st">"Total Number of Words"</span>, color <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-26-1.png" width="672"></div>
 <p>This is a problem. <em>Why?</em></p>
 <p>Here is a solution (proposed by Mendenhall):</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -325,9 +326,9 @@ Figure 1.1: From Mendenhall (1987) - The Characteristic Curves of Composition.
 ## mutate (grouped): new variable 'word_length' (integer) with 17 unique values and 0% NA
 ##                   new variable 'median_word_length' (double) with one unique value and 0% NA
 ## group_by: 2 grouping variables (word_length, title)
-## mutate (grouped): new variable 'total_word_length' (integer) with 55 unique values and 0% NA
-## distinct (grouped): removed 39,940 rows (&gt;99%), 60 rows remaining (removed 0 groups, 60 groups remaining)</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+## mutate (grouped): new variable 'total_word_length' (integer) with 57 unique values and 0% NA
+## distinct (grouped): removed 39,938 rows (&gt;99%), 62 rows remaining (removed 0 groups, 62 groups remaining)</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-27-1.png" width="672"></div>
 <p>Would you look at that, Mendenhall was onto something: an author may have a <em>signature</em> in terms of word-length distribution. For Wilde, there is no obvious change across time (each play was published in a different year). But what happens when we compare Wilde’s signature with Shakespeare’s? Let’s choose four plays (at random) by Shakespeare: <em>A Midsummer Night’s Dream</em>, <em>The Merchant of Venice</em>, <em>Much Ado About Nothing</em>, and <em>The Tempest</em>.</p>
 </div>
 <div id="comparing-shakespeare-and-wilde" class="section level2" number="1.4">
@@ -406,9 +407,9 @@ Figure 1.1: From Mendenhall (1987) - The Characteristic Curves of Composition.
 ## mutate (grouped): new variable 'word_length' (integer) with 17 unique values and 0% NA
 ##                   new variable 'median_word_length' (double) with one unique value and 0% NA
 ## group_by: 3 grouping variables (word_length, title, author)
-## mutate (grouped): new variable 'total_word_length' (integer) with 89 unique values and 0% NA
-## distinct (grouped): removed 69,897 rows (&gt;99%), 103 rows remaining (removed 0 groups, 103 groups remaining)</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+## mutate (grouped): new variable 'total_word_length' (integer) with 87 unique values and 0% NA
+## distinct (grouped): removed 69,895 rows (&gt;99%), 105 rows remaining (removed 0 groups, 105 groups remaining)</code></pre>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-29-1.png" width="672"></div>
 <p>Are there any differences? What can we conclude from the evidence? What are the limitations of this approach? Are there alternative approaches to study what Mendenhall was getting at?</p>
 </div>
 <div id="exercise-optional" class="section level2" number="1.5">
@@ -460,7 +461,7 @@ Figure 1.1: From Mendenhall (1987) - The Characteristic Curves of Composition.
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-01.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -38,16 +38,34 @@ Build output goes to the `docs/` directory. The project supports multiple output
 - `10-week6.Rmd` - Structural Topic Models (STM); k-means intuition and topic modeling on inaugural speeches
 - `11-week7.Rmd` - Supervised learning intro; Wordscores technique replicating Laver & Benoit (2003)
 
+*Weeks 8-11 (planned, slides and readings exist but no Rmd files yet):*
+- Week 8 - Introduction to Deep Learning and Word Embeddings
+- Week 9 - The Transformers Architecture
+- Week 10 - Encoder-Only LLMs
+- Week 11 - Decoder-Only LLMs (Generative LLMs)
+
 **Configuration:**
 - `_bookdown.yml` - Bookdown settings (output dir, book filename)
 - `_output.yml` - Output format specs (themes, PDF/EPUB settings)
 - `style.css` - Custom styling for HTML output
 - `preamble.tex` - LaTeX preamble for PDF output
+- `cta_updated.Rproj` - RStudio project file (BuildType: Website)
+- `book.bib` - Bibliography file for references
+- `packages.bib` - Auto-generated bibliography for R packages
+- `.nojekyll` - Jekyll bypass file for GitHub Pages hosting
 
 **Data and Assets:**
-- `data/` - Course datasets (CSV, XLSX, Rdata files)
+- `data/` - Course datasets:
+  - `lyrics_sample.xlsx` - Song lyrics corpus (Week 2)
+  - `ventura_etal_df.Rdata` - Debate chat data from Ventura et al. (Week 3)
+  - `inaugTexts.xlsx` - U.S. presidential inaugural speeches (Weeks 5-6)
+  - `NRC-AffectIntensity-Lexicon.txt` - Sentiment lexicon
+  - `candidate-tweets.csv`, `candidate-tweets_en.csv` - Political tweets data
+  - `politics_sample.csv`, `book_blurbs.csv` - Additional text corpora
+  - `anes_sample.Rdata` - American National Election Studies sample
 - `images/` - Figures referenced in content
-- `slides/` - PowerPoint lecture slides
+- `files/` - Course documents (syllabus PDF: `9594_Computational_Text_Analysis_2026.pdf`)
+- `slides/` - PowerPoint lecture slides (Weeks 1-7 implemented, plus advanced topics 8-13)
 
 **Shiny Apps:**
 - `k-means/app.R` - K-means clustering step-by-step intuition builder (used in Week 6)
@@ -64,5 +82,7 @@ The codebase relies on: `tidyverse`, `tidytext`, `quanteda` (with extensions: `q
 
 ## Course Content Split
 
-- Weeks 1-5: R-focused (tidyverse, tidytext, quanteda, STM)
-- Weeks 6-11: Combined R and Python (word embeddings, LLMs, transformers)
+- Weeks 1-7: R-focused (tidyverse, tidytext, quanteda, STM, Wordscores) - **implemented**
+- Weeks 8-11: Deep learning and LLMs (word embeddings, transformers, encoder/decoder models) - **slides and readings exist, Rmd files not yet implemented**
+
+Note: Python integration for weeks 8-11 is planned but not yet committed to the repository.

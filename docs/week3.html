@@ -54,6 +54,7 @@
 <li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
 <li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
+<li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 </ul>
 
         <div class="book-extra">
@@ -284,7 +285,7 @@
 ## group_by: one grouping variable (mentions_cat)
 ## mutate (grouped): new variable 'likes_mean' (double) with 3 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-52-1.png" width="672"></div>
 <p>And we can also see if there are differences across news media:</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -318,7 +319,7 @@
 ## group_by: 2 grouping variables (mentions_cat, media)
 ## mutate (grouped): new variable 'median_like' (double) with 6 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
 <p>Similar to Young and Soroka (2012), we can also explore our keywords of interest in context. This is a good way to validate our proposed measure (e.g., is mentioning <em>trump</em> a reflection of interest, or simply relevance?).</p>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a quanteda corpus from the Ventura et al. dataset.</span></span>
@@ -735,7 +736,7 @@
 <pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
 ## group_by: one grouping variable (media)
 ## mutate (grouped): new variable 'median_sent' (double) with 3 unique values and 0% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-65-1.png" width="672"></div>
 </div>
 <div id="domain-specific-dictionaries" class="section level3" number="3.5.2">
 <h3>
@@ -912,7 +913,7 @@
 ## distinct (grouped): removed 29,544 rows (&gt;99%), 3 rows remaining (removed 0 groups, 3 groups remaining)</code></pre>
 <div class="inline-table"><table class="table table-sm">
 <caption>
-<span id="tab:unnamed-chunk-50">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
+<span id="tab:unnamed-chunk-69">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
 <thead><tr class="header">
 <th align="left">media</th>
 <th align="right">pct_econ</th>
@@ -1044,7 +1045,7 @@
 ## filter: removed 20,355 rows (69%), 9,180 rows remaining
 ## filter: removed 2,518 rows (27%), 6,662 rows remaining
 ## `geom_smooth()` using formula = 'y ~ x'</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-72-1.png" width="672"></div>
 <p>Finally, for the sake of showing the process, I will write the code to load the dictionary using <code>quanteda</code>, but note that this approach loses all the intensity information.</p>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">affect_dict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>anger <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"anger"</span><span class="op">]</span>,</span>
@@ -1163,7 +1164,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-01.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

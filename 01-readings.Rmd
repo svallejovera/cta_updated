@@ -117,6 +117,8 @@
 
 - Lin, Gechun, and Christopher Lucas. 2023. “An Introduction to Neural Networks for the Social Sciences.” In *The Oxford Handbook of Engaged Methodological Pluralism in Political Science*, edited by Janet M. Box-Steffensmeier, Dino P. Christenson, and Valeria Sinclair-Chapman. Oxford: Oxford University Press. <https://doi.org/10.1093/oxfordhb/9780192868282.013.79>
 
+Mikolov, T., Chen, K., Corrado, G. and Dean, J., 2013. Efficient estimation of word representations in vector space. arXiv preprint arXiv:1301.3781.
+
 - Meyer, David. 2016. “How Exactly Does word2vec Work?” <https://davidmeyer.github.io/ml/how_does_word2vec_work.pdf>
 
 - Alammar, Jay. 2019. “The Illustrated Word2vec.” <https://jalammar.github.io/illustrated-word2vec/>

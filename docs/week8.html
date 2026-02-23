@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 8 Week 8: Introduction to Deep Learning | PS9594: Computational Text Analysis</title>
+<meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
+<meta name="description" content="Slides 8 Introduction to Deep Learning (link or in Perusall) to slides)  8.1 Why Neural Networks in a Text Analysis Course? Neural networks are just parameterized functions that we fit by...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 8 Week 8: Introduction to Deep Learning | PS9594: Computational Text Analysis">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Slides 8 Introduction to Deep Learning (link or in Perusall) to slides)  8.1 Why Neural Networks in a Text Analysis Course? Neural networks are just parameterized functions that we fit by...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 8 Week 8: Introduction to Deep Learning | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="Slides 8 Introduction to Deep Learning (link or in Perusall) to slides)  8.1 Why Neural Networks in a Text Analysis Course? Neural networks are just parameterized functions that we fit by...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">PS9594: Computational Text Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">“Computational Text Analysis”</a></li>
+<li><a class="" href="readings.html">Reading List</a></li>
+<li><a class="" href="assignments.html">Assignments</a></li>
+<li><a class="" href="replication.html">Replication Exercise</a></li>
+<li><a class="" href="final_paper.html">Final Paper</a></li>
+<li><a class="" href="week1.html"><span class="header-section-number">1</span> Week 1: A Primer on Using Text as Data</a></li>
+<li><a class="" href="week2.html"><span class="header-section-number">2</span> Week 2: Tokenization and Word Frequency</a></li>
+<li><a class="" href="week3.html"><span class="header-section-number">3</span> Week 3: Dictionary-Based Approaches</a></li>
+<li><a class="" href="week4.html"><span class="header-section-number">4</span> Week 4: Complexity and Similarity</a></li>
+<li><a class="" href="week5.html"><span class="header-section-number">5</span> Week 5: Scaling Techniques (Unsupervised Learning I)</a></li>
+<li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
+<li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
+<li><a class="active" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/svallejovera/cta_updated">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week8" class="section level1" number="8">
+<h1>
+<span class="header-section-number">8</span> Week 8: Introduction to Deep Learning<a class="anchor" aria-label="anchor" href="#week8"><i class="fas fa-link"></i></a>
+</h1>
+<div id="slides-7" class="section level2 unnumbered">
+<h2>Slides<a class="anchor" aria-label="anchor" href="#slides-7"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>8 Introduction to Deep Learning (<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/8%20Neural%20Networks%20and%20Word%20Embeddings.pptx">link</a> or in Perusall) to slides)</li>
+</ul>
+</div>
+<div id="why-neural-networks-in-a-text-analysis-course" class="section level2" number="8.1">
+<h2>
+<span class="header-section-number">8.1</span> Why Neural Networks in a Text Analysis Course?<a class="anchor" aria-label="anchor" href="#why-neural-networks-in-a-text-analysis-course"><i class="fas fa-link"></i></a>
+</h2>
+<p>Neural networks are just <em>parameterized functions</em> that we fit by minimizing a loss function. If that sounds familiar, it should: it is the same basic idea behind regression. The two big changes are:</p>
+<ol style="list-style-type: decimal">
+<li>We stack many simple functions (layers) on top of each other.</li>
+<li>We add <strong>nonlinearities</strong> (activation functions), so the model can learn more flexible patterns.</li>
+</ol>
+<p>This week we will (i) train a tiny neural network <strong>by hand</strong> (forward pass → loss → gradients → update), and then (ii) connect the idea of “learned weights” to <strong>word embeddings</strong>.</p>
+</div>
+<div id="setup-7" class="section level2" number="8.2">
+<h2>
+<span class="header-section-number">8.2</span> Setup<a class="anchor" aria-label="anchor" href="#setup-7"><i class="fas fa-link"></i></a>
+</h2>
+<p>As always, we first load the packages that we’ll be using:</p>
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/elbersb/tidylog/">tidylog</a></span><span class="op">)</span>    </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>   </span></code></pre></div>
+<p>We will use tiny, toy numbers so that the arithmetic is transparent.</p>
+<hr>
+</div>
+<div id="part-1-a-single-neuron-with-a-linear-activation-regression" class="section level2" number="8.3">
+<h2>
+<span class="header-section-number">8.3</span> Part 1: A single neuron with a <strong>linear</strong> activation (regression)<a class="anchor" aria-label="anchor" href="#part-1-a-single-neuron-with-a-linear-activation-regression"><i class="fas fa-link"></i></a>
+</h2>
+<p>A “single neuron” takes an input <span class="math inline">\(x\)</span>, multiplies it by a weight <span class="math inline">\(w\)</span>, adds a bias <span class="math inline">\(b\)</span>, and outputs:</p>
+<p><span class="math display">\[
+\hat{y} = wx + b
+\]</span></p>
+<p>This is literally the same functional form as simple linear regression. The key point is not novelty, but rather to practice the mechanics of <em>gradient descent</em>.</p>
+<div id="a-tiny-dataset" class="section level3" number="8.3.1">
+<h3>
+<span class="header-section-number">8.3.1</span> A tiny dataset<a class="anchor" aria-label="anchor" href="#a-tiny-dataset"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let’s use three observations:</p>
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toy_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">toy_lin</span></span></code></pre></div>
+<pre><code>## # A tibble: 3 × 2
+##       x     y
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     0     0
+## 2     1     1
+## 3     2     4</code></pre>
+</div>
+<div id="forward-pass-by-hand" class="section level3" number="8.3.2">
+<h3>
+<span class="header-section-number">8.3.2</span> Forward pass (by hand)<a class="anchor" aria-label="anchor" href="#forward-pass-by-hand"><i class="fas fa-link"></i></a>
+</h3>
+<p>Pick initial parameters (intentionally a little “wrong”):</p>
+<ul>
+<li><span class="math inline">\(w = 0.4\)</span></li>
+<li><span class="math inline">\(b = 0.2\)</span></li>
+</ul>
+<p>Compute predictions:</p>
+<p><span class="math display">\[
+\hat{y}_i = w x_i + b
+\]</span></p>
+<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fl">0.4</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
+<span></span>
+<span><span class="va">toy_lin</span> <span class="op">&lt;-</span> <span class="va">toy_lin</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    yhat <span class="op">=</span> <span class="va">w</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span>,</span>
+<span>    error <span class="op">=</span> <span class="va">yhat</span> <span class="op">-</span> <span class="va">y</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: new variable 'yhat' (double) with 3 unique values and 0% NA
+##         new variable 'error' (double) with 3 unique values and 0% NA</code></pre>
+<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">toy_lin</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="right">x</th>
+<th align="right">y</th>
+<th align="right">yhat</th>
+<th align="right">error</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.2</td>
+<td align="right">0.2</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.6</td>
+<td align="right">-0.4</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">1.0</td>
+<td align="right">-3.0</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="loss-mean-squared-error" class="section level3" number="8.3.3">
+<h3>
+<span class="header-section-number">8.3.3</span> Loss (Mean Squared Error)<a class="anchor" aria-label="anchor" href="#loss-mean-squared-error"><i class="fas fa-link"></i></a>
+</h3>
+<p>We’ll use the “half MSE” because it makes derivatives cleaner (will see what we mean by this in a minute):</p>
+<p><span class="math display">\[
+L = \frac{1}{2n}\sum_{i=1}^{n}(\hat{y}_i - y_i)^2
+\]</span></p>
+<p>This is called the <em>loss function</em>, the <em>cost function</em>, or the <em>error function</em>.</p>
+<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">loss_lin</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">toy_lin</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">toy_lin</span><span class="op">$</span><span class="va">yhat</span> <span class="op">-</span> <span class="va">toy_lin</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">loss_lin</span></span></code></pre></div>
+<pre><code>## [1] 1.533333</code></pre>
+<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualizing how well the line fits </span></span>
+<span></span>
+<span><span class="va">toy_lin</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">yhat</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">'#2C2C54'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">yhat</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">'#2C2C54'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Actual and predicted values over x (before the update)"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Value"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-129-1.png" width="672"></div>
+</div>
+<div id="gradients-this-is-the-whole-game" class="section level3" number="8.3.4">
+<h3>
+<span class="header-section-number">8.3.4</span> Gradients (this is the whole game)<a class="anchor" aria-label="anchor" href="#gradients-this-is-the-whole-game"><i class="fas fa-link"></i></a>
+</h3>
+<p>That’s an ok prediction. But there is probably a better line we can plot that will better predict the observed values. We will do some backpropagation.</p>
+<p>During backpropagation, we take the partial derivative of the error function with respect to each weight and bias in the model. The error function does not contain any weights or biases in its equation so we use the <strong>chain rule</strong> to do so. The result of doing this is a direction and magnitude in which each parameter should be tuned to minimize the error function. This concept is called <em>gradient descent</em>.</p>
+<p>I will try to explain why we use the derivative of the errors and the chain rule as intuitively as possible, but if you want another, more detailed, explanation of the process, I suggest you check <a href="https://www.youtube.com/watch?app=desktop&amp;v=tIeHLnjs5U8">this video</a>.</p>
+<p>We are looking for better values to give <span class="math inline">\(w\)</span> and <span class="math inline">\(b\)</span>.</p>
+<div class="figure">
+<span style="display:block;" id="fig:gradient"></span>
+<img src="images/gradient_descent.png" alt="Simplified cost function curve. In NNs this function might not be convex." width="100%"><p class="caption">
+Figure 8.1: Simplified cost function curve. In NNs this function might not be convex.
+</p>
+</div>
+<p>This is what we have:</p>
+<ul>
+<li><span class="math inline">\(\hat{y}_i = wx_i + b\)</span></li>
+<li><span class="math inline">\(e_i = \hat{y}_i - y_i\)</span></li>
+<li><span class="math inline">\(L = \frac{1}{2n}\sum e_i^2\)</span></li>
+</ul>
+<p>Derivative w.r.t. predictions:</p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial \hat{y}_i} = \frac{1}{n}(\hat{y}_i - y_i) = \frac{1}{n}e_i
+\]</span></p>
+<p>And since <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial w} = x_i\)</span> and <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial b} = 1\)</span>, we get:</p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial w} = \frac{1}{n}\sum_{i=1}^{n} e_i x_i
+\qquad
+\frac{\partial L}{\partial b} = \frac{1}{n}\sum_{i=1}^{n} e_i
+\]</span></p>
+<p>Let’s compute these gradients in R:</p>
+<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">toy_lin</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dL_dw_lin</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">toy_lin</span><span class="op">$</span><span class="va">error</span> <span class="op">*</span> <span class="va">toy_lin</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">dL_db_lin</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">toy_lin</span><span class="op">$</span><span class="va">error</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dL_dw_lin</span></span></code></pre></div>
+<pre><code>## [1] -2.133333</code></pre>
+<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dL_db_lin</span></span></code></pre></div>
+<pre><code>## [1] -1.066667</code></pre>
+</div>
+<div id="one-gradient-descent-update" class="section level3" number="8.3.5">
+<h3>
+<span class="header-section-number">8.3.5</span> One gradient descent update<a class="anchor" aria-label="anchor" href="#one-gradient-descent-update"><i class="fas fa-link"></i></a>
+</h3>
+<p>Gradient descent update rule:</p>
+<p><span class="math display">\[
+w \leftarrow w - \alpha \frac{\partial L}{\partial w}
+\qquad
+b \leftarrow b - \alpha \frac{\partial L}{\partial b}
+\]</span></p>
+<p>Let’s choose a learning rate <span class="math inline">\(\alpha = 0.2\)</span> and update once:</p>
+<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
+<span></span>
+<span><span class="va">w_new</span> <span class="op">&lt;-</span> <span class="va">w</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_dw_lin</span></span>
+<span><span class="va">b_new</span> <span class="op">&lt;-</span> <span class="va">b</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_db_lin</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>w_old <span class="op">=</span> <span class="va">w</span>, w_new <span class="op">=</span> <span class="va">w_new</span>, b_old <span class="op">=</span> <span class="va">b</span>, b_new <span class="op">=</span> <span class="va">b_new</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##     w_old     w_new     b_old     b_new 
+## 0.4000000 0.8266667 0.2000000 0.4133333</code></pre>
+<p>Now recompute the loss to check that we improved:</p>
+<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toy_lin_after</span> <span class="op">&lt;-</span> <span class="va">toy_lin</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    yhat_new <span class="op">=</span> <span class="va">w_new</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b_new</span>,</span>
+<span>    error_new <span class="op">=</span> <span class="va">yhat_new</span> <span class="op">-</span> <span class="va">y</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: new variable 'yhat_new' (double) with 3 unique values and 0% NA
+##         new variable 'error_new' (double) with 3 unique values and 0% NA</code></pre>
+<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">loss_lin_after</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">toy_lin_after</span><span class="op">$</span><span class="va">yhat_new</span> <span class="op">-</span> <span class="va">toy_lin_after</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>loss_before <span class="op">=</span> <span class="va">loss_lin</span>, loss_after <span class="op">=</span> <span class="va">loss_lin_after</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## loss_before  loss_after 
+##    1.533333    0.661037</code></pre>
+<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualizing how well the UPDATED line fits </span></span>
+<span></span>
+<span><span class="va">toy_lin_after</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">yhat_new</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">'#2C2C54'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">yhat_new</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="st">'#2C2C54'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Actual and predicted values over x (before the update)"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Value"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-133-1.png" width="672"></div>
+<div class="sourceCode" id="cb243"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Actual and predicted values over x (after the update)"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Value"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code>## $x
+## [1] "x"
+## 
+## $y
+## [1] "Value"
+## 
+## $title
+## [1] "Actual and predicted values over x (after the update)"
+## 
+## attr(,"class")
+## [1] "labels"</code></pre>
+<p>If you got a smaller loss after the update, congratulations: you have trained a “neural network” (a very small one).</p>
+<hr>
+</div>
+</div>
+<div id="part-2-a-single-neuron-with-a-sigmoid-activation-a-classic-neural-network-move" class="section level2" number="8.4">
+<h2>
+<span class="header-section-number">8.4</span> Part 2: A single neuron with a <strong>sigmoid</strong> activation (a classic neural-network move)<a class="anchor" aria-label="anchor" href="#part-2-a-single-neuron-with-a-sigmoid-activation-a-classic-neural-network-move"><i class="fas fa-link"></i></a>
+</h2>
+<p>The linear neuron is useful for intuition, but it is not <em>distinctively neural-network-ish</em>. The distinctive move is adding a nonlinearity.</p>
+<p>We define:</p>
+<ol style="list-style-type: decimal">
+<li><p>Pre-activation (the “weighted sum”):
+<span class="math display">\[
+a = wx + b
+\]</span></p></li>
+<li><p>Activation (sigmoid):
+<span class="math display">\[
+\hat{y} = \sigma(a) = \frac{1}{1 + e^{-a}}
+\]</span></p></li>
+</ol>
+<p>We will keep the same “half MSE” loss:</p>
+<p><span class="math display">\[
+L = \frac{1}{2n}\sum_{i=1}^{n}(\hat{y}_i - y_i)^2
+\]</span></p>
+<div id="a-tiny-dataset-for-sigmoid" class="section level3" number="8.4.1">
+<h3>
+<span class="header-section-number">8.4.1</span> A tiny dataset for sigmoid<a class="anchor" aria-label="anchor" href="#a-tiny-dataset-for-sigmoid"><i class="fas fa-link"></i></a>
+</h3>
+<p>To keep things simple, let’s do a “probability-like” target:</p>
+<div class="sourceCode" id="cb245"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toy_sig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>  <span class="co"># not perfect, just a toy target</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">toy_sig</span></span></code></pre></div>
+<pre><code>## # A tibble: 3 × 2
+##       x     y
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     0     0
+## 2     1     1
+## 3     2     1</code></pre>
+</div>
+<div id="define-sigmoid" class="section level3" number="8.4.2">
+<h3>
+<span class="header-section-number">8.4.2</span> Define sigmoid<a class="anchor" aria-label="anchor" href="#define-sigmoid"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sigmoid</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="forward-pass" class="section level3" number="8.4.3">
+<h3>
+<span class="header-section-number">8.4.3</span> Forward pass<a class="anchor" aria-label="anchor" href="#forward-pass"><i class="fas fa-link"></i></a>
+</h3>
+<p>Initialize:</p>
+<ul>
+<li><span class="math inline">\(w = 0.8\)</span></li>
+<li><span class="math inline">\(b = -0.4\)</span></li>
+</ul>
+<p>Compute:</p>
+<ul>
+<li><span class="math inline">\(a_i = wx_i + b\)</span></li>
+<li><span class="math inline">\(\hat{y}_i = \sigma(a_i)\)</span></li>
+</ul>
+<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fl">0.8</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.4</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">toy_sig</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">toy_sig</span> <span class="op">&lt;-</span> <span class="va">toy_sig</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    a <span class="op">=</span> <span class="va">w</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span>,</span>
+<span>    yhat <span class="op">=</span> <span class="fu">sigmoid</span><span class="op">(</span><span class="va">a</span><span class="op">)</span>,</span>
+<span>    error <span class="op">=</span> <span class="va">yhat</span> <span class="op">-</span> <span class="va">y</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: new variable 'a' (double) with 3 unique values and 0% NA
+##         new variable 'yhat' (double) with 3 unique values and 0% NA
+##         new variable 'error' (double) with 3 unique values and 0% NA</code></pre>
+<div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">toy_sig</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="right">x</th>
+<th align="right">y</th>
+<th align="right">a</th>
+<th align="right">yhat</th>
+<th align="right">error</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-0.4</td>
+<td align="right">0.4013123</td>
+<td align="right">0.4013123</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.4</td>
+<td align="right">0.5986877</td>
+<td align="right">-0.4013123</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1.2</td>
+<td align="right">0.7685248</td>
+<td align="right">-0.2314752</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="loss" class="section level3" number="8.4.4">
+<h3>
+<span class="header-section-number">8.4.4</span> Loss<a class="anchor" aria-label="anchor" href="#loss"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">loss_sig</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">toy_sig</span><span class="op">$</span><span class="va">yhat</span> <span class="op">-</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">loss_sig</span></span></code></pre></div>
+<pre><code>## [1] 0.06261399</code></pre>
+</div>
+<div id="backprop-chain-rule-step-by-step" class="section level3" number="8.4.5">
+<h3>
+<span class="header-section-number">8.4.5</span> Backprop (chain rule, step-by-step)<a class="anchor" aria-label="anchor" href="#backprop-chain-rule-step-by-step"><i class="fas fa-link"></i></a>
+</h3>
+<p>We want <span class="math inline">\(\frac{\partial L}{\partial w}\)</span> and <span class="math inline">\(\frac{\partial L}{\partial b}\)</span>.</p>
+<p>For each observation <span class="math inline">\(i\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Loss derivative w.r.t. prediction:
+<span class="math display">\[
+\frac{\partial L}{\partial \hat{y}_i} = \frac{1}{n}(\hat{y}_i - y_i)
+\]</span></p></li>
+<li><p>Sigmoid derivative:
+<span class="math display">\[
+\frac{\partial \hat{y}_i}{\partial a_i} = \hat{y}_i(1-\hat{y}_i)
+\]</span></p></li>
+<li><p>Pre-activation derivatives:
+<span class="math display">\[
+\frac{\partial a_i}{\partial w} = x_i
+\qquad
+\frac{\partial a_i}{\partial b} = 1
+\]</span></p></li>
+</ol>
+<p>Combine them:</p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial w}
+= \sum_{i=1}^{n}
+\left(
+\frac{\partial L}{\partial \hat{y}_i}
+\cdot
+\frac{\partial \hat{y}_i}{\partial a_i}
+\cdot
+\frac{\partial a_i}{\partial w}
+\right)
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial b}
+= \sum_{i=1}^{n}
+\left(
+\frac{\partial L}{\partial \hat{y}_i}
+\cdot
+\frac{\partial \hat{y}_i}{\partial a_i}
+\cdot
+\frac{\partial a_i}{\partial b}
+\right)
+\]</span></p>
+<p>Let’s compute these gradients explicitly:</p>
+<div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># dL/dyhat_i</span></span>
+<span><span class="va">dL_dyhat</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">toy_sig</span><span class="op">$</span><span class="va">yhat</span> <span class="op">-</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># dyhat_i/da_i for sigmoid</span></span>
+<span><span class="va">dyhat_da</span> <span class="op">&lt;-</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">yhat</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">yhat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># da_i/dw and da_i/db</span></span>
+<span><span class="va">da_dw</span> <span class="op">&lt;-</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">da_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># chain rule</span></span>
+<span><span class="va">dL_dw_sig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dL_dyhat</span> <span class="op">*</span> <span class="va">dyhat_da</span> <span class="op">*</span> <span class="va">da_dw</span><span class="op">)</span></span>
+<span><span class="va">dL_db_sig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dL_dyhat</span> <span class="op">*</span> <span class="va">dyhat_da</span> <span class="op">*</span> <span class="va">da_db</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dL_dw_sig</span></span></code></pre></div>
+<pre><code>## [1] -0.05959197</code></pre>
+<div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dL_db_sig</span></span></code></pre></div>
+<pre><code>## [1] -0.01372605</code></pre>
+</div>
+<div id="one-update-check-the-loss" class="section level3" number="8.4.6">
+<h3>
+<span class="header-section-number">8.4.6</span> One update + check the loss<a class="anchor" aria-label="anchor" href="#one-update-check-the-loss"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb257"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.8</span>  <span class="co"># you can play with this</span></span>
+<span></span>
+<span><span class="va">w_new</span> <span class="op">&lt;-</span> <span class="va">w</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_dw_sig</span></span>
+<span><span class="va">b_new</span> <span class="op">&lt;-</span> <span class="va">b</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_db_sig</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>w_old <span class="op">=</span> <span class="va">w</span>, w_new <span class="op">=</span> <span class="va">w_new</span>, b_old <span class="op">=</span> <span class="va">b</span>, b_new <span class="op">=</span> <span class="va">b_new</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##      w_old      w_new      b_old      b_new 
+##  0.8000000  0.8476736 -0.4000000 -0.3890192</code></pre>
+<div class="sourceCode" id="cb259"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toy_sig_after</span> <span class="op">&lt;-</span> <span class="va">toy_sig</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    a_new <span class="op">=</span> <span class="va">w_new</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b_new</span>,</span>
+<span>    yhat_new <span class="op">=</span> <span class="fu">sigmoid</span><span class="op">(</span><span class="va">a_new</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code>## mutate: new variable 'a_new' (double) with 3 unique values and 0% NA
+##         new variable 'yhat_new' (double) with 3 unique values and 0% NA</code></pre>
+<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">loss_sig_after</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">toy_sig_after</span><span class="op">$</span><span class="va">yhat_new</span> <span class="op">-</span> <span class="va">toy_sig_after</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>loss_before <span class="op">=</span> <span class="va">loss_sig</span>, loss_after <span class="op">=</span> <span class="va">loss_sig_after</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## loss_before  loss_after 
+##  0.06261399  0.05976601</code></pre>
+<p>If loss decreased, the network is moving in the right direction. If it increased, reduce <span class="math inline">\(\alpha\)</span>.</p>
+</div>
+<div id="optional-train-for-multiple-steps" class="section level3" number="8.4.7">
+<h3>
+<span class="header-section-number">8.4.7</span> (Optional) Train for multiple steps<a class="anchor" aria-label="anchor" href="#optional-train-for-multiple-steps"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is the exact same logic, repeated.</p>
+<div class="sourceCode" id="cb263"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">train_sigmoid_one_neuron</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">w_init</span>, <span class="va">b_init</span>, <span class="va">alpha</span>, <span class="va">steps</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">sigmoid</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">w</span> <span class="op">&lt;-</span> <span class="va">w_init</span></span>
+<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="va">b_init</span></span>
+<span></span>
+<span>  <span class="va">history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>step <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">integer</a></span><span class="op">(</span><span class="op">)</span>, loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">double</a></span><span class="op">(</span><span class="op">)</span>, w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">double</a></span><span class="op">(</span><span class="op">)</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">s</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">steps</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">a</span> <span class="op">&lt;-</span> <span class="va">w</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span></span>
+<span>    <span class="va">yhat</span> <span class="op">&lt;-</span> <span class="fu">sigmoid</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">loss</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">yhat</span> <span class="op">-</span> <span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">dL_dyhat</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">yhat</span> <span class="op">-</span> <span class="va">y</span><span class="op">)</span></span>
+<span>    <span class="va">dyhat_da</span> <span class="op">&lt;-</span> <span class="va">yhat</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">yhat</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">dL_dw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dL_dyhat</span> <span class="op">*</span> <span class="va">dyhat_da</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">dL_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dL_dyhat</span> <span class="op">*</span> <span class="va">dyhat_da</span> <span class="op">*</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">w</span> <span class="op">&lt;-</span> <span class="va">w</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_dw</span></span>
+<span>    <span class="va">b</span> <span class="op">&lt;-</span> <span class="va">b</span> <span class="op">-</span> <span class="va">alpha</span> <span class="op">*</span> <span class="va">dL_db</span></span>
+<span></span>
+<span>    <span class="va">history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">history</span>, <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>step <span class="op">=</span> <span class="va">s</span>, loss <span class="op">=</span> <span class="va">loss</span>, w <span class="op">=</span> <span class="va">w</span>, b <span class="op">=</span> <span class="va">b</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="va">history</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">hist_sig</span> <span class="op">&lt;-</span> <span class="fu">train_sigmoid_one_neuron</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">x</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">toy_sig</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>  w_init <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  b_init <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  steps <span class="op">=</span> <span class="fl">30</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">hist_sig</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##    step   loss     w      b
+##   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1    25 0.0382  1.47 -0.479
+## 2    26 0.0377  1.48 -0.488
+## 3    27 0.0372  1.50 -0.496
+## 4    28 0.0368  1.52 -0.504
+## 5    29 0.0364  1.53 -0.512
+## 6    30 0.0359  1.55 -0.521</code></pre>
+<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">hist_sig</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">step</span>, y <span class="op">=</span> <span class="va">loss</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Training a one-neuron sigmoid network (toy data)"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Gradient descent step"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Loss"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-142-1.png" width="672"></div>
+<hr>
+</div>
+</div>
+<div id="how-this-connects-to-word-embeddings" class="section level2" number="8.5">
+<h2>
+<span class="header-section-number">8.5</span> How this connects to word embeddings<a class="anchor" aria-label="anchor" href="#how-this-connects-to-word-embeddings"><i class="fas fa-link"></i></a>
+</h2>
+<p>The reason we did this “by hand” is to demystify the basic mechanism:</p>
+<ul>
+<li>You start with <strong>random weights</strong>.</li>
+<li>You compute predictions.</li>
+<li>You measure how wrong you are (loss).</li>
+<li>You compute gradients (how to change weights to reduce loss).</li>
+<li>You update weights.</li>
+</ul>
+<p>Word embeddings are also <strong>weights</strong>. The difference is that:</p>
+<ul>
+<li>Instead of learning one weight <span class="math inline">\(w\)</span>, we learn a <em>vector</em> of weights for each word: <span class="math inline">\(\mathbf{w}_{\text{word}} \in \mathbb{R}^d\)</span>.</li>
+<li>Training nudges these vectors so that the model becomes better at its prediction task (e.g., predicting nearby words, or predicting masked tokens).</li>
+</ul>
+<p>So when you hear “an embedding is learned,” you should translate that as:</p>
+<blockquote>
+<p>“Gradient descent moved a bunch of weights until the model’s predictions improved.”</p>
+</blockquote>
+<p>Next week, we will use this same story (forward pass → loss → gradients → update), but we will scale it up to many dimensions and many tokens.</p>
+<hr>
+</div>
+<div id="references" class="section level2" number="8.6">
+<h2>
+<span class="header-section-number">8.6</span> References<a class="anchor" aria-label="anchor" href="#references"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>
+<em>Training a neural network by hand</em> (Medium post): <a href="https://medium.com/data-science/training-a-neural-network-by-hand-1bcac4d82a6e" class="uri">https://medium.com/data-science/training-a-neural-network-by-hand-1bcac4d82a6e</a>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+
+
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#week8"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
+<li><a class="nav-link" href="#slides-7">Slides</a></li>
+<li><a class="nav-link" href="#why-neural-networks-in-a-text-analysis-course"><span class="header-section-number">8.1</span> Why Neural Networks in a Text Analysis Course?</a></li>
+<li><a class="nav-link" href="#setup-7"><span class="header-section-number">8.2</span> Setup</a></li>
+<li>
+<a class="nav-link" href="#part-1-a-single-neuron-with-a-linear-activation-regression"><span class="header-section-number">8.3</span> Part 1: A single neuron with a linear activation (regression)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#a-tiny-dataset"><span class="header-section-number">8.3.1</span> A tiny dataset</a></li>
+<li><a class="nav-link" href="#forward-pass-by-hand"><span class="header-section-number">8.3.2</span> Forward pass (by hand)</a></li>
+<li><a class="nav-link" href="#loss-mean-squared-error"><span class="header-section-number">8.3.3</span> Loss (Mean Squared Error)</a></li>
+<li><a class="nav-link" href="#gradients-this-is-the-whole-game"><span class="header-section-number">8.3.4</span> Gradients (this is the whole game)</a></li>
+<li><a class="nav-link" href="#one-gradient-descent-update"><span class="header-section-number">8.3.5</span> One gradient descent update</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#part-2-a-single-neuron-with-a-sigmoid-activation-a-classic-neural-network-move"><span class="header-section-number">8.4</span> Part 2: A single neuron with a sigmoid activation (a classic neural-network move)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#a-tiny-dataset-for-sigmoid"><span class="header-section-number">8.4.1</span> A tiny dataset for sigmoid</a></li>
+<li><a class="nav-link" href="#define-sigmoid"><span class="header-section-number">8.4.2</span> Define sigmoid</a></li>
+<li><a class="nav-link" href="#forward-pass"><span class="header-section-number">8.4.3</span> Forward pass</a></li>
+<li><a class="nav-link" href="#loss"><span class="header-section-number">8.4.4</span> Loss</a></li>
+<li><a class="nav-link" href="#backprop-chain-rule-step-by-step"><span class="header-section-number">8.4.5</span> Backprop (chain rule, step-by-step)</a></li>
+<li><a class="nav-link" href="#one-update-check-the-loss"><span class="header-section-number">8.4.6</span> One update + check the loss</a></li>
+<li><a class="nav-link" href="#optional-train-for-multiple-steps"><span class="header-section-number">8.4.7</span> (Optional) Train for multiple steps</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#how-this-connects-to-word-embeddings"><span class="header-section-number">8.5</span> How this connects to word embeddings</a></li>
+<li><a class="nav-link" href="#references"><span class="header-section-number">8.6</span> References</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/12-week8.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/12-week8.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
