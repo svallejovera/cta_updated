@@ -302,7 +302,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_y_discrete</a></span><span class="op">(</span>expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Using rowname as id variables</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-89-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-70-1.png" width="672"></div>
 <p>Noise!</p>
 </div>
 </div>
@@ -316,43 +316,45 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/anes_sample.Rdata"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 9
-##   V200001 like_dem_pres          dislike_dem_pres
-##     &lt;dbl&gt; &lt;chr&gt;                  &lt;chr&gt;           
-## 1  200015 &lt;NA&gt;                   nothing about s…
-## 2  200022 &lt;NA&gt;                   He wants to tak…
-## 3  200039 He is not Donald Trum… &lt;NA&gt;            
-## 4  200046 he look honest and hi… &lt;NA&gt;            
-## 5  200053 &lt;NA&gt;                   Open borders, l…
-## 6  200060 he is NOT Donald Trum… &lt;NA&gt;            
+##   V200001 like_dem_pres         dislike_dem_pres
+##     &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;           
+## 1  200015 &lt;NA&gt;                  nothing about s…
+## 2  200022 &lt;NA&gt;                  He wants to tak…
+## 3  200039 He is not Donald Tru… &lt;NA&gt;            
+## 4  200046 he look honest and h… &lt;NA&gt;            
+## 5  200053 &lt;NA&gt;                  Open borders, l…
+## 6  200060 he is NOT Donald Tru… &lt;NA&gt;            
 ## # ℹ 6 more variables: like_rep_pres &lt;chr&gt;,
 ## #   dislike_rep_pres &lt;chr&gt;, income &lt;int&gt;,
 ## #   pid &lt;int&gt;, edu &lt;int&gt;, age &lt;int&gt;</code></pre>
 <p>We have open-ended survey questions that ask respondents what they like and dislike about the Democratic (Joe Biden) and Republican (Donald Trump) 2020 U.S. presidential candidates before the election. Note that survey respondents could opt out of the question and were assigned an <em>NA</em>.</p>
 <p>Let’s check:</p>
 <div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">read_like_dem_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/textstat_readability.html">textstat_readability</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">$</span><span class="va">like_dem_pres</span>,measure <span class="op">=</span> <span class="st">"Flesch"</span><span class="op">)</span></span>
-<span><span class="va">open_srvy</span><span class="op">$</span><span class="va">read_like_dem_pres</span> <span class="op">&lt;-</span> <span class="va">read_like_dem_pres</span><span class="op">$</span><span class="va">Flesch</span></span>
+<code class="sourceCode R"><span><span class="va">read_like_dem_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/textstat_readability.html">textstat_readability</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">$</span><span class="va">like_dem_pres</span>,measure <span class="op">=</span> <span class="st">"Flesch"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Warning: NA is replaced by empty string</code></pre>
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">open_srvy</span><span class="op">$</span><span class="va">read_like_dem_pres</span> <span class="op">&lt;-</span> <span class="va">read_like_dem_pres</span><span class="op">$</span><span class="va">Flesch</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span><span class="op">]</span>,<span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 15 × 2
-##    like_dem_pres               read_like_dem_pres
-##    &lt;chr&gt;                                    &lt;dbl&gt;
-##  1 &lt;NA&gt;                                      NA  
-##  2 &lt;NA&gt;                                      NA  
-##  3 He is not Donald Trump.                  100. 
-##  4 he look honest and his pol…               54.7
-##  5 &lt;NA&gt;                                      NA  
-##  6 he is NOT Donald Trump !!!…              100. 
-##  7 he has been in gov for alm…               89.6
-##  8 &lt;NA&gt;                                      NA  
-##  9 he is wanting to do things…               96.0
-## 10 &lt;NA&gt;                                      NA  
-## 11 Candidato adecuado para li…              -10.8
-## 12 &lt;NA&gt;                                      NA  
-## 13 &lt;NA&gt;                                      NA  
-## 14 Everything he stands for.                 75.9
-## 15 He is very intuned with hi…               81.9</code></pre>
+##    like_dem_pres              read_like_dem_pres
+##    &lt;chr&gt;                                   &lt;dbl&gt;
+##  1 &lt;NA&gt;                                     NA  
+##  2 &lt;NA&gt;                                     NA  
+##  3 He is not Donald Trump.                 100. 
+##  4 he look honest and his po…               54.7
+##  5 &lt;NA&gt;                                     NA  
+##  6 he is NOT Donald Trump !!…              100. 
+##  7 he has been in gov for al…               89.6
+##  8 &lt;NA&gt;                                     NA  
+##  9 he is wanting to do thing…               96.0
+## 10 &lt;NA&gt;                                     NA  
+## 11 Candidato adecuado para l…              -10.8
+## 12 &lt;NA&gt;                                     NA  
+## 13 &lt;NA&gt;                                     NA  
+## 14 Everything he stands for.                75.9
+## 15 He is very intuned with h…               81.9</code></pre>
 <p>Makes sense: the third row is quite easy to ready, the fourth row is a bit more complex, and the eleventh row is impossible to read because it is in Spanish.</p>
-<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">open_srvy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Remove people who did not answer</span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="va">edu</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -368,7 +370,7 @@
 <span>       caption <span class="op">=</span> <span class="st">"Note: Education goes from 1 - Less the high school credentials to 5 - Graduate Degree"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## filter: removed 131 rows (2%), 8,149 rows remaining
 ## filter: removed 4,412 rows (54%), 3,737 rows remaining</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-92-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-73-1.png" width="672"></div>
 <p>Look at that… having a degree makes you speak more complicated.</p>
 </div>
 <div id="exercise-optional-1" class="section level2" number="4.5">

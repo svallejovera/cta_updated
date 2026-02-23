@@ -2,7 +2,7 @@
 
 ## Slides{.unnumbered}
 
-- 8 Introduction to Deep Learning ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/8%20Neural%20Networks%20and%20Word%20Embeddings.pptx) or in Perusall) to slides)
+- 8 Introduction to Deep Learning ([link](https://github.com/svallejovera/cta_updated/blob/main/slides/8%20Neural%20Networks%20and%20Word%20Embeddings.pptx) to slides)
 
 ## Why Neural Networks in a Text Analysis Course?
 

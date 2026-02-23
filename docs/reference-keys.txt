@@ -1,5 +1,5 @@
 fig:curve
-tab:unnamed-chunk-69
+tab:unnamed-chunk-50
 fig:gradient
 week1
 setup

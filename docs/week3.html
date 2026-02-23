@@ -234,28 +234,28 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trump_biden</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 20 × 5
 ## # Groups:   text_id [20]
-##    text_id trump_cmmnt biden_cmmnt likes debate  
-##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;   
-##  1       1           0           0   100 abc_fir…
-##  2       2           1           0    61 abc_fir…
-##  3       3           1           0    99 abc_fir…
-##  4       4           0           0    47 abc_fir…
-##  5       5           1           0   154 abc_fir…
-##  6       6           0           0   171 abc_fir…
-##  7       7           0           0    79 abc_fir…
-##  8       8           0           0    39 abc_fir…
-##  9       9           0           0    53 abc_fir…
-## 10      10           0           0    36 abc_fir…
-## 11      11           1           0    41 abc_fir…
-## 12      12           0           0    28 abc_fir…
-## 13      13           1           0    54 abc_fir…
-## 14      14           0           0    30 abc_fir…
-## 15      15           1           0    27 abc_fir…
-## 16      16           1           1    31 abc_fir…
-## 17      17           1           0    35 abc_fir…
-## 18      18           1           1    32 abc_fir…
-## 19      19           0           0    34 abc_fir…
-## 20      20           1           0    37 abc_fir…</code></pre>
+##    text_id trump_cmmnt biden_cmmnt likes debate 
+##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;  
+##  1       1           0           0   100 abc_fi…
+##  2       2           1           0    61 abc_fi…
+##  3       3           1           0    99 abc_fi…
+##  4       4           0           0    47 abc_fi…
+##  5       5           1           0   154 abc_fi…
+##  6       6           0           0   171 abc_fi…
+##  7       7           0           0    79 abc_fi…
+##  8       8           0           0    39 abc_fi…
+##  9       9           0           0    53 abc_fi…
+## 10      10           0           0    36 abc_fi…
+## 11      11           1           0    41 abc_fi…
+## 12      12           0           0    28 abc_fi…
+## 13      13           1           0    54 abc_fi…
+## 14      14           0           0    30 abc_fi…
+## 15      15           1           0    27 abc_fi…
+## 16      16           1           1    31 abc_fi…
+## 17      17           1           0    35 abc_fi…
+## 18      18           1           1    32 abc_fi…
+## 19      19           0           0    34 abc_fi…
+## 20      20           1           0    37 abc_fi…</code></pre>
 <p>Rather than replicating the results from Figure 3 in Ventura et al. (2021), we will estimate the median number of likes that comments mentioning Trump, Biden, both, or neither receive:</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -285,7 +285,7 @@
 ## group_by: one grouping variable (mentions_cat)
 ## mutate (grouped): new variable 'likes_mean' (double) with 3 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-52-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
 <p>And we can also see if there are differences across news media:</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -319,7 +319,7 @@
 ## group_by: 2 grouping variables (mentions_cat, media)
 ## mutate (grouped): new variable 'median_like' (double) with 6 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
 <p>Similar to Young and Soroka (2012), we can also explore our keywords of interest in context. This is a good way to validate our proposed measure (e.g., is mentioning <em>trump</em> a reflection of interest, or simply relevance?).</p>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a quanteda corpus from the Ventura et al. dataset.</span></span>
@@ -501,48 +501,48 @@
 <span></span>
 <span><span class="co"># Inspect the top 20 collocations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">col_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##            collocation count count_nested length
-## 1          know how to   115            0      3
-## 2  the american people   220            0      3
-## 3          this is the   158            0      3
-## 4           to do with   108            0      3
-## 5       this debate is   167            0      3
-## 6             is not a   139            0      3
-## 7     wallace needs to   172            0      3
-## 8         is the worst   110            0      3
-## 9            is such a   107            0      3
-## 10        trump is the   153            0      3
-## 11           is a joke   248            0      3
-## 12      trump has done   105            0      3
-## 13          trump is a   322            0      3
-## 14         this is not   119            0      3
-## 15      trump needs to   131            0      3
-## 16         what a joke   141            0      3
-## 17   the united states   132            0      3
-## 18         going to be   122            0      3
-## 19         is going to   210            0      3
-## 20          biden is a   164            0      3
-##         lambda           z
-## 1  3.098608190 11.32651308
-## 2  2.602503749 10.16184037
-## 3  1.393392161  9.01490638
-## 4  4.010890138  7.21665079
-## 5  0.994328169  6.14171313
-## 6  0.796789305  6.08626604
-## 7  1.635032948  4.63118161
-## 8  1.840376131  3.63917670
-## 9  0.776121492  2.54094422
-## 10 0.280826175  2.53147919
-## 11 2.096508909  2.53031226
-## 12 0.644366045  2.27854315
-## 13 0.204080417  2.01355366
-## 14 0.447286359  1.99058988
-## 15 0.577684570  1.93126531
-## 16 2.376681732  1.67038242
-## 17 0.738270253  1.43145851
-## 18 1.918098701  1.35112904
-## 19 0.101248917  0.60225753
-## 20 0.001248882  0.01013271</code></pre>
+<pre><code>##            collocation count count_nested
+## 1          know how to   115            0
+## 2  the american people   220            0
+## 3          this is the   158            0
+## 4           to do with   108            0
+## 5       this debate is   167            0
+## 6             is not a   139            0
+## 7     wallace needs to   172            0
+## 8         is the worst   110            0
+## 9            is such a   107            0
+## 10        trump is the   153            0
+## 11           is a joke   248            0
+## 12      trump has done   105            0
+## 13          trump is a   322            0
+## 14         this is not   119            0
+## 15      trump needs to   131            0
+## 16         what a joke   141            0
+## 17   the united states   132            0
+## 18         going to be   122            0
+## 19         is going to   210            0
+## 20          biden is a   164            0
+##    length      lambda           z
+## 1       3 3.098608190 11.32651308
+## 2       3 2.602503749 10.16184037
+## 3       3 1.393392161  9.01490638
+## 4       3 4.010890138  7.21665079
+## 5       3 0.994328169  6.14171313
+## 6       3 0.796789305  6.08626604
+## 7       3 1.635032948  4.63118161
+## 8       3 1.840376131  3.63917670
+## 9       3 0.776121492  2.54094422
+## 10      3 0.280826175  2.53147919
+## 11      3 2.096508909  2.53031226
+## 12      3 0.644366045  2.27854315
+## 13      3 0.204080417  2.01355366
+## 14      3 0.447286359  1.99058988
+## 15      3 0.577684570  1.93126531
+## 16      3 2.376681732  1.67038242
+## 17      3 0.738270253  1.43145851
+## 18      3 1.918098701  1.35112904
+## 19      3 0.101248917  0.60225753
+## 20      3 0.001248882  0.01013271</code></pre>
 </div>
 <div id="dictionary-approaches" class="section level2" number="3.5">
 <h2>
@@ -696,18 +696,18 @@
 <code class="sourceCode R"><span><span class="co"># Note that the `word` and `sentiment` columns are meaningless now</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">comment_pos_neg</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 10 × 12
-##    text_id id        likes debate word  sentiment
-##      &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    
-##  1       1 ABC News    100 abc_f… coro… &lt;NA&gt;     
-##  2       2 Anita Hi…    61 abc_f… god   positive 
-##  3       3 Dave Gar…    99 abc_f… trump &lt;NA&gt;     
-##  4       4 Carl Roy     47 abc_f… deba… positive 
-##  5       5 Lynda Ma…   154 abc_f… omg   &lt;NA&gt;     
-##  6       6 Nica Mer…   171 abc_f… it’s  &lt;NA&gt;     
-##  7       7 Connie S…    79 abc_f… happ… &lt;NA&gt;     
-##  8       8 Tammy Ei…    39 abc_f… expe… &lt;NA&gt;     
-##  9       9 Susan We…    53 abc_f… smart &lt;NA&gt;     
-## 10      10 Dana Spe…    36 abc_f… worst &lt;NA&gt;     
+##    text_id id       likes debate word  sentiment
+##      &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    
+##  1       1 ABC News   100 abc_f… coro… &lt;NA&gt;     
+##  2       2 Anita H…    61 abc_f… god   positive 
+##  3       3 Dave Ga…    99 abc_f… trump &lt;NA&gt;     
+##  4       4 Carl Roy    47 abc_f… deba… positive 
+##  5       5 Lynda M…   154 abc_f… omg   &lt;NA&gt;     
+##  6       6 Nica Me…   171 abc_f… it’s  &lt;NA&gt;     
+##  7       7 Connie …    79 abc_f… happ… &lt;NA&gt;     
+##  8       8 Tammy E…    39 abc_f… expe… &lt;NA&gt;     
+##  9       9 Susan W…    53 abc_f… smart &lt;NA&gt;     
+## 10      10 Dana Sp…    36 abc_f… worst &lt;NA&gt;     
 ## # ℹ 6 more variables: pos_dum &lt;dbl&gt;,
 ## #   neg_dum &lt;dbl&gt;, total_words &lt;int&gt;,
 ## #   total_pos &lt;dbl&gt;, total_neg &lt;dbl&gt;,
@@ -736,7 +736,7 @@
 <pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
 ## group_by: one grouping variable (media)
 ## mutate (grouped): new variable 'median_sent' (double) with 3 unique values and 0% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-65-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
 </div>
 <div id="domain-specific-dictionaries" class="section level3" number="3.5.2">
 <h3>
@@ -913,7 +913,7 @@
 ## distinct (grouped): removed 29,544 rows (&gt;99%), 3 rows remaining (removed 0 groups, 3 groups remaining)</code></pre>
 <div class="inline-table"><table class="table table-sm">
 <caption>
-<span id="tab:unnamed-chunk-69">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
+<span id="tab:unnamed-chunk-50">Table 3.1: </span>% of mentions by topic and media outlet.</caption>
 <thead><tr class="header">
 <th align="left">media</th>
 <th align="right">pct_econ</th>
@@ -1045,7 +1045,7 @@
 ## filter: removed 20,355 rows (69%), 9,180 rows remaining
 ## filter: removed 2,518 rows (27%), 6,662 rows remaining
 ## `geom_smooth()` using formula = 'y ~ x'</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-72-1.png" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
 <p>Finally, for the sake of showing the process, I will write the code to load the dictionary using <code>quanteda</code>, but note that this approach loses all the intensity information.</p>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">affect_dict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>anger <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"anger"</span><span class="op">]</span>,</span>
@@ -1089,27 +1089,27 @@
 ## 11  text11      11 32.000000 32   6.25 28.12
 ## 12  text12      12 13.000000 39  12.82  5.13
 ## 23  text23      23 20.000000 20  15.00 25.00
-##    anger  fear  joy sadness AllPunc Period Comma
-## 3   5.26 15.79 5.26   10.53   15.79   0.00  0.00
-## 7   4.35  4.35 0.00    8.70    8.70   0.00  0.00
-## 9   4.35  2.17 2.17    4.35   23.91  17.39  4.35
-## 11  9.38  6.25 3.12    9.38    9.38   9.38  0.00
-## 12  2.56  2.56 0.00    0.00   15.38   5.13  2.56
-## 23 10.00  5.00 5.00    5.00    5.00   5.00  0.00
-##    Colon SemiC QMark Exclam Dash Quote Apostro
-## 3      0     0  0.00  15.79    0  0.00    0.00
-## 7      0     0  0.00   8.70    0  0.00    0.00
-## 9      0     0  2.17   0.00    0  0.00    0.00
-## 11     0     0  0.00   0.00    0  0.00    0.00
-## 12     0     0  0.00   2.56    0  5.13    5.13
-## 23     0     0  0.00   0.00    0  0.00    0.00
-##    Parenth OtherP
-## 3        0  15.79
-## 7        0   8.70
-## 9        0  23.91
-## 11       0   9.38
-## 12       0  10.26
-## 23       0   5.00</code></pre>
+##    anger  fear  joy sadness AllPunc Period
+## 3   5.26 15.79 5.26   10.53   15.79   0.00
+## 7   4.35  4.35 0.00    8.70    8.70   0.00
+## 9   4.35  2.17 2.17    4.35   23.91  17.39
+## 11  9.38  6.25 3.12    9.38    9.38   9.38
+## 12  2.56  2.56 0.00    0.00   15.38   5.13
+## 23 10.00  5.00 5.00    5.00    5.00   5.00
+##    Comma Colon SemiC QMark Exclam Dash Quote
+## 3   0.00     0     0  0.00  15.79    0  0.00
+## 7   0.00     0     0  0.00   8.70    0  0.00
+## 9   4.35     0     0  2.17   0.00    0  0.00
+## 11  0.00     0     0  0.00   0.00    0  0.00
+## 12  2.56     0     0  0.00   2.56    0  5.13
+## 23  0.00     0     0  0.00   0.00    0  0.00
+##    Apostro Parenth OtherP
+## 3     0.00       0  15.79
+## 7     0.00       0   8.70
+## 9     0.00       0  23.91
+## 11    0.00       0   9.38
+## 12    5.13       0  10.26
+## 23    0.00       0   5.00</code></pre>
 </div>
 </div>
 <div id="assignments-1---due-date-eod-friday-week-4-1" class="section level2" number="3.6">

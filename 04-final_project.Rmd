@@ -2,6 +2,22 @@
 
 The paper is the complete description of your project’s analysis and results. It should be **4,000 words max** (single-spaced; 12pt font). The front page and references do *not* count toward the word limit. During **Week 13**, student will present the final project to the class. The final paper is due on **April 16**. The final paper is worth **40%** of your grade. 
 
+## Project Components {.unnumbered}
+
+The project has three parts:
+
+  1. a *2-page project proposal* (to be discussed with, and approved by, me),
+  2. an *in-class presentation*, and
+  3. a *4000-word essay*.
+
+You can find the deadlines and grading breakdown in the following table:
+
+| Requirement       | Due               | Length         | Percentage |
+|------------------|-------------------|----------------|------------|
+| Project Proposal | EOD Friday, Week 8 | 2 pages (max)  | 5%         |
+| Presentation     | Week 13            | 10--15 minutes | 10%        |
+| Project essay    | EOD April 13th     | 4000 words     | 25%        |
+
 ## Paper Outline {.unnumbered}
 
 Below, I outline what you should aim to cover in each section. Note that your paper should read as a cohesive report (not as a set of disconnected answers to prompts):
