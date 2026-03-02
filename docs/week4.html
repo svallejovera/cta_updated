@@ -55,6 +55,7 @@
 <li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
+<li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 </ul>
 
         <div class="book-extra">
@@ -177,39 +178,31 @@
 <span><span class="va">docs_toks</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 3 documents.
 ## text1 :
-## [1] "professor’s" "standards"   "weather"    
-## [4] "Ontario"     "Winter"      "term"       
-## [7] "miserable"  
+## [1] "professor’s" "standards"   "weather"     "Ontario"     "Winter"     
+## [6] "term"        "miserable"  
 ## 
 ## text2 :
-## [1] "professor’s" "high"        "standards"  
-## [4] "weather"     "London"      "Winter"     
-## [7] "term"        "depressive" 
+## [1] "professor’s" "high"        "standards"   "weather"     "London"     
+## [6] "Winter"      "term"        "depressive" 
 ## 
 ## text3 :
-## [1] "professor"  "strong"     "evidence"  
-## [4] "weather"    "London"     "Ontario"   
-## [7] "miserable"  "depressive"</code></pre>
+## [1] "professor"  "strong"     "evidence"   "weather"    "London"    
+## [6] "Ontario"    "miserable"  "depressive"</code></pre>
 <p>Now we are ready to create a <code>dfm</code>:</p>
 <div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">docs_dmf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dfm.html">dfm</a></span><span class="op">(</span><span class="va">docs_toks</span><span class="op">)</span></span>
 <span><span class="va">docs_dmf</span></span></code></pre></div>
 <pre><code>## Document-feature matrix of: 3 documents, 13 features (41.03% sparse) and 0 docvars.
 ##        features
-## docs    professor’s standards weather ontario
-##   text1           1         1       1       1
-##   text2           1         1       1       0
-##   text3           0         0       1       1
+## docs    professor’s standards weather ontario winter term miserable high
+##   text1           1         1       1       1      1    1         1    0
+##   text2           1         1       1       0      1    1         0    1
+##   text3           0         0       1       1      0    0         1    0
 ##        features
-## docs    winter term miserable high london
-##   text1      1    1         1    0      0
-##   text2      1    1         0    1      1
-##   text3      0    0         1    0      1
-##        features
-## docs    depressive
-##   text1          0
-##   text2          1
-##   text3          1
+## docs    london depressive
+##   text1      0          0
+##   text2      1          1
+##   text3      1          1
 ## [ reached max_nfeat ... 3 more features ]</code></pre>
 <p>Just a matrix (actually, a sparse matrix which becomes even sparser as the corpus grows). Now we can measure the similarity or distance between these two texts. The most straightforward approach is to correlate the occurrence of 1s and 0s across texts. One intuitive way to see what this means is to transpose the <code>dfm</code> and present it in a shape that you may find more familiar:</p>
 <div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
@@ -316,17 +309,15 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/anes_sample.Rdata"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 9
-##   V200001 like_dem_pres         dislike_dem_pres
-##     &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;           
-## 1  200015 &lt;NA&gt;                  nothing about s…
-## 2  200022 &lt;NA&gt;                  He wants to tak…
-## 3  200039 He is not Donald Tru… &lt;NA&gt;            
-## 4  200046 he look honest and h… &lt;NA&gt;            
-## 5  200053 &lt;NA&gt;                  Open borders, l…
-## 6  200060 he is NOT Donald Tru… &lt;NA&gt;            
-## # ℹ 6 more variables: like_rep_pres &lt;chr&gt;,
-## #   dislike_rep_pres &lt;chr&gt;, income &lt;int&gt;,
-## #   pid &lt;int&gt;, edu &lt;int&gt;, age &lt;int&gt;</code></pre>
+##   V200001 like_dem_pres    dislike_dem_pres like_rep_pres dislike_rep_pres
+##     &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;           
+## 1  200015 &lt;NA&gt;             nothing about s… belife in a … &lt;NA&gt;            
+## 2  200022 &lt;NA&gt;             He wants to tak… &lt;NA&gt;          &lt;NA&gt;            
+## 3  200039 He is not Donal… &lt;NA&gt;             &lt;NA&gt;          He is a racist,…
+## 4  200046 he look honest … &lt;NA&gt;             &lt;NA&gt;          racism, equalit…
+## 5  200053 &lt;NA&gt;             Open borders, l… No war, No o… Ridiculous Covi…
+## 6  200060 he is NOT Donal… &lt;NA&gt;             &lt;NA&gt;          He is a crimina…
+## # ℹ 4 more variables: income &lt;int&gt;, pid &lt;int&gt;, edu &lt;int&gt;, age &lt;int&gt;</code></pre>
 <p>We have open-ended survey questions that ask respondents what they like and dislike about the Democratic (Joe Biden) and Republican (Donald Trump) 2020 U.S. presidential candidates before the election. Note that survey respondents could opt out of the question and were assigned an <em>NA</em>.</p>
 <p>Let’s check:</p>
 <div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
@@ -336,23 +327,23 @@
 <code class="sourceCode R"><span><span class="va">open_srvy</span><span class="op">$</span><span class="va">read_like_dem_pres</span> <span class="op">&lt;-</span> <span class="va">read_like_dem_pres</span><span class="op">$</span><span class="va">Flesch</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">open_srvy</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span><span class="op">]</span>,<span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 15 × 2
-##    like_dem_pres              read_like_dem_pres
-##    &lt;chr&gt;                                   &lt;dbl&gt;
-##  1 &lt;NA&gt;                                     NA  
-##  2 &lt;NA&gt;                                     NA  
-##  3 He is not Donald Trump.                 100. 
-##  4 he look honest and his po…               54.7
-##  5 &lt;NA&gt;                                     NA  
-##  6 he is NOT Donald Trump !!…              100. 
-##  7 he has been in gov for al…               89.6
-##  8 &lt;NA&gt;                                     NA  
-##  9 he is wanting to do thing…               96.0
-## 10 &lt;NA&gt;                                     NA  
-## 11 Candidato adecuado para l…              -10.8
-## 12 &lt;NA&gt;                                     NA  
-## 13 &lt;NA&gt;                                     NA  
-## 14 Everything he stands for.                75.9
-## 15 He is very intuned with h…               81.9</code></pre>
+##    like_dem_pres                                        read_like_dem_pres
+##    &lt;chr&gt;                                                             &lt;dbl&gt;
+##  1 &lt;NA&gt;                                                               NA  
+##  2 &lt;NA&gt;                                                               NA  
+##  3 He is not Donald Trump.                                           100. 
+##  4 he look honest and his politics history.                           54.7
+##  5 &lt;NA&gt;                                                               NA  
+##  6 he is NOT Donald Trump !!!!!!                                     100. 
+##  7 he has been in gov for almost 50 yrs and was vice f…               89.6
+##  8 &lt;NA&gt;                                                               NA  
+##  9 he is wanting to do things to help the people of th…               96.0
+## 10 &lt;NA&gt;                                                               NA  
+## 11 Candidato adecuado para liderar un pais.                          -10.8
+## 12 &lt;NA&gt;                                                               NA  
+## 13 &lt;NA&gt;                                                               NA  
+## 14 Everything he stands for.                                          75.9
+## 15 He is very intuned with his voters and their point …               81.9</code></pre>
 <p>Makes sense: the third row is quite easy to ready, the fourth row is a bit more complex, and the eleventh row is impossible to read because it is in Spanish.</p>
 <div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">open_srvy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -418,7 +409,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

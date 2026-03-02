@@ -55,6 +55,7 @@
 <li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
+<li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 </ul>
 
         <div class="book-extra">
@@ -98,24 +99,20 @@
 <code class="sourceCode R"><span><span class="va">sample_lyrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/lyrics_sample.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">sample_lyrics</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 5
-##   artist                album  year song  lyrics
-##   &lt;chr&gt;                 &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Rage Against the Mac… Evil…  1996 Bull… "Come…
-## 2 Rage Against the Mac… Rage…  1992 Kill… "Kill…
-## 3 Rage Against the Mac… Rene…  2000 Rene… "No m…
-## 4 Rage Against the Mac… The …  1999 Slee… "Yeah…
-## 5 Rage Against the Mac… The …  1999 Guer… "Tran…
-## 6 Rage Against the Mac… The …  1999 Test… "Uh!\…</code></pre>
+##   artist                   album                      year song     lyrics
+##   &lt;chr&gt;                    &lt;chr&gt;                     &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; 
+## 1 Rage Against the Machine Evil Empire                1996 Bulls o… "Come…
+## 2 Rage Against the Machine Rage Against the Machine   1992 Killing… "Kill…
+## 3 Rage Against the Machine Renegades                  2000 Renegad… "No m…
+## 4 Rage Against the Machine The Battle of Los Angeles  1999 Sleep N… "Yeah…
+## 5 Rage Against the Machine The Battle of Los Angeles  1999 Guerril… "Tran…
+## 6 Rage Against the Machine The Battle of Los Angeles  1999 Testify  "Uh!\…</code></pre>
 <p>Ok, so we have different artists, from different genres and years…</p>
 <pre><code>## 
-##      Megan Thee Stallion 
-##                        5 
-## Rage Against the Machine 
-##                        6 
-##         System of a Down 
-##                        5 
-##             Taylor Swift 
-##                        5</code></pre>
+##      Megan Thee Stallion Rage Against the Machine 
+##                        5                        6 
+##         System of a Down             Taylor Swift 
+##                        5                        5</code></pre>
 <p>And we have the lyrics in the following form:</p>
 <pre><code>## [1] "Yeah\r\n\r\nThe world is my expense\r\nIt’s the cost of my desire\r\nJesus blessed me with its future\r\nAnd I protect it with fire\r\n\r\nSo raise your fists and march around\r\nJust don’t take what you need\r\nI’ll jail and bury those committed\r\nAnd smother the rest in greed\r\n\r\nCrawl with me into tomorrow\r\nOr I’ll drag you to your grave\r\nI’m deep inside your children\r\nThey’ll betray you in my name\r\n\r\nHey, hey, sleep now in the fire\r\nHey, hey, sleep now in the fire\r\n\r\nThe lie is my expense\r\nThe scope of my desire\r\nThe party blessed me with its future\r\nAnd I protect it with fire\r\n\r\nI am the Niña, the Pinta, the Santa María\r\nThe noose and the rapist, the fields overseer\r\nThe Agents of Orange, the Priests of Hiroshima\r\nThe cost of my desire, sleep now in the fire\r\n\r\nHey, hey, sleep now in the fire\r\nHey, hey, sleep now in the fire\r\n\r\nFor it’s the end of history\r\nIt’s caged and frozen still\r\nThere is no other pill to take\r\nSo swallow the one that made you ill\r\n\r\nThe Niña, the Pinta, the Santa María\r\nThe noose and the rapist, the fields overseer\r\nThe Agents of Orange, the Priests of Hiroshima\r\nThe cost of my desire to sleep now in the fire\r\n\r\nYeah\r\n\r\nSleep now in the fire\r\nSleep now in the fire\r\nSleep now in the fire\r\nSleep now in the fire"</code></pre>
 </div>
@@ -135,8 +132,8 @@
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Drop the original lyrics column to avoid keeping both raw and cleaned versions</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lyrics</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## mutate: new variable 'lyrics_clean' (character)
-## with 21 unique values and 0% NA</code></pre>
+<pre><code>## mutate: new variable 'lyrics_clean' (character) with 21 unique values and
+## 0% NA</code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect the 4th cleaned lyric to confirm the replacements worked as intended</span></span>
 <span><span class="va">sample_lyrics</span><span class="op">$</span><span class="va">lyrics_clean</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
@@ -161,94 +158,50 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">corpus_lyrics</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Corpus consisting of 21 documents, showing 21 documents:
 ## 
-##    Text Types Tokens Sentences
-##   text1   119    375        35
-##   text2    52    853        83
-##   text3   188    835        91
-##   text4    97    352        38
-##   text5   160    440        50
-##   text6   133    535        67
-##   text7   105    560        53
-##   text8    67    366        40
-##   text9    68    298        33
-##  text10    65    258        32
-##  text11   137    558        68
-##  text12   131    876        70
-##  text13   159    465        41
-##  text14   162    544        62
-##  text15   196    738        84
-##  text16   169    549        50
-##  text17   229    867        55
-##  text18   193    664        61
-##  text19   310   1190        87
-##  text20   198    656        48
-##  text21   255   1092        73
-##                    artist
-##  Rage Against the Machine
-##  Rage Against the Machine
-##  Rage Against the Machine
-##  Rage Against the Machine
-##  Rage Against the Machine
-##  Rage Against the Machine
-##          System of a Down
-##          System of a Down
-##          System of a Down
-##          System of a Down
-##          System of a Down
-##              Taylor Swift
-##              Taylor Swift
-##              Taylor Swift
-##              Taylor Swift
-##              Taylor Swift
-##       Megan Thee Stallion
-##       Megan Thee Stallion
-##       Megan Thee Stallion
-##       Megan Thee Stallion
-##       Megan Thee Stallion
-##                       album year
-##                 Evil Empire 1996
-##    Rage Against the Machine 1992
-##                   Renegades 2000
-##   The Battle of Los Angeles 1999
-##   The Battle of Los Angeles 1999
-##   The Battle of Los Angeles 1999
-##                   Mezmerize 2005
-##                    Toxicity 2001
-##                    Toxicity 2001
-##                    Toxicity 2001
-##                    Toxicity 2001
-##                        1989 2014
-##                   Midnights 2022
-##                    Fearless 2008
-##                        1989 2014
-##                    Fearless 2008
-##                  Traumazine 2022
-##                        Suga 2020
-##  Something for Thee Hotties 2021
-##                  Traumazine 2022
-##                  Traumazine 2022
-##                   song
-##        Bulls on Parade
-##    Killing in the Name
-##      Renegades of Funk
-##  Sleep Now in the Fire
-##        Guerrilla Radio
-##                Testify
-##                B.Y.O.B
-##             Chop Suey!
-##                Aerials
-##                Toxicty
-##                  Sugar
-##           Shake it Off
-##              Anti-Hero
-##     You Belong With Me
-##            Blank Space
-##             Love Story
-##                 Plan B
-##                 Savage
-##              Thot Shit
-##                    Her
-##             Ungrateful</code></pre>
+##    Text Types Tokens Sentences                   artist
+##   text1   119    375        35 Rage Against the Machine
+##   text2    52    853        83 Rage Against the Machine
+##   text3   188    835        91 Rage Against the Machine
+##   text4    97    352        38 Rage Against the Machine
+##   text5   160    440        50 Rage Against the Machine
+##   text6   133    535        67 Rage Against the Machine
+##   text7   105    560        53         System of a Down
+##   text8    67    366        40         System of a Down
+##   text9    68    298        33         System of a Down
+##  text10    65    258        32         System of a Down
+##  text11   137    558        68         System of a Down
+##  text12   131    876        70             Taylor Swift
+##  text13   159    465        41             Taylor Swift
+##  text14   162    544        62             Taylor Swift
+##  text15   196    738        84             Taylor Swift
+##  text16   169    549        50             Taylor Swift
+##  text17   229    867        55      Megan Thee Stallion
+##  text18   193    664        61      Megan Thee Stallion
+##  text19   310   1190        87      Megan Thee Stallion
+##  text20   198    656        48      Megan Thee Stallion
+##  text21   255   1092        73      Megan Thee Stallion
+##                       album year                  song
+##                 Evil Empire 1996       Bulls on Parade
+##    Rage Against the Machine 1992   Killing in the Name
+##                   Renegades 2000     Renegades of Funk
+##   The Battle of Los Angeles 1999 Sleep Now in the Fire
+##   The Battle of Los Angeles 1999       Guerrilla Radio
+##   The Battle of Los Angeles 1999               Testify
+##                   Mezmerize 2005               B.Y.O.B
+##                    Toxicity 2001            Chop Suey!
+##                    Toxicity 2001               Aerials
+##                    Toxicity 2001               Toxicty
+##                    Toxicity 2001                 Sugar
+##                        1989 2014          Shake it Off
+##                   Midnights 2022             Anti-Hero
+##                    Fearless 2008    You Belong With Me
+##                        1989 2014           Blank Space
+##                    Fearless 2008            Love Story
+##                  Traumazine 2022                Plan B
+##                        Suga 2020                Savage
+##  Something for Thee Hotties 2021             Thot Shit
+##                  Traumazine 2022                   Her
+##                  Traumazine 2022            Ungrateful</code></pre>
 <p>Looks good. Now we can tokenize our corpus (and reduce complexity). One benefit of creating a corpus object first is that it preserves all the metadata for each document when we tokenize. This will come in handy later.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tokenize the corpus: split each document into tokens (typically words).</span></span>
@@ -264,16 +217,14 @@
 <span><span class="va">lyrics_toks</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "The"     "world"   "is"     
-##  [5] "my"      "expense" "It’s"    "the"    
-##  [9] "cost"    "of"      "my"      "desire" 
+##  [1] "Yeah"    "The"     "world"   "is"      "my"      "expense" "It’s"   
+##  [8] "the"     "cost"    "of"      "my"      "desire" 
 ## [ ... and 227 more ]
 ## 
 ## text14 :
-##  [1] "You're"     "on"         "the"       
-##  [4] "phone"      "with"       "your"      
-##  [7] "girlfriend" "she's"      "upset"     
-## [10] "She's"      "going"      "off"       
+##  [1] "You're"     "on"         "the"        "phone"      "with"      
+##  [6] "your"       "girlfriend" "she's"      "upset"      "She's"     
+## [11] "going"      "off"       
 ## [ ... and 385 more ]</code></pre>
 <p>We got rid of punctuation. Now let’s remove stop words, high- and low-frequency words, and stem the remaining tokens. Here I am cheating, though: I already know which words are high- and low-frequency because I inspected my <code>dfm</code> (see the next code chunk).</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
@@ -300,31 +251,27 @@
 <span><span class="va">lyrics_toks</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "world"   "expense" "It’s"   
-##  [5] "cost"    "desire"  "Jesus"   "blessed"
-##  [9] "future"  "protect" "fire"    "raise"  
+##  [1] "Yeah"    "world"   "expense" "It’s"    "cost"    "desire"  "Jesus"  
+##  [8] "blessed" "future"  "protect" "fire"    "raise"  
 ## [ ... and 105 more ]
 ## 
 ## text14 :
-##  [1] "phone"      "girlfriend" "upset"     
-##  [4] "going"      "something"  "said"      
-##  [7] "Cause"      "get"        "humor"     
-## [10] "like"       "room"       "typical"   
+##  [1] "phone"      "girlfriend" "upset"      "going"      "something" 
+##  [6] "said"       "Cause"      "get"        "humor"      "like"      
+## [11] "room"       "typical"   
 ## [ ... and 133 more ]</code></pre>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_toks_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">14</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## Tokens consisting of 2 documents and 4 docvars.
 ## text4 :
-##  [1] "Yeah"    "world"   "expens"  "It’s"   
-##  [5] "cost"    "desir"   "Jesus"   "bless"  
-##  [9] "futur"   "protect" "fire"    "rais"   
+##  [1] "Yeah"    "world"   "expens"  "It’s"    "cost"    "desir"   "Jesus"  
+##  [8] "bless"   "futur"   "protect" "fire"    "rais"   
 ## [ ... and 105 more ]
 ## 
 ## text14 :
-##  [1] "phone"      "girlfriend" "upset"     
-##  [4] "go"         "someth"     "said"      
-##  [7] "Caus"       "get"        "humor"     
-## [10] "like"       "room"       "typic"     
+##  [1] "phone"      "girlfriend" "upset"      "go"         "someth"    
+##  [6] "said"       "Caus"       "get"        "humor"      "like"      
+## [11] "room"       "typic"     
 ## [ ... and 133 more ]</code></pre>
 <p>We can compare the stemmed output and the non-stemmed output. Why did “future” become “futur”? Because stemming assumes that, for <em>our</em> purposes, “future” and “futuristic” should be treated as the same underlying root. Whether that assumption is appropriate depends on your research question. Finally, we can create our document-feature matrix (<code>dfm</code>).</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
@@ -339,21 +286,13 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">lyrics_dfm_stem</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Document-feature matrix of: 6 documents, 1,161 features (93.10% sparse) and 4 docvars.
 ##        features
-## docs    come wit microphon explod shatter mold
-##   text1    4   4         1      1       1    1
-##   text2    2   0         0      0       0    0
-##   text3    0   0         0      0       0    0
-##   text4    0   0         0      0       0    0
-##   text5    0   0         0      0       0    0
-##   text6    0   4         0      0       0    0
-##        features
-## docs    either drop hit like
-##   text1      1    3   1    1
-##   text2      0    0   0    0
-##   text3      0    0   0    4
-##   text4      0    0   0    0
-##   text5      0    0   0    1
-##   text6      0    0   0    0
+## docs    come wit microphon explod shatter mold either drop hit like
+##   text1    4   4         1      1       1    1      1    3   1    1
+##   text2    2   0         0      0       0    0      0    0   0    0
+##   text3    0   0         0      0       0    0      0    0   0    4
+##   text4    0   0         0      0       0    0      0    0   0    0
+##   text5    0   0         0      0       0    0      0    0   0    1
+##   text6    0   4         0      0       0    0      0    0   0    0
 ## [ reached max_nfeat ... 1,151 more features ]</code></pre>
 <p>Note that once we create the <code>dfm</code> object, all tokens become lowercase. Now we can check what are the 15 most frequent tokens.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
@@ -387,8 +326,7 @@
 <code class="sourceCode R"><span><span class="va">only_once</span> <span class="op">&lt;-</span> <span class="va">lyrics_dfm_stem</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://quanteda.io/reference/textstat_frequency.html">textstat_frequency</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="va">frequency</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## filter: removed 564 rows (49%), 597 rows
-## remaining</code></pre>
+<pre><code>## filter: removed 564 rows (49%), 597 rows remaining</code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">only_once</span><span class="op">$</span><span class="va">feature</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 597</code></pre>
@@ -588,7 +526,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

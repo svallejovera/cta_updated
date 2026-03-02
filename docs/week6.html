@@ -55,6 +55,7 @@
 <li><a class="active" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
+<li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 </ul>
 
         <div class="book-extra">
@@ -97,14 +98,14 @@
 <code class="sourceCode R"><span><span class="va">us_pres</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/inaugTexts.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 4
-##   inaugSpeech               Year President party
-##   &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;
-## 1 "My Countrymen, It a re…  1853 Pierce    Demo…
-## 2 "Fellow citizens, I app…  1857 Buchanan  Demo…
-## 3 "Fellow-Citizens of the…  1861 Lincoln   Repu…
-## 4 "Fellow-Countrymen:\r\n…  1865 Lincoln   Repu…
-## 5 "Citizens of the United…  1869 Grant     Repu…
-## 6 "Fellow-Citizens:\r\n\r…  1873 Grant     Repu…</code></pre>
+##   inaugSpeech                                         Year President party
+##   &lt;chr&gt;                                              &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;
+## 1 "My Countrymen, It a relief to feel that no heart…  1853 Pierce    Demo…
+## 2 "Fellow citizens, I appear before you this day to…  1857 Buchanan  Demo…
+## 3 "Fellow-Citizens of the United States: In complia…  1861 Lincoln   Repu…
+## 4 "Fellow-Countrymen:\r\n\r\nAt this second appeari…  1865 Lincoln   Repu…
+## 5 "Citizens of the United States:\r\n\r\nYour suffr…  1869 Grant     Repu…
+## 6 "Fellow-Citizens:\r\n\r\nUnder Providence I have …  1873 Grant     Repu…</code></pre>
 <p>The text is pretty clean, so we can convert it into a corpus object, then into a <code>dfm</code>:</p>
 <div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">corpus_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/corpus.html">corpus</a></span><span class="op">(</span><span class="va">us_pres</span>,</span>
@@ -114,90 +115,48 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">corpus_us_pres</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Corpus consisting of 41 documents, showing 41 documents:
 ## 
-##    Text Types Tokens Sentences Year
-##   text1  1164   3631       104 1853
-##   text2   944   3080        89 1857
-##   text3  1074   3992       135 1861
-##   text4   359    774        26 1865
-##   text5   484   1223        40 1869
-##   text6   551   1469        43 1873
-##   text7   830   2698        59 1877
-##   text8  1020   3206       111 1881
-##   text9   675   1812        44 1885
-##  text10  1351   4720       157 1889
-##  text11   821   2125        58 1893
-##  text12  1231   4345       130 1897
-##  text13   854   2437       100 1901
-##  text14   404   1079        33 1905
-##  text15  1437   5822       158 1909
-##  text16   658   1882        68 1913
-##  text17   548   1648        59 1917
-##  text18  1168   3717       148 1921
-##  text19  1220   4440       196 1925
-##  text20  1089   3855       158 1929
-##  text21   742   2052        85 1933
-##  text22   724   1981        96 1937
-##  text23   525   1494        68 1941
-##  text24   274    619        27 1945
-##  text25   780   2495       116 1949
-##  text26   899   2729       119 1953
-##  text27   620   1883        92 1957
-##  text28   565   1516        52 1961
-##  text29   567   1697        93 1965
-##  text30   742   2395       103 1969
-##  text31   543   1978        68 1973
-##  text32   527   1364        52 1977
-##  text33   902   2772       129 1981
-##  text34   924   2897       124 1985
-##  text35   795   2667       141 1989
-##  text36   642   1833        81 1993
-##  text37   772   2423       111 1997
-##  text38   620   1804        97 2001
-##  text39   773   2321       100 2005
-##  text40   937   2667       110 2009
-##  text41   814   2317        88 2013
-##     President      party
-##        Pierce   Democrat
-##      Buchanan   Democrat
-##       Lincoln Republican
-##       Lincoln Republican
-##         Grant Republican
-##         Grant Republican
-##         Hayes Republican
-##      Garfield Republican
-##     Cleveland   Democrat
-##      Harrison Republican
-##     Cleveland   Democrat
-##      McKinley Republican
-##      McKinley Republican
-##   T Roosevelt Republican
-##          Taft Republican
-##        Wilson   Democrat
-##        Wilson   Democrat
-##       Harding Republican
-##      Coolidge Republican
-##        Hoover Republican
-##  FD Roosevelt   Democrat
-##  FD Roosevelt   Democrat
-##  FD Roosevelt   Democrat
-##  FD Roosevelt   Democrat
-##        Truman   Democrat
-##    Eisenhower Republican
-##    Eisenhower Republican
-##       Kennedy   Democrat
-##       Johnson   Democrat
-##         Nixon Republican
-##         Nixon Republican
-##        Carter   Democrat
-##        Reagan Republican
-##        Reagan Republican
-##          Bush Republican
-##       Clinton   Democrat
-##       Clinton   Democrat
-##          Bush Republican
-##          Bush Republican
-##         Obama   Democrat
-##         Obama   Democrat</code></pre>
+##    Text Types Tokens Sentences Year    President      party
+##   text1  1164   3631       104 1853       Pierce   Democrat
+##   text2   944   3080        89 1857     Buchanan   Democrat
+##   text3  1074   3992       135 1861      Lincoln Republican
+##   text4   359    774        26 1865      Lincoln Republican
+##   text5   484   1223        40 1869        Grant Republican
+##   text6   551   1469        43 1873        Grant Republican
+##   text7   830   2698        59 1877        Hayes Republican
+##   text8  1020   3206       111 1881     Garfield Republican
+##   text9   675   1812        44 1885    Cleveland   Democrat
+##  text10  1351   4720       157 1889     Harrison Republican
+##  text11   821   2125        58 1893    Cleveland   Democrat
+##  text12  1231   4345       130 1897     McKinley Republican
+##  text13   854   2437       100 1901     McKinley Republican
+##  text14   404   1079        33 1905  T Roosevelt Republican
+##  text15  1437   5822       158 1909         Taft Republican
+##  text16   658   1882        68 1913       Wilson   Democrat
+##  text17   548   1648        59 1917       Wilson   Democrat
+##  text18  1168   3717       148 1921      Harding Republican
+##  text19  1220   4440       196 1925     Coolidge Republican
+##  text20  1089   3855       158 1929       Hoover Republican
+##  text21   742   2052        85 1933 FD Roosevelt   Democrat
+##  text22   724   1981        96 1937 FD Roosevelt   Democrat
+##  text23   525   1494        68 1941 FD Roosevelt   Democrat
+##  text24   274    619        27 1945 FD Roosevelt   Democrat
+##  text25   780   2495       116 1949       Truman   Democrat
+##  text26   899   2729       119 1953   Eisenhower Republican
+##  text27   620   1883        92 1957   Eisenhower Republican
+##  text28   565   1516        52 1961      Kennedy   Democrat
+##  text29   567   1697        93 1965      Johnson   Democrat
+##  text30   742   2395       103 1969        Nixon Republican
+##  text31   543   1978        68 1973        Nixon Republican
+##  text32   527   1364        52 1977       Carter   Democrat
+##  text33   902   2772       129 1981       Reagan Republican
+##  text34   924   2897       124 1985       Reagan Republican
+##  text35   795   2667       141 1989         Bush Republican
+##  text36   642   1833        81 1993      Clinton   Democrat
+##  text37   772   2423       111 1997      Clinton   Democrat
+##  text38   620   1804        97 2001         Bush Republican
+##  text39   773   2321       100 2005         Bush Republican
+##  text40   937   2667       110 2009        Obama   Democrat
+##  text41   814   2317        88 2013        Obama   Democrat</code></pre>
 <div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We do the whole tokenization sequence</span></span>
 <span><span class="va">toks_us_pres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_us_pres</span>,</span>
@@ -595,12 +554,10 @@
 <p>We can also see the overall quality of our topic model:</p>
 <div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">stm_us_pres</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##  [1]  -5.287875  -9.358241 -12.913601  -2.995819
-##  [5]  -8.562729 -11.770514  -4.095783  -5.495206
-##  [9]  -5.782951  -4.769013
-##  [1] 8.975480 9.330844 8.792229 8.230546
-##  [5] 7.888169 9.119047 8.616511 7.905410
-##  [9] 8.690023 8.814819</code></pre>
+<pre><code>##  [1]  -5.287875  -9.358241 -12.913601  -2.995819  -8.562729 -11.770514
+##  [7]  -4.095783  -5.495206  -5.782951  -4.769013
+##  [1] 8.975480 9.330844 8.792229 8.230546 7.888169 9.119047 8.616511
+##  [8] 7.905410 8.690023 8.814819</code></pre>
 <div class="inline-figure"><img src="main_files/figure-html/Quality-1.png" width="672"></div>
 <p>On their own, both metrics are not really useful (what do those numbers even mean?). They are useful when we are looking for the “optimal” number of topics.</p>
 <div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
@@ -617,68 +574,47 @@
 <span></span>
 <span><span class="co"># I will just graph the 'quality' of each model:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">k_10</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##  [1]  -5.287875  -9.358241 -12.913601  -2.995819
-##  [5]  -8.562729 -11.770514  -4.095783  -5.495206
-##  [9]  -5.782951  -4.769013
-##  [1] 8.975480 9.330844 8.792229 8.230546
-##  [5] 7.888169 9.119047 8.616511 7.905410
-##  [9] 8.690023 8.814819</code></pre>
+<pre><code>##  [1]  -5.287875  -9.358241 -12.913601  -2.995819  -8.562729 -11.770514
+##  [7]  -4.095783  -5.495206  -5.782951  -4.769013
+##  [1] 8.975480 9.330844 8.792229 8.230546 7.888169 9.119047 8.616511
+##  [8] 7.905410 8.690023 8.814819</code></pre>
 <div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-1.png" width="672"></div>
 <div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">k_15</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##  [1]  -8.282551 -10.661122  -9.146329  -6.243444
-##  [5] -10.002100 -11.315179  -3.107797  -4.907182
-##  [9]  -5.059424  -4.905652  -7.864316 -13.149897
+<pre><code>##  [1]  -8.282551 -10.661122  -9.146329  -6.243444 -10.002100 -11.315179
+##  [7]  -3.107797  -4.907182  -5.059424  -4.905652  -7.864316 -13.149897
 ## [13]  -6.834348 -11.917696  -4.182962
-##  [1] 9.224913 9.358942 9.252240 9.185552
-##  [5] 9.037701 9.150431 8.614509 8.496738
-##  [9] 8.546778 9.138797 8.182268 9.136596
-## [13] 8.467905 9.641939 8.453004</code></pre>
+##  [1] 9.224913 9.358942 9.252240 9.185552 9.037701 9.150431 8.614509
+##  [8] 8.496738 8.546778 9.138797 8.182268 9.136596 8.467905 9.641939
+## [15] 8.453004</code></pre>
 <div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-2.png" width="672"></div>
 <div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stm/man/topicQuality.html">topicQuality</a></span><span class="op">(</span><span class="va">k_20</span>,<span class="va">dfm_us_pres</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##  [1]  -8.136428 -22.245476 -21.390006  -6.602534
-##  [5] -11.543624 -10.272049  -3.923380  -5.506620
-##  [9]  -7.188791 -12.486262 -10.086060 -13.443443
-## [13] -15.978725 -12.256070 -10.137597 -11.231218
-## [17]  -6.177453  -4.358259  -5.246579  -2.209688
-##  [1] 9.488914 9.872405 9.761287 9.184162
-##  [5] 9.370479 9.330506 9.018598 8.520731
-##  [9] 8.634212 9.649024 8.306973 9.125545
-## [13] 8.958623 9.644274 9.532977 8.823851
-## [17] 9.488908 9.220082 8.595757 8.726901</code></pre>
+<pre><code>##  [1]  -8.136428 -22.245476 -21.390006  -6.602534 -11.543624 -10.272049
+##  [7]  -3.923380  -5.506620  -7.188791 -12.486262 -10.086060 -13.443443
+## [13] -15.978725 -12.256070 -10.137597 -11.231218  -6.177453  -4.358259
+## [19]  -5.246579  -2.209688
+##  [1] 9.488914 9.872405 9.761287 9.184162 9.370479 9.330506 9.018598
+##  [8] 8.520731 8.634212 9.649024 8.306973 9.125545 8.958623 9.644274
+## [15] 9.532977 8.823851 9.488908 9.220082 8.595757 8.726901</code></pre>
 <div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-94-3.png" width="672"></div>
 <p>Maybe we have some theory about the difference in topic prevalence across parties. We can see the topic proportions in our topic model object:</p>
 <div class="sourceCode" id="cb203"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##              [,1]         [,2]         [,3]
-## [1,] 0.0001979850 9.251664e-05 8.228013e-05
-## [2,] 0.0004943565 6.848981e-05 9.820101e-01
-## [3,] 0.0002944155 4.882956e-05 9.988036e-01
-## [4,] 0.1142592136 9.390427e-04 8.766105e-01
-## [5,] 0.0114556926 2.301045e-04 6.716342e-03
-## [6,] 0.0253504520 3.633666e-04 4.721880e-03
-##              [,4]         [,5]         [,6]
-## [1,] 1.374029e-04 0.0003064405 0.0001963620
-## [2,] 1.268903e-04 0.0165642826 0.0001660826
-## [3,] 1.888195e-05 0.0005382537 0.0000637886
-## [4,] 2.738605e-04 0.0030665368 0.0007906834
-## [5,] 1.151595e-03 0.9771020843 0.0005254018
-## [6,] 1.752615e-03 0.9609463741 0.0007236007
-##              [,7]         [,8]         [,9]
-## [1,] 1.252948e-04 9.985702e-01 1.878275e-04
-## [2,] 1.833598e-04 2.357889e-04 9.220995e-05
-## [3,] 5.100825e-05 6.868126e-05 6.709721e-05
-## [4,] 8.990925e-04 7.088244e-04 1.080922e-03
-## [5,] 4.726644e-04 8.332618e-04 8.167810e-04
-## [6,] 6.685461e-04 1.759546e-03 1.313855e-03
-##             [,10]
-## [1,] 1.037197e-04
-## [2,] 5.844376e-05
-## [3,] 4.546202e-05
-## [4,] 1.371326e-03
-## [5,] 6.960722e-04
-## [6,] 2.399765e-03</code></pre>
+<pre><code>##              [,1]         [,2]         [,3]         [,4]         [,5]
+## [1,] 0.0001979850 9.251664e-05 8.228013e-05 1.374029e-04 0.0003064405
+## [2,] 0.0004943565 6.848981e-05 9.820101e-01 1.268903e-04 0.0165642826
+## [3,] 0.0002944155 4.882956e-05 9.988036e-01 1.888195e-05 0.0005382537
+## [4,] 0.1142592136 9.390427e-04 8.766105e-01 2.738605e-04 0.0030665368
+## [5,] 0.0114556926 2.301045e-04 6.716342e-03 1.151595e-03 0.9771020843
+## [6,] 0.0253504520 3.633666e-04 4.721880e-03 1.752615e-03 0.9609463741
+##              [,6]         [,7]         [,8]         [,9]        [,10]
+## [1,] 0.0001963620 1.252948e-04 9.985702e-01 1.878275e-04 1.037197e-04
+## [2,] 0.0001660826 1.833598e-04 2.357889e-04 9.220995e-05 5.844376e-05
+## [3,] 0.0000637886 5.100825e-05 6.868126e-05 6.709721e-05 4.546202e-05
+## [4,] 0.0007906834 8.990925e-04 7.088244e-04 1.080922e-03 1.371326e-03
+## [5,] 0.0005254018 4.726644e-04 8.332618e-04 8.167810e-04 6.960722e-04
+## [6,] 0.0007236007 6.685461e-04 1.759546e-03 1.313855e-03 2.399765e-03</code></pre>
 <p>Note that the prevalence terms <span class="math inline">\(\theta\)</span> will add to 1 within a document. That is, the term tells us the proportion of (words associated with) topics for each document:</p>
 <div class="sourceCode" id="cb205"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">stm_us_pres</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -697,13 +633,10 @@
 <span><span class="fu"><a href="https://strengejacke.github.io/sjPlot/reference/plot_model.html">plot_model</a></span><span class="op">(</span><span class="va">feols_topic5</span>, type <span class="op">=</span> <span class="st">"pred"</span>, term <span class="op">=</span> <span class="st">"party"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Stat. Sig. at p&lt;0.1"</span>, x<span class="op">=</span><span class="st">""</span>, y<span class="op">=</span><span class="st">"Topic Prevalence"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Some of the focal terms are of type
-##   `character`. This may lead to unexpected
-##   results. It is recommended to convert these
-##   variables to factors before fitting the
-##   model.
-##   The following variables are of type
-##   character: `party`</code></pre>
+<pre><code>## Some of the focal terms are of type `character`. This may lead to
+##   unexpected results. It is recommended to convert these variables to
+##   factors before fitting the model.
+##   The following variables are of type character: `party`</code></pre>
 <div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-97-1.png" width="672"></div>
 <p>Seems that Republican presidents address more the economy in their speeches. Let’s plot the proportion of speeches about the economy by president:</p>
 <div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
@@ -758,7 +691,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-02-23.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
