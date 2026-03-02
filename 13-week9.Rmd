@@ -1,0 +1,10 @@
+# Week 9: The Transformers Architecture {#week9}
+
+## Slides{.unnumbered}
+
+- 9 The Transformers Architecture
+([link](https://github.com/svallejovera/cta_updated/blob/main/slides/9%20Transformers.pdf) to slides)
+
+## No code :( {.unnumbered}
+
+We have no code for this week. This is the last of the lecture-heavy weeks, so there's something to look forward to. 
