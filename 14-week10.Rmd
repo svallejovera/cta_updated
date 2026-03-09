@@ -1,0 +1,18 @@
+# Week 10: Encoder-Only LLMs {#week10}
+
+## Slides{.unnumbered}
+
+- 10 Encoder-Only LLMs
+([link](https://github.com/svallejovera/cta_updated/blob/main/slides/10%20Encoders.pdf) to slides)
+
+## Using Fine-Tuned Models
+
+Before we fine-tune our own models, let's play a bit with previously fine-tuned models, see how they work, and get an intuition to the workflow. Here is the [link](https://colab.research.google.com/drive/12tgniDQ_7xCkPlScinBzl2xk3wReDQ59?usp=sharing).
+
+## Fine-Tuning a Model
+
+Ok, now we can fine-tune our own model. Here is the [link](https://colab.research.google.com/drive/1KY5UqOtqSdLAtE4qzuHQ6YSuZdImqYJ3?usp=sharing). 
+
+## Further Pre-Training a Model
+
+Finally, we can also further pre-train a model (to then fine-tune it). Here is the [link](https://colab.research.google.com/drive/1_nmDGG_OzU3MjIa4T6JZTD_ra6kAa0wW?usp=sharing) for that.
