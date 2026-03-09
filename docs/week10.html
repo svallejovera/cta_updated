@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 9 Week 9: The Transformers Architecture | PS9594: Computational Text Analysis</title>
+<title>Chapter 10 Week 10: Encoder-Only LLMs | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
-<meta name="description" content="Slides 9 The Transformers Architecture (link to slides)  No code :( We have no code for this week. This is the last of the lecture-heavy weeks, so there’s something to look forward to.">
+<meta name="description" content="Slides 10 Encoder-Only LLMs (link to slides)  10.1 Using Fine-Tuned Models Before we fine-tune our own models, let’s play a bit with previously fine-tuned models, see how they work, and get an...">
 <meta name="generator" content="bookdown 0.46 with bs4_book()">
-<meta property="og:title" content="Chapter 9 Week 9: The Transformers Architecture | PS9594: Computational Text Analysis">
+<meta property="og:title" content="Chapter 10 Week 10: Encoder-Only LLMs | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
-<meta property="og:description" content="Slides 9 The Transformers Architecture (link to slides)  No code :( We have no code for this week. This is the last of the lecture-heavy weeks, so there’s something to look forward to.">
+<meta property="og:description" content="Slides 10 Encoder-Only LLMs (link to slides)  10.1 Using Fine-Tuned Models Before we fine-tune our own models, let’s play a bit with previously fine-tuned models, see how they work, and get an...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 9 Week 9: The Transformers Architecture | PS9594: Computational Text Analysis">
-<meta name="twitter:description" content="Slides 9 The Transformers Architecture (link to slides)  No code :( We have no code for this week. This is the last of the lecture-heavy weeks, so there’s something to look forward to.">
+<meta name="twitter:title" content="Chapter 10 Week 10: Encoder-Only LLMs | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="Slides 10 Encoder-Only LLMs (link to slides)  10.1 Using Fine-Tuned Models Before we fine-tune our own models, let’s play a bit with previously fine-tuned models, see how they work, and get an...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -55,8 +55,8 @@
 <li><a class="" href="week6.html"><span class="header-section-number">6</span> Week 6: Topic Modeling (Unsupervised Learning II)</a></li>
 <li><a class="" href="week7.html"><span class="header-section-number">7</span> Week 7: A Primer on Supervised Learning</a></li>
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
-<li><a class="active" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
-<li><a class="" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
+<li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
+<li><a class="active" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
 </ul>
 
         <div class="book-extra">
@@ -64,40 +64,63 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week9" class="section level1" number="9">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week10" class="section level1" number="10">
 <h1>
-<span class="header-section-number">9</span> Week 9: The Transformers Architecture<a class="anchor" aria-label="anchor" href="#week9"><i class="fas fa-link"></i></a>
+<span class="header-section-number">10</span> Week 10: Encoder-Only LLMs<a class="anchor" aria-label="anchor" href="#week10"><i class="fas fa-link"></i></a>
 </h1>
-<div id="slides-8" class="section level2 unnumbered">
-<h2>Slides<a class="anchor" aria-label="anchor" href="#slides-8"><i class="fas fa-link"></i></a>
+<div id="slides-9" class="section level2 unnumbered">
+<h2>Slides<a class="anchor" aria-label="anchor" href="#slides-9"><i class="fas fa-link"></i></a>
 </h2>
 <ul>
-<li>9 The Transformers Architecture
-(<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/9%20Transformers.pdf">link</a> to slides)</li>
+<li>10 Encoder-Only LLMs
+(<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/10%20Encoders.pdf">link</a> to slides)</li>
 </ul>
 </div>
-<div id="no-code" class="section level2 unnumbered">
-<h2>No code :(<a class="anchor" aria-label="anchor" href="#no-code"><i class="fas fa-link"></i></a>
+<div id="using-fine-tuned-models" class="section level2" number="10.1">
+<h2>
+<span class="header-section-number">10.1</span> Using Fine-Tuned Models<a class="anchor" aria-label="anchor" href="#using-fine-tuned-models"><i class="fas fa-link"></i></a>
 </h2>
-<p>We have no code for this week. This is the last of the lecture-heavy weeks, so there’s something to look forward to.</p>
+<p>Before we fine-tune our own models, let’s play a bit with previously fine-tuned models, see how they work, and get an intuition to the workflow. Here is the <a href="https://colab.research.google.com/drive/12tgniDQ_7xCkPlScinBzl2xk3wReDQ59?usp=sharing">link</a>.</p>
+</div>
+<div id="fine-tuning-a-model" class="section level2" number="10.2">
+<h2>
+<span class="header-section-number">10.2</span> Fine-Tuning a Model<a class="anchor" aria-label="anchor" href="#fine-tuning-a-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>Ok, now we can fine-tune our own model. Here is the <a href="https://colab.research.google.com/drive/1KY5UqOtqSdLAtE4qzuHQ6YSuZdImqYJ3?usp=sharing">link</a>.</p>
+</div>
+<div id="further-pre-training-a-model" class="section level2" number="10.3">
+<h2>
+<span class="header-section-number">10.3</span> Further Pre-Training a Model<a class="anchor" aria-label="anchor" href="#further-pre-training-a-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>Finally, we can also further pre-train a model (to then fine-tune it). Here is the <a href="https://colab.research.google.com/drive/1_nmDGG_OzU3MjIa4T6JZTD_ra6kAa0wW?usp=sharing">link</a> for that.</p>
 
 </div>
 </div>
+
+
+
+
+
+
+
+
   <div class="chapter-nav">
-<div class="prev"><a href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></div>
-<div class="next"><a href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></div>
+<div class="prev"><a href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></div>
+<div class="empty"></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#week9"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
-<li><a class="nav-link" href="#slides-8">Slides</a></li>
-<li><a class="nav-link" href="#no-code">No code :(</a></li>
+<li><a class="nav-link" href="#week10"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
+<li><a class="nav-link" href="#slides-9">Slides</a></li>
+<li><a class="nav-link" href="#using-fine-tuned-models"><span class="header-section-number">10.1</span> Using Fine-Tuned Models</a></li>
+<li><a class="nav-link" href="#fine-tuning-a-model"><span class="header-section-number">10.2</span> Fine-Tuning a Model</a></li>
+<li><a class="nav-link" href="#further-pre-training-a-model"><span class="header-section-number">10.3</span> Further Pre-Training a Model</a></li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/13-week9.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/13-week9.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/14-week10.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/14-week10.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
