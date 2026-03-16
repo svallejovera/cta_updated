@@ -7,7 +7,7 @@
 <title>Chapter 7 Week 7: A Primer on Supervised Learning | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
 <meta name="description" content='Slides 7 Supervised Learning (link to slides)  7.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin") library(austin) # just for...'>
-<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
 <meta property="og:title" content="Chapter 7 Week 7: A Primer on Supervised Learning | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
 <meta property="og:description" content='Slides 7 Supervised Learning (link to slides)  7.1 Setup As always, we first load the packages that we’ll be using: # devtools::install_github("conjugateprior/austin") library(austin) # just for...'>
@@ -57,6 +57,7 @@
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 <li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 <li><a class="" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
+<li><a class="" href="week11.html"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
 </ul>
 
         <div class="book-extra">
@@ -80,7 +81,7 @@
 <span class="header-section-number">7.1</span> Setup<a class="anchor" aria-label="anchor" href="#setup-6"><i class="fas fa-link"></i></a>
 </h2>
 <p>As always, we first load the packages that we’ll be using:</p>
-<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># devtools::install_github("conjugateprior/austin")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conjugateprior.github.io/austin">austin</a></span><span class="op">)</span> <span class="co"># just for those sweet wordscores</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="co"># for wrangling data</span></span>
@@ -95,10 +96,10 @@
 <span class="header-section-number">7.2</span> Wordscores<a class="anchor" aria-label="anchor" href="#wordscores"><i class="fas fa-link"></i></a>
 </h2>
 <p>Laver et al. (2003) propose a supervised scaling technique called <em>Wordscores</em>. We learned the intuition in this week’s lecture. We will now replicate Table 1 from Laver and Benoit (2003) using the <code>austin</code> package. The package includes sample data that we will use:</p>
-<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb216"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">lbg</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s keep only the reference documents:</p>
-<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">ref</span></span></code></pre></div>
 <pre><code>##      docs
@@ -141,7 +142,7 @@
 ##    ZJ   0   0   0   0   3
 ##    ZK   0   0   0   0   2</code></pre>
 <p>This is the same matrix as in Figure 1, where we have a count of each word (in this case, letters) by reference document (i.e., documents that have already been labeled). We can assign scores (<code>A_scores</code>) to each reference text to place them on an ideological scale (or whatever scale we want). We then estimate <em>Wordscores</em> for each word.</p>
-<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We do this in the order of the reference texts:</span></span>
 <span><span class="va">A_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>,<span class="op">-</span><span class="fl">0.75</span>,<span class="fl">0</span>,<span class="fl">0.75</span>,<span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="va">ws</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/classic.wordscores.html">classic.wordscores</a></span><span class="op">(</span><span class="va">ref</span>, scores<span class="op">=</span><span class="va">A_score</span><span class="op">)</span></span>
@@ -185,7 +186,7 @@
 ## ZJ  1.5000000
 ## ZK  1.5000000</code></pre>
 <p>Now we get the virgin text and predict the textscore by estimating the average of the weighted wordscores for the virgin document:</p>
-<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://conjugateprior.github.io/austin/reference/getdocs.html">getdocs</a></span><span class="op">(</span><span class="va">lbg</span>, <span class="st">'V1'</span><span class="op">)</span></span>
 <span><span class="va">vir</span></span></code></pre></div>
 <pre><code>##      docs
@@ -227,7 +228,7 @@
 ##    ZI   0
 ##    ZJ   0
 ##    ZK   0</code></pre>
-<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># predict textscores for the virgin documents</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ws</span>, newdata<span class="op">=</span><span class="va">vir</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 37 of 37 words (100%) are scorable
@@ -265,7 +266,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-09.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-15.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

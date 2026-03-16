@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Page not found | PS9594: Computational Text Analysis</title>
+<title>Chapter 11 Week 11: Decoder-Only LLMs | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
-<meta name="description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="description" content="Slides 11 Decoder-Only LLMs (link to slides)  11.1 Using Decoder-Only LLMs We will first see how we can use LLMs through the API. Note that this is different from using the playground. Accessing...">
 <meta name="generator" content="bookdown 0.42 with bs4_book()">
-<meta property="og:title" content="Page not found | PS9594: Computational Text Analysis">
+<meta property="og:title" content="Chapter 11 Week 11: Decoder-Only LLMs | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
-<meta property="og:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta property="og:description" content="Slides 11 Decoder-Only LLMs (link to slides)  11.1 Using Decoder-Only LLMs We will first see how we can use LLMs through the API. Note that this is different from using the playground. Accessing...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Page not found | PS9594: Computational Text Analysis">
-<meta name="twitter:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="twitter:title" content="Chapter 11 Week 11: Decoder-Only LLMs | PS9594: Computational Text Analysis">
+<meta name="twitter:description" content="Slides 11 Decoder-Only LLMs (link to slides)  11.1 Using Decoder-Only LLMs We will first see how we can use LLMs through the API. Note that this is different from using the playground. Accessing...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -57,7 +57,7 @@
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 <li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 <li><a class="" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
-<li><a class="" href="week11.html"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
+<li><a class="active" href="week11.html"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
 </ul>
 
         <div class="book-extra">
@@ -65,18 +65,60 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="page-not-found" class="section level1">
-<h1>Page not found<a class="anchor" aria-label="anchor" href="#page-not-found"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="week11" class="section level1" number="11">
+<h1>
+<span class="header-section-number">11</span> Week 11: Decoder-Only LLMs<a class="anchor" aria-label="anchor" href="#week11"><i class="fas fa-link"></i></a>
 </h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="slides-10" class="section level2 unnumbered">
+<h2>Slides<a class="anchor" aria-label="anchor" href="#slides-10"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>11 Decoder-Only LLMs
+(<a href="https://github.com/svallejovera/cta_updated/blob/main/slides/11%20Decoders.pdf">link</a> to slides)</li>
+</ul>
 </div>
+<div id="using-decoder-only-llms" class="section level2" number="11.1">
+<h2>
+<span class="header-section-number">11.1</span> Using Decoder-Only LLMs<a class="anchor" aria-label="anchor" href="#using-decoder-only-llms"><i class="fas fa-link"></i></a>
+</h2>
+<p>We will first see how we can use LLMs through the API. Note that this is different from using the playground. Accessing the API allows is designed for processing larger batches of data. Here is the <a href="https://colab.research.google.com/drive/1d4zjvX0z7z1vYgAAg0fPIVx6n_g7CQT3?usp=sharing">link</a>.</p>
+</div>
+<div id="using-llms-as-annotators" class="section level2" number="11.2">
+<h2>
+<span class="header-section-number">11.2</span> Using LLMs as Annotators<a class="anchor" aria-label="anchor" href="#using-llms-as-annotators"><i class="fas fa-link"></i></a>
+</h2>
+<p>Ok, now we can use LLMs as annotators. Here is the <a href="https://colab.research.google.com/drive/1CKdSOzV8ddcz9k4Z96t9vvHW_MjB6qTp?usp=sharing">link</a>.</p>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
   <div class="chapter-nav">
-<div class="empty"></div>
+<div class="prev"><a href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></div>
 <div class="empty"></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
-    </div>
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#week11"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
+<li><a class="nav-link" href="#slides-10">Slides</a></li>
+<li><a class="nav-link" href="#using-decoder-only-llms"><span class="header-section-number">11.1</span> Using Decoder-Only LLMs</a></li>
+<li><a class="nav-link" href="#using-llms-as-annotators"><span class="header-section-number">11.2</span> Using LLMs as Annotators</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/svallejovera/cta_updated/blob/master/15-week11.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/svallejovera/cta_updated/edit/master/15-week11.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
 
 </div>
 </div> <!-- .container -->

@@ -68,3 +68,6 @@ week10
 using-fine-tuned-models
 fine-tuning-a-model
 further-pre-training-a-model
+week11
+using-decoder-only-llms
+using-llms-as-annotators

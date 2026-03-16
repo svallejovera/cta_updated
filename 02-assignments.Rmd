@@ -55,7 +55,7 @@ Part I:
 2. Decide the number of categories that you will be predicting.
 3. Decide the number of observations you will code per category.
 4. Create a draft codebook to guide coders who will (hypothetically) label your training set.
-5. Label a sample of your data (N=200); decide how you will sample the data and explain your decision. Have a classmate label the same sample (you can find the coder pairing [here](https://colab.research.google.com/drive/19KXG7mauoCBwNfyvwR6mrXsAXS4TgX86)). Estimate [inter-coder reliability](http://www.cookbook-r.com/Statistical_analysis/Inter-rater_reliability/) and [evaluate the results](https://statisticsbyjim.com/hypothesis-testing/inter-rater-reliability/).
+5. Label a sample of your data (N=200); decide how you will sample the data and explain your decision. Have a LLM label the same sample (you can find the code [here](https://colab.research.google.com/drive/1CKdSOzV8ddcz9k4Z96t9vvHW_MjB6qTp?usp=sharing)). Estimate [inter-coder reliability](http://www.cookbook-r.com/Statistical_analysis/Inter-rater_reliability/) and [evaluate the results](https://statisticsbyjim.com/hypothesis-testing/inter-rater-reliability/).
 6. How difficult or easy was the task? What problems did you run into? What would you change in your codebook to improve it? What other lessons did you learn from this exercise?
 
 Note: We will use the codebook and training set for Part II. This can also be the basis for your final paper.

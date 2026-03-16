@@ -7,7 +7,7 @@
 <title>Chapter 2 Week 2: Tokenization and Word Frequency | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
 <meta name="description" content="Slides 3 Tokenization and Word Frequency (link or in Perusall)  2.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
-<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
 <meta property="og:title" content="Chapter 2 Week 2: Tokenization and Word Frequency | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Slides 3 Tokenization and Word Frequency (link or in Perusall)  2.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to...">
@@ -57,6 +57,7 @@
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 <li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 <li><a class="" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
+<li><a class="" href="week11.html"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
 </ul>
 
         <div class="book-extra">
@@ -100,14 +101,14 @@
 <code class="sourceCode R"><span><span class="va">sample_lyrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/lyrics_sample.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">sample_lyrics</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 6 × 5
-##   artist                album  year song  lyrics
-##   &lt;chr&gt;                 &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Rage Against the Mac… Evil…  1996 Bull… "Come…
-## 2 Rage Against the Mac… Rage…  1992 Kill… "Kill…
-## 3 Rage Against the Mac… Rene…  2000 Rene… "No m…
-## 4 Rage Against the Mac… The …  1999 Slee… "Yeah…
-## 5 Rage Against the Mac… The …  1999 Guer… "Tran…
-## 6 Rage Against the Mac… The …  1999 Test… "Uh!\…</code></pre>
+##   artist             album  year song  lyrics
+##   &lt;chr&gt;              &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Rage Against the … Evil…  1996 Bull… "Come…
+## 2 Rage Against the … Rage…  1992 Kill… "Kill…
+## 3 Rage Against the … Rene…  2000 Rene… "No m…
+## 4 Rage Against the … The …  1999 Slee… "Yeah…
+## 5 Rage Against the … The …  1999 Guer… "Tran…
+## 6 Rage Against the … The …  1999 Test… "Uh!\…</code></pre>
 <p>Ok, so we have different artists, from different genres and years…</p>
 <pre><code>## 
 ##      Megan Thee Stallion 
@@ -137,8 +138,8 @@
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Drop the original lyrics column to avoid keeping both raw and cleaned versions</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lyrics</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## mutate: new variable 'lyrics_clean' (character)
-## with 21 unique values and 0% NA</code></pre>
+<pre><code>## mutate: new variable 'lyrics_clean'
+## (character) with 21 unique values and 0% NA</code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect the 4th cleaned lyric to confirm the replacements worked as intended</span></span>
 <span><span class="va">sample_lyrics</span><span class="op">$</span><span class="va">lyrics_clean</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
@@ -341,21 +342,21 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">lyrics_dfm_stem</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Document-feature matrix of: 6 documents, 1,161 features (93.10% sparse) and 4 docvars.
 ##        features
-## docs    come wit microphon explod shatter mold
-##   text1    4   4         1      1       1    1
-##   text2    2   0         0      0       0    0
-##   text3    0   0         0      0       0    0
-##   text4    0   0         0      0       0    0
-##   text5    0   0         0      0       0    0
-##   text6    0   4         0      0       0    0
+## docs    come wit microphon explod shatter
+##   text1    4   4         1      1       1
+##   text2    2   0         0      0       0
+##   text3    0   0         0      0       0
+##   text4    0   0         0      0       0
+##   text5    0   0         0      0       0
+##   text6    0   4         0      0       0
 ##        features
-## docs    either drop hit like
-##   text1      1    3   1    1
-##   text2      0    0   0    0
-##   text3      0    0   0    4
-##   text4      0    0   0    0
-##   text5      0    0   0    1
-##   text6      0    0   0    0
+## docs    mold either drop hit like
+##   text1    1      1    3   1    1
+##   text2    0      0    0   0    0
+##   text3    0      0    0   0    4
+##   text4    0      0    0   0    0
+##   text5    0      0    0   0    1
+##   text6    0      0    0   0    0
 ## [ reached max_nfeat ... 1,151 more features ]</code></pre>
 <p>Note that once we create the <code>dfm</code> object, all tokens become lowercase. Now we can check what are the 15 most frequent tokens.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
@@ -383,7 +384,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">"Frequency"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Hide legend (frequency is already shown on the y-axis)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
 <p>Does not tell us much, but I used the previous code to check for low-information tokens that I might want to remove from my analysis. We can also see how many tokens appear only once:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">only_once</span> <span class="op">&lt;-</span> <span class="va">lyrics_dfm_stem</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -416,7 +417,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
 <p>Interesting. There is not a lot of overlap (apart from one token shared by Megan Thee Stallion and Rage Against the Machine). However, it would be great if we could measure the importance of a word relative to how widely it appears across documents (i.e., normalize by document prevalence). Enter TF-IDF: “term frequency–inverse document frequency.” TF-IDF weighting up-weights relatively rare words–words that do not appear in many documents. By combining term frequency and inverse document frequency, we can identify words that are especially characteristic of a given document within a collection.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_dfm_tfidf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dfm_tfidf.html">dfm_tfidf</a></span><span class="op">(</span><span class="va">lyrics_dfm_stem</span><span class="op">)</span> <span class="co"># Create a dfm with tf-idf instead of counts</span></span>
@@ -434,7 +435,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">"TF-IDF"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
 <p>If we are building a dictionary, for example, we might want to include words with high TF-IDF values. Another way to think about TF-IDF is in terms of predictive power. Words that are common to all documents have little predictive power and receive a TF-IDF value close to 0. Words that appear in only a relatively small number of documents tend to have greater predictive power and receive higher TF-IDF values. Very rare words are also effectively down-weighted, since they may provide only idiosyncratic information about a single document (i.e., strong “prediction” for one document but little information about the rest). As you will read in Chapters 6–7 of Grimmer et al., the goal is to find the right balance.</p>
 <p>Another useful tool (and concept) is <em>keyness</em>. Keyness is a two-by-two association score for features that occur differentially across categories. We can estimate which features are more strongly associated with one category (in this case, one artist) relative to another. Let’s compare Megan Thee Stallion and Taylor Swift.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
@@ -453,7 +454,7 @@
 <span></span>
 <span><span class="co"># Visualize the most strongly associated (key) features for the target vs. the reference group.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/quanteda.textplots/man/textplot_keyness.html">textplot_keyness</a></span><span class="op">(</span><span class="va">lyrics_key</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-24-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-24-1.png" width="672"></div>
 <p>Similar to what we would have inferred from the TF-IDF graphs. Notice that stemming does not always work as expected. Taylor Swift sings about “shake, shake, shake,” and Megan Thee Stallion sings about “shaking.” However, these still appear as distinct features for the two artists.</p>
 </div>
 <div id="word-frequency-across-artist" class="section level2" number="2.5">
@@ -498,7 +499,7 @@
 ## distinct (grouped): removed 8,958 rows (&gt;99%), 21 rows remaining (removed 0 groups, 21 groups remaining)
 ## group_by: one grouping variable (artist)
 ## mutate (grouped): new variable 'mean_tokens' (double) with 4 unique values and 0% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-25-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-25-1.png" width="672"></div>
 <p>Alternatively, we can estimate the frequency of a specific token by song.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyrics_totals</span> <span class="op">&lt;-</span> <span class="va">sample_lyrics</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -548,7 +549,7 @@
 ##            &gt; rows total                21
 ## ungroup: no grouping variables remain
 ## mutate: new variable 'like_prop' (double) with 13 unique values and 43% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-28-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
 </div>
 <div id="final-words-1" class="section level2" number="2.6">
 <h2>
@@ -590,7 +591,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-09.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-15.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

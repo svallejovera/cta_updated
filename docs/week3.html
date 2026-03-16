@@ -7,7 +7,7 @@
 <title>Chapter 3 Week 3: Dictionary-Based Approaches | PS9594: Computational Text Analysis</title>
 <meta name="author" content="Dr. Sebastián Vallejo Vera | Western University">
 <meta name="description" content="Slides 4 Dictionary-Based Approaches (link or in Perusall)  3.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to know...">
-<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Week 3: Dictionary-Based Approaches | PS9594: Computational Text Analysis">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Slides 4 Dictionary-Based Approaches (link or in Perusall)  3.1 Setup As always, we first load the packages that we’ll be using: library(tidyverse) # for wrangling data library(tidylog) # to know...">
@@ -57,6 +57,7 @@
 <li><a class="" href="week8.html"><span class="header-section-number">8</span> Week 8: Introduction to Deep Learning</a></li>
 <li><a class="" href="week9.html"><span class="header-section-number">9</span> Week 9: The Transformers Architecture</a></li>
 <li><a class="" href="week10.html"><span class="header-section-number">10</span> Week 10: Encoder-Only LLMs</a></li>
+<li><a class="" href="week11.html"><span class="header-section-number">11</span> Week 11: Decoder-Only LLMs</a></li>
 </ul>
 
         <div class="book-extra">
@@ -236,28 +237,29 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trump_biden</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 20 × 5
 ## # Groups:   text_id [20]
-##    text_id trump_cmmnt biden_cmmnt likes debate 
-##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;  
-##  1       1           0           0   100 abc_fi…
-##  2       2           1           0    61 abc_fi…
-##  3       3           1           0    99 abc_fi…
-##  4       4           0           0    47 abc_fi…
-##  5       5           1           0   154 abc_fi…
-##  6       6           0           0   171 abc_fi…
-##  7       7           0           0    79 abc_fi…
-##  8       8           0           0    39 abc_fi…
-##  9       9           0           0    53 abc_fi…
-## 10      10           0           0    36 abc_fi…
-## 11      11           1           0    41 abc_fi…
-## 12      12           0           0    28 abc_fi…
-## 13      13           1           0    54 abc_fi…
-## 14      14           0           0    30 abc_fi…
-## 15      15           1           0    27 abc_fi…
-## 16      16           1           1    31 abc_fi…
-## 17      17           1           0    35 abc_fi…
-## 18      18           1           1    32 abc_fi…
-## 19      19           0           0    34 abc_fi…
-## 20      20           1           0    37 abc_fi…</code></pre>
+##    text_id trump_cmmnt biden_cmmnt likes
+##      &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt;
+##  1       1           0           0   100
+##  2       2           1           0    61
+##  3       3           1           0    99
+##  4       4           0           0    47
+##  5       5           1           0   154
+##  6       6           0           0   171
+##  7       7           0           0    79
+##  8       8           0           0    39
+##  9       9           0           0    53
+## 10      10           0           0    36
+## 11      11           1           0    41
+## 12      12           0           0    28
+## 13      13           1           0    54
+## 14      14           0           0    30
+## 15      15           1           0    27
+## 16      16           1           1    31
+## 17      17           1           0    35
+## 18      18           1           1    32
+## 19      19           0           0    34
+## 20      20           1           0    37
+## # ℹ 1 more variable: debate &lt;chr&gt;</code></pre>
 <p>Rather than replicating the results from Figure 3 in Ventura et al. (2021), we will estimate the median number of likes that comments mentioning Trump, Biden, both, or neither receive:</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -287,7 +289,7 @@
 ## group_by: one grouping variable (mentions_cat)
 ## mutate (grouped): new variable 'likes_mean' (double) with 3 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-33-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
 <p>And we can also see if there are differences across news media:</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trump_biden</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -321,7 +323,7 @@
 ## group_by: 2 grouping variables (mentions_cat, media)
 ## mutate (grouped): new variable 'median_like' (double) with 6 unique values and 0% NA
 ## ungroup: no grouping variables remain</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-34-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
 <p>Similar to Young and Soroka (2012), we can also explore our keywords of interest in context. This is a good way to validate our proposed measure (e.g., is mentioning <em>trump</em> a reflection of interest, or simply relevance?).</p>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a quanteda corpus from the Ventura et al. dataset.</span></span>
@@ -343,94 +345,115 @@
 <span><span class="co"># Inspect the first 20 KWIC results</span></span>
 <span><span class="co"># (The number of tokens before/after the keyword is controlled by the window size in kwic().)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">kw_trump</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Keyword-in-context with 20 matches.                                               
-##    [text2, 5]      God please bless all | Trump
-##    [text3, 1]                           | Trump
-##    [text5, 7]               ... shut up | tRump
-##  [text11, 11] a bad opiate problem then | trump
-##   [text13, 4]                 This is a | TRUMP
-##   [text15, 1]                           | Trump
-##   [text16, 8]  this SO much better than | Trump
-##   [text17, 3]                    I love | Trump
-##   [text18, 4]            Biden is right | Trump
-##   [text20, 1]                           | Trump
-##  [text22, 12]     being a decent human. | Trump
-##   [text23, 1]                           | Trump
-##  [text27, 11]          for once, i wish | trump
-##  [text28, 10]             it America... | Trump
-##   [text30, 1]                           | Trump
-##   [text31, 1]                           | Trump
-##   [text32, 1]                           | Trump
-##  [text32, 15]    People open your eyes. | Trump
-##   [text34, 1]                           | Trump
-##   [text36, 1]                           | Trump
-##                                   
-##  | supporters. They need it       
-##  | is a living disaster!          
-##  | ... so rude                    
-##  | brings up about bidens son     
-##  | all about ME debate and        
-##  | is looking pretty flushed right
-##  | and I wasn’t even going        
-##  | ! He is the best               
-##  | doesn’t have a plan for        
-##  | worse president EVER 😡 thank  
-##  | doesn't know the meaning of    
-##  | such a hateful person he       
-##  | would shut his trap for        
-##  | IS NOT smarter than a          
-##  | has improved our economy and   
-##  | has done so much harm          
-##  | is a clown and after           
-##  | is evil.                       
-##  | is so broke that is            
-##  | is literally making this debate</code></pre>
+<pre><code>## Keyword-in-context with 20 matches.                                         
+##    [text2, 5]      God please bless all |
+##    [text3, 1]                           |
+##    [text5, 7]               ... shut up |
+##  [text11, 11] a bad opiate problem then |
+##   [text13, 4]                 This is a |
+##   [text15, 1]                           |
+##   [text16, 8]  this SO much better than |
+##   [text17, 3]                    I love |
+##   [text18, 4]            Biden is right |
+##   [text20, 1]                           |
+##  [text22, 12]     being a decent human. |
+##   [text23, 1]                           |
+##  [text27, 11]          for once, i wish |
+##  [text28, 10]             it America... |
+##   [text30, 1]                           |
+##   [text31, 1]                           |
+##   [text32, 1]                           |
+##  [text32, 15]    People open your eyes. |
+##   [text34, 1]                           |
+##   [text36, 1]                           |
+##                                         
+##  Trump | supporters. They need it       
+##  Trump | is a living disaster!          
+##  tRump | ... so rude                    
+##  trump | brings up about bidens son     
+##  TRUMP | all about ME debate and        
+##  Trump | is looking pretty flushed right
+##  Trump | and I wasn’t even going        
+##  Trump | ! He is the best               
+##  Trump | doesn’t have a plan for        
+##  Trump | worse president EVER 😡 thank  
+##  Trump | doesn't know the meaning of    
+##  Trump | such a hateful person he       
+##  trump | would shut his trap for        
+##  Trump | IS NOT smarter than a          
+##  Trump | has improved our economy and   
+##  Trump | has done so much harm          
+##  Trump | is a clown and after           
+##  Trump | is evil.                       
+##  Trump | is so broke that is            
+##  Trump | is literally making this debate</code></pre>
 <p>We can also look for more than one word at the same time:</p>
 <div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kw_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/kwic.html">kwic</a></span><span class="op">(</span><span class="va">toks_ventura</span>, pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"best"</span>,<span class="st">"worst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">kw_best</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## Keyword-in-context with 20 matches.                                               
-##    [text4, 17] yard class president debate at |
-##    [text10, 1]                                |
-##    [text17, 8]               Trump! He is the |
-##    [text43, 6]           This is gonna be the |
-##   [text81, 31]  an incompetent President, the |
-##   [text81, 33]          President, the worst, |
-##   [text81, 35]              the worst, worst, |
-##   [text82, 11]         was totally one sided! |
-##    [text86, 8]           right - Trump is the |
-##   [text100, 9]             !! BRAVO BRAVO THE |
-##   [text102, 4]                  Obama was the |
-##  [text119, 10]            he said he would do |
-##  [text138, 13]               think. He is the |
-##  [text141, 22]           puppet could be? The |
-##   [text143, 6]           Trump may not be the |
-##  [text158, 15]              This man is a the |
-##   [text167, 3]                         He the |
-##  [text221, 34]           by far have been the |
-##  [text221, 36]           have been the worst, |
-##  [text221, 38]              the worst, WORST, |
-##                                             
-##  best  | .                                  
-##  Worst | debate I’ve ever seen!             
-##  best  | president ever! Thank you          
-##  best  | show on TV in 4                    
-##  worst | , worst, worst in                  
-##  worst | , worst in history.                
-##  worst | in history.                        
-##  Worst | ever! Our president kept           
-##  worst | president America ever had!        
-##  BEST  | PRESIDENT OF THE WORLD.            
-##  worst | president ever!!!                  
-##  Best  | President ever Crybabies don't like
-##  worst | president ever                     
-##  worst | president in our time ever         
-##  best  | choice but I will choose           
-##  worst | thing that has ever happened       
-##  worst | president we had in the            
-##  worst | , WORST, WORST PRESIDENT           
-##  WORST | , WORST PRESIDENT!!                
-##  WORST | PRESIDENT!!!</code></pre>
+<pre><code>## Keyword-in-context with 20 matches.              
+##    [text4, 17]
+##    [text10, 1]
+##    [text17, 8]
+##    [text43, 6]
+##   [text81, 31]
+##   [text81, 33]
+##   [text81, 35]
+##   [text82, 11]
+##    [text86, 8]
+##   [text100, 9]
+##   [text102, 4]
+##  [text119, 10]
+##  [text138, 13]
+##  [text141, 22]
+##   [text143, 6]
+##  [text158, 15]
+##   [text167, 3]
+##  [text221, 34]
+##  [text221, 36]
+##  [text221, 38]
+##                                          
+##  yard class president debate at | best  |
+##                                 | Worst |
+##                Trump! He is the | best  |
+##            This is gonna be the | best  |
+##   an incompetent President, the | worst |
+##           President, the worst, | worst |
+##               the worst, worst, | worst |
+##          was totally one sided! | Worst |
+##            right - Trump is the | worst |
+##              !! BRAVO BRAVO THE | BEST  |
+##                   Obama was the | worst |
+##             he said he would do | Best  |
+##                think. He is the | worst |
+##            puppet could be? The | worst |
+##            Trump may not be the | best  |
+##               This man is a the | worst |
+##                          He the | worst |
+##            by far have been the | worst |
+##            have been the worst, | WORST |
+##               the worst, WORST, | WORST |
+##                                     
+##  .                                  
+##  debate I’ve ever seen!             
+##  president ever! Thank you          
+##  show on TV in 4                    
+##  , worst, worst in                  
+##  , worst in history.                
+##  in history.                        
+##  ever! Our president kept           
+##  president America ever had!        
+##  PRESIDENT OF THE WORLD.            
+##  president ever!!!                  
+##  President ever Crybabies don't like
+##  president ever                     
+##  president in our time ever         
+##  choice but I will choose           
+##  thing that has ever happened       
+##  president we had in the            
+##  , WORST, WORST PRESIDENT           
+##  , WORST PRESIDENT!!                
+##  PRESIDENT!!!</code></pre>
 <p>Alternatively, we can examine which words most commonly occur together. These are called <em>collocations</em> (a concept closely related to <em>n-grams</em>). Here, we want to identify the most common names mentioned (first and last names).</p>
 <div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">toks_ventura</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/tokens.html">tokens</a></span><span class="op">(</span><span class="va">corpus_ventura</span>, remove_punct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -442,48 +465,48 @@
 <span>                                padding <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>                  <span class="fu"><a href="https://quanteda.io/reference/textstat_collocations.html">textstat_collocations</a></span><span class="op">(</span>min_count <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="co"># Minimum number of collocations to be taken into account.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">col_ventura</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<pre><code>##          collocation count count_nested length
-## 1      chris wallace  1695            0      2
-## 2    president trump   831            0      2
-## 3          joe biden   431            0      2
-## 4           fox news   267            0      2
-## 5       mr president   152            0      2
-## 6      united states   144            0      2
-## 7       donald trump   141            0      2
-## 8         mike pence    40            0      2
-## 9       jo jorgensen    78            0      2
-## 10             HE IS    43            0      2
-## 11  democratic party    38            0      2
-## 12    vice president   347            0      2
-## 13     CHRIS WALLACE    38            0      2
-## 14   PRESIDENT TRUMP    37            0      2
-## 15          TRUMP IS    42            0      2
-## 16       white house    47            0      2
-## 17 african americans    35            0      2
-## 18         JOE BIDEN    25            0      2
-## 19           YOU ARE    27            0      2
-## 20            IS NOT    34            0      2
-##       lambda         z
-## 1   6.752252 128.27065
-## 2   3.747948  84.12773
-## 3   3.389153  59.43303
-## 4   8.943930  53.78327
-## 5   4.985057  45.89307
-## 6  12.106819  36.13493
-## 7   4.735894  35.48376
-## 8   8.952895  34.74457
-## 9  10.969720  34.45690
-## 10  6.205826  34.13557
-## 11  9.093924  31.88407
-## 12  8.555551  31.81775
-## 13  9.634400  31.78949
-## 14  5.845521  30.56607
-## 15  5.197700  30.15608
-## 16 11.387847  29.41946
-## 17  7.750170  29.38751
-## 18  7.534616  28.84871
-## 19  6.651381  28.81572
-## 20  5.508680  28.73548</code></pre>
+<pre><code>##          collocation count count_nested
+## 1      chris wallace  1695            0
+## 2    president trump   831            0
+## 3          joe biden   431            0
+## 4           fox news   267            0
+## 5       mr president   152            0
+## 6      united states   144            0
+## 7       donald trump   141            0
+## 8         mike pence    40            0
+## 9       jo jorgensen    78            0
+## 10             HE IS    43            0
+## 11  democratic party    38            0
+## 12    vice president   347            0
+## 13     CHRIS WALLACE    38            0
+## 14   PRESIDENT TRUMP    37            0
+## 15          TRUMP IS    42            0
+## 16       white house    47            0
+## 17 african americans    35            0
+## 18         JOE BIDEN    25            0
+## 19           YOU ARE    27            0
+## 20            IS NOT    34            0
+##    length    lambda         z
+## 1       2  6.752252 128.27065
+## 2       2  3.747948  84.12773
+## 3       2  3.389153  59.43303
+## 4       2  8.943930  53.78327
+## 5       2  4.985057  45.89307
+## 6       2 12.106819  36.13493
+## 7       2  4.735894  35.48376
+## 8       2  8.952895  34.74457
+## 9       2 10.969720  34.45690
+## 10      2  6.205826  34.13557
+## 11      2  9.093924  31.88407
+## 12      2  8.555551  31.81775
+## 13      2  9.634400  31.78949
+## 14      2  5.845521  30.56607
+## 15      2  5.197700  30.15608
+## 16      2 11.387847  29.41946
+## 17      2  7.750170  29.38751
+## 18      2  7.534616  28.84871
+## 19      2  6.651381  28.81572
+## 20      2  5.508680  28.73548</code></pre>
 <p>(The <span class="math inline">\(\lambda\)</span> score is a measure of how strongly two words are associated, for example, how likely <em>chris</em> and <em>wallace</em> are to occur next to each other. For a complete explanation, you can <a href="http://web.science.mq.edu.au/~mjohnson/papers/2001/dpb-colloc01.pdf">read this paper</a>.)</p>
 <p>We can also discover collocations longer than two words. In the example below, we identify collocations consisting of three words.</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
@@ -698,18 +721,18 @@
 <code class="sourceCode R"><span><span class="co"># Note that the `word` and `sentiment` columns are meaningless now</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">comment_pos_neg</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 10 × 12
-##    text_id id       likes debate word  sentiment
-##      &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    
-##  1       1 ABC News   100 abc_f… coro… &lt;NA&gt;     
-##  2       2 Anita H…    61 abc_f… god   positive 
-##  3       3 Dave Ga…    99 abc_f… trump &lt;NA&gt;     
-##  4       4 Carl Roy    47 abc_f… deba… positive 
-##  5       5 Lynda M…   154 abc_f… omg   &lt;NA&gt;     
-##  6       6 Nica Me…   171 abc_f… it’s  &lt;NA&gt;     
-##  7       7 Connie …    79 abc_f… happ… &lt;NA&gt;     
-##  8       8 Tammy E…    39 abc_f… expe… &lt;NA&gt;     
-##  9       9 Susan W…    53 abc_f… smart &lt;NA&gt;     
-## 10      10 Dana Sp…    36 abc_f… worst &lt;NA&gt;     
+##    text_id id    likes debate word  sentiment
+##      &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    
+##  1       1 ABC …   100 abc_f… coro… &lt;NA&gt;     
+##  2       2 Anit…    61 abc_f… god   positive 
+##  3       3 Dave…    99 abc_f… trump &lt;NA&gt;     
+##  4       4 Carl…    47 abc_f… deba… positive 
+##  5       5 Lynd…   154 abc_f… omg   &lt;NA&gt;     
+##  6       6 Nica…   171 abc_f… it’s  &lt;NA&gt;     
+##  7       7 Conn…    79 abc_f… happ… &lt;NA&gt;     
+##  8       8 Tamm…    39 abc_f… expe… &lt;NA&gt;     
+##  9       9 Susa…    53 abc_f… smart &lt;NA&gt;     
+## 10      10 Dana…    36 abc_f… worst &lt;NA&gt;     
 ## # ℹ 6 more variables: pos_dum &lt;dbl&gt;,
 ## #   neg_dum &lt;dbl&gt;, total_words &lt;int&gt;,
 ## #   total_pos &lt;dbl&gt;, total_neg &lt;dbl&gt;,
@@ -738,7 +761,7 @@
 <pre><code>## mutate: new variable 'media' (character) with 3 unique values and 0% NA
 ## group_by: one grouping variable (media)
 ## mutate (grouped): new variable 'median_sent' (double) with 3 unique values and 0% NA</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-46-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
 </div>
 <div id="domain-specific-dictionaries" class="section level3" number="3.5.2">
 <h3>
@@ -855,41 +878,41 @@
 ## 12331 Lynne Basista Shine     6
 ## 14345          RJ Jimenez     4
 ## 19889      Nicole Brennan    13
-##                        debate   docname Segment
-## 4998  abc_first_debate_manual  text4998    4998
-## 6475  abc_first_debate_manual  text6475    6475
-## 8098  abc_first_debate_manual  text8098    8098
-## 12331 fox_first_debate_manual text12331   12331
-## 14345 fox_first_debate_manual text14345   14345
-## 19889 nbc_first_debate_manual text19889   19889
-##            WPS WC Sixltr   Dic economy
-## 4998  12.50000 25   4.00  8.00    4.00
-## 6475  20.00000 20  25.00 10.00    5.00
-## 8098  14.00000 28   7.14 10.71    7.14
-## 12331 27.00000 27  18.52  7.41    3.70
-## 14345 11.66667 35   8.57  5.71    2.86
-## 19889  9.50000 19   5.26 10.53    5.26
-##       immigration AllPunc Period Comma Colon
-## 4998         4.00   12.00   0.00     4     0
-## 6475         5.00    0.00   0.00     0     0
-## 8098         3.57   35.71   3.57     0     0
-## 12331        3.70    7.41   0.00     0     0
-## 14345        2.86   25.71  25.71     0     0
-## 19889        5.26   21.05  21.05     0     0
-##       SemiC QMark Exclam Dash Quote Apostro
-## 4998      0  4.00   0.00  0.0  4.00    4.00
-## 6475      0  0.00   0.00  0.0  0.00    0.00
-## 8098      0 17.86  10.71  0.0  3.57    3.57
-## 12331     0  0.00   3.70  3.7  0.00    0.00
-## 14345     0  0.00   0.00  0.0  0.00    0.00
-## 19889     0  0.00   0.00  0.0  0.00    0.00
-##       Parenth OtherP
-## 4998        0   8.00
-## 6475        0   0.00
-## 8098        0  35.71
-## 12331       0   3.70
-## 14345       0  25.71
-## 19889       0  21.05</code></pre>
+##                        debate   docname
+## 4998  abc_first_debate_manual  text4998
+## 6475  abc_first_debate_manual  text6475
+## 8098  abc_first_debate_manual  text8098
+## 12331 fox_first_debate_manual text12331
+## 14345 fox_first_debate_manual text14345
+## 19889 nbc_first_debate_manual text19889
+##       Segment      WPS WC Sixltr   Dic
+## 4998     4998 12.50000 25   4.00  8.00
+## 6475     6475 20.00000 20  25.00 10.00
+## 8098     8098 14.00000 28   7.14 10.71
+## 12331   12331 27.00000 27  18.52  7.41
+## 14345   14345 11.66667 35   8.57  5.71
+## 19889   19889  9.50000 19   5.26 10.53
+##       economy immigration AllPunc Period
+## 4998     4.00        4.00   12.00   0.00
+## 6475     5.00        5.00    0.00   0.00
+## 8098     7.14        3.57   35.71   3.57
+## 12331    3.70        3.70    7.41   0.00
+## 14345    2.86        2.86   25.71  25.71
+## 19889    5.26        5.26   21.05  21.05
+##       Comma Colon SemiC QMark Exclam Dash
+## 4998      4     0     0  4.00   0.00  0.0
+## 6475      0     0     0  0.00   0.00  0.0
+## 8098      0     0     0 17.86  10.71  0.0
+## 12331     0     0     0  0.00   3.70  3.7
+## 14345     0     0     0  0.00   0.00  0.0
+## 19889     0     0     0  0.00   0.00  0.0
+##       Quote Apostro Parenth OtherP
+## 4998   4.00    4.00       0   8.00
+## 6475   0.00    0.00       0   0.00
+## 8098   3.57    3.57       0  35.71
+## 12331  0.00    0.00       0   3.70
+## 14345  0.00    0.00       0  25.71
+## 19889  0.00    0.00       0  21.05</code></pre>
 <p>The output provides some interesting information. First, <code>economy</code> and <code>immigration</code> give us the <em>percentage</em> of words in the text that match our economy or immigration dictionaries. In general, we would not expect many words in a sentence to reference, for example, “jobs” for us to conclude that the sentence is about the economy. So, any value above 0% can be interpreted as mentioning the economy (unless you have theoretical reasons to treat, say, 3% as meaningfully different from 2%). For the remaining variables:</p>
 <ul>
 <li>
@@ -978,8 +1001,8 @@
 ## &gt; matched rows 12,605
 ## &gt; =========
 ## &gt; rows total 197,548
-## mutate: changed 184,943 values (94%) of 'score'
-## (184,943 fewer NAs)</code></pre>
+## mutate: changed 184,943 values (94%) of
+## 'score' (184,943 fewer NAs)</code></pre>
 <div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ventura_joy</span><span class="op">[</span><span class="va">ventura_joy</span><span class="op">$</span><span class="va">score</span><span class="op">&gt;</span><span class="fl">0</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##    text_id           id likes
@@ -1038,8 +1061,8 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Mean Joy"</span>, y <span class="op">=</span> <span class="st">"Likes"</span>, color <span class="op">=</span> <span class="st">""</span>, fill <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
-<pre><code>## mutate: new variable 'media' (character) with 3
-## unique values and 0% NA</code></pre>
+<pre><code>## mutate: new variable 'media' (character)
+## with 3 unique values and 0% NA</code></pre>
 <pre><code>## group_by: one grouping variable (text_id)
 ## mutate (grouped): new variable 'mean_joy' (double) with 3,118 unique values and 0% NA
 ## distinct (grouped): removed 168,013 rows (85%), 29,535 rows remaining (removed 0 groups, 29,535 groups remaining)
@@ -1047,7 +1070,7 @@
 ## filter: removed 20,355 rows (69%), 9,180 rows remaining
 ## filter: removed 2,518 rows (27%), 6,662 rows remaining
 ## `geom_smooth()` using formula = 'y ~ x'</code></pre>
-<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" alt="" width="672"></div>
+<div class="inline-figure"><img src="main_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
 <p>Finally, for the sake of showing the process, I will write the code to load the dictionary using <code>quanteda</code>, but note that this approach loses all the intensity information.</p>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">affect_dict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://quanteda.io/reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>anger <span class="op">=</span> <span class="va">intense_lex</span><span class="op">$</span><span class="va">term</span><span class="op">[</span><span class="va">intense_lex</span><span class="op">$</span><span class="va">AffectDimension</span><span class="op">==</span><span class="st">"anger"</span><span class="op">]</span>,</span>
@@ -1077,41 +1100,48 @@
 ## 11                             with\n the usa having such a bad opiate problem then trump brings up about \nbidens son is the most disgraceful thing any human being could do...vote\n him out
 ## 12   Trump’s\n only recourse in the debate is to demean his opponent and talk about \nwhat a great man he, himself is. Turn his mic off when it’s not his turn\n to speak. Nothing but babble!
 ## 23                                                                                           Trump such a hateful person he has no moral or respect in a debate he blames everyone except him.
-##              id likes                  debate
-## 3  Dave Garland    99 abc_first_debate_manual
-## 7   Connie Sage    79 abc_first_debate_manual
-## 9  Susan Weyant    53 abc_first_debate_manual
-## 11  Lynn Kohler    41 abc_first_debate_manual
-## 12     Jim Lape    28 abc_first_debate_manual
-## 23   Joe Sonera    65 abc_first_debate_manual
-##    docname Segment       WPS WC Sixltr   Dic
-## 3    text3       3  6.333333 19  15.79 36.84
-## 7    text7       7 11.500000 23  17.39 17.39
-## 9    text9       9 15.333333 46   8.70 13.04
-## 11  text11      11 32.000000 32   6.25 28.12
-## 12  text12      12 13.000000 39  12.82  5.13
-## 23  text23      23 20.000000 20  15.00 25.00
-##    anger  fear  joy sadness AllPunc Period
-## 3   5.26 15.79 5.26   10.53   15.79   0.00
-## 7   4.35  4.35 0.00    8.70    8.70   0.00
-## 9   4.35  2.17 2.17    4.35   23.91  17.39
-## 11  9.38  6.25 3.12    9.38    9.38   9.38
-## 12  2.56  2.56 0.00    0.00   15.38   5.13
-## 23 10.00  5.00 5.00    5.00    5.00   5.00
-##    Comma Colon SemiC QMark Exclam Dash Quote
-## 3   0.00     0     0  0.00  15.79    0  0.00
-## 7   0.00     0     0  0.00   8.70    0  0.00
-## 9   4.35     0     0  2.17   0.00    0  0.00
-## 11  0.00     0     0  0.00   0.00    0  0.00
-## 12  2.56     0     0  0.00   2.56    0  5.13
-## 23  0.00     0     0  0.00   0.00    0  0.00
-##    Apostro Parenth OtherP
-## 3     0.00       0  15.79
-## 7     0.00       0   8.70
-## 9     0.00       0  23.91
-## 11    0.00       0   9.38
-## 12    5.13       0  10.26
-## 23    0.00       0   5.00</code></pre>
+##              id likes
+## 3  Dave Garland    99
+## 7   Connie Sage    79
+## 9  Susan Weyant    53
+## 11  Lynn Kohler    41
+## 12     Jim Lape    28
+## 23   Joe Sonera    65
+##                     debate docname Segment
+## 3  abc_first_debate_manual   text3       3
+## 7  abc_first_debate_manual   text7       7
+## 9  abc_first_debate_manual   text9       9
+## 11 abc_first_debate_manual  text11      11
+## 12 abc_first_debate_manual  text12      12
+## 23 abc_first_debate_manual  text23      23
+##          WPS WC Sixltr   Dic anger  fear
+## 3   6.333333 19  15.79 36.84  5.26 15.79
+## 7  11.500000 23  17.39 17.39  4.35  4.35
+## 9  15.333333 46   8.70 13.04  4.35  2.17
+## 11 32.000000 32   6.25 28.12  9.38  6.25
+## 12 13.000000 39  12.82  5.13  2.56  2.56
+## 23 20.000000 20  15.00 25.00 10.00  5.00
+##     joy sadness AllPunc Period Comma Colon
+## 3  5.26   10.53   15.79   0.00  0.00     0
+## 7  0.00    8.70    8.70   0.00  0.00     0
+## 9  2.17    4.35   23.91  17.39  4.35     0
+## 11 3.12    9.38    9.38   9.38  0.00     0
+## 12 0.00    0.00   15.38   5.13  2.56     0
+## 23 5.00    5.00    5.00   5.00  0.00     0
+##    SemiC QMark Exclam Dash Quote Apostro
+## 3      0  0.00  15.79    0  0.00    0.00
+## 7      0  0.00   8.70    0  0.00    0.00
+## 9      0  2.17   0.00    0  0.00    0.00
+## 11     0  0.00   0.00    0  0.00    0.00
+## 12     0  0.00   2.56    0  5.13    5.13
+## 23     0  0.00   0.00    0  0.00    0.00
+##    Parenth OtherP
+## 3        0  15.79
+## 7        0   8.70
+## 9        0  23.91
+## 11       0   9.38
+## 12       0  10.26
+## 23       0   5.00</code></pre>
 </div>
 </div>
 <div id="assignments-1---due-date-eod-friday-week-4-1" class="section level2" number="3.6">
@@ -1166,7 +1196,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-09.</p>
+    <p>"<strong>PS9594: Computational Text Analysis</strong>" was written by Dr. Sebastián Vallejo Vera | Western University. It was last built on 2026-03-15.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

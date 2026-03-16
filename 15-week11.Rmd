@@ -1,0 +1,14 @@
+# Week 11: Decoder-Only LLMs {#week11}
+
+## Slides{.unnumbered}
+
+- 11 Decoder-Only LLMs
+([link](https://github.com/svallejovera/cta_updated/blob/main/slides/11%20Decoders.pdf) to slides)
+
+## Using Decoder-Only LLMs
+
+We will first see how we can use LLMs through the API. Note that this is different from using the playground. Accessing the API allows is designed for processing larger batches of data. Here is the [link](https://colab.research.google.com/drive/1d4zjvX0z7z1vYgAAg0fPIVx6n_g7CQT3?usp=sharing).
+
+## Using LLMs as Annotators
+
+Ok, now we can use LLMs as annotators. Here is the [link](https://colab.research.google.com/drive/1CKdSOzV8ddcz9k4Z96t9vvHW_MjB6qTp?usp=sharing). 
